@@ -1,0 +1,57 @@
+service-select-ds-add-100554 {//don't change this line 
+    .service-selectds-add {
+        padding: 1rem;
+
+        .next-action {
+            display: flex;
+            justify-content: center;
+
+            button {
+                width: 150px;
+            }
+        }
+
+        .ds-type-select {
+            margin-top: 1rem;
+            display: flex;
+            height: 100px;
+            align-items: center;
+            gap: 0.1rem;
+
+            >.ds-type-select-item {
+                height: 100%;
+                width: 400px;
+
+                &.active,
+                &:hover {
+                    opacity: 1;
+                    background: #fafafa;
+                }
+
+                opacity: 0.2;
+                display: flex;
+                gap:0.2rem;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+
+                input {
+                    width: auto;
+                }
+
+                >span {
+                    font-family: 'Quicksand', sans-serif;
+                    font-size: 1.5em;
+                }
+            }
+        }
+
+        .section-add {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+    }
+
+}
+

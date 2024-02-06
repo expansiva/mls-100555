@@ -1,0 +1,68 @@
+collab-ds-input-select-color-100554 { //don't change this line 
+ 	 :host {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+
+        input[type="color"]{
+            display: block;
+            font-size: 1rem;
+            background-color: rgb(255, 255, 255);
+            background-clip: padding-box;
+            border: 1px solid rgb(181, 180, 180);
+            border-radius: 0.25rem;
+            transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+            outline: none;
+            height: 30px;
+        }
+
+        select{
+            display: block;
+            font-size: 1rem;
+            background-color: rgb(255, 255, 255);
+            background-clip: padding-box;
+            border: 1px solid rgb(181, 180, 180);
+            border-radius: 0.25rem;
+            transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+            outline: none;
+            height: 30px;
+        }
+
+        >div {
+            display: flex;
+            border: 1px solid rgb(181, 180, 180);
+            border-radius: 5px;
+
+            input[type="search"] {
+                border: none;
+                padding: .1rem .1rem;
+                outline: none;
+                width: 60px;
+            }
+
+            select {
+                border: 0px;
+                border-top-left-radius: 0px;
+                border-bottom-left-radius: 0px;
+                min-width: 45px;
+                padding: .1rem .1rem;
+                outline: none;
+                -webkit-appearance: none;
+                font-size: 13px;
+                text-align-last: center;
+                transition: all .3s;
+                user-select: none;
+
+                &:hover {
+                    background-color: #40404054;
+                    color: white;
+                    transition: all 0.3s;
+
+                }
+            }
+
+        }
+
+    }
+}
+

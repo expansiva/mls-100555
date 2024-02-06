@@ -1,0 +1,53 @@
+service-preview-add-style-100554 {
+
+    //don't change this line 
+    :host {
+        display: block;
+        padding: 1rem;
+    }
+
+    mls-input-tags {
+        font-family: 'Helvetica Neue', 'Lucida Grande', sans-serif;
+        max-width: 100%;
+        display: flex;
+        align-content: flex-start;
+        flex-wrap: wrap;
+        background-color: #FFF;
+        border: solid 1px #CCC;
+        border-radius: 2px;
+        min-height: 33px;
+        padding: 0 5px;
+
+        input {
+            border: none;
+        }
+
+        >div {
+            display: flex;
+            gap:.5rem;
+            flex-grow: 0;
+            margin: 5px 5px 5px 0;
+            padding: 0 5px 0 10px;
+            height: 25px;
+            line-height: 25px;
+            background-color: #E1E1E1;
+            color: #333;
+            font-size: 14px;
+            border-radius: 2px;
+            position: relative;
+            overflow: hidden;
+            span{
+                width: 12px;
+                cursor: pointer;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+        }
+
+        >div:last-child {
+            margin-right: 5px;
+        }
+    }
+}
+

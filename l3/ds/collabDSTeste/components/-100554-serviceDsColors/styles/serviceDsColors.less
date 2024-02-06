@@ -1,0 +1,164 @@
+service-ds-colors-100554 {//don't change this line 
+    :host{
+        font-family: @font-family-primary;
+        display: block;
+        overflow: auto;
+        height: 100%;
+    }
+    .service_tokens_color {
+        padding: 0 1rem;
+
+        input[type="checkbox"],
+        select {
+            display: inline-block;
+            width: auto;
+        }
+
+        fieldset {
+            border: none;
+            box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+            margin-bottom: 3rem;
+
+            legend {
+                text-transform: uppercase;
+                font-size: 14px;
+                font-weight: bold;
+            }
+        }
+
+        .header {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+
+            .action-item {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                cursor: pointer;
+                transition: background-color 1s ease;
+
+                &.clicked {
+                    color: white;
+                    background-color: #4545bd;
+                    animation: pulse 1s infinite;
+                }
+
+                &:hover {
+                    background-color: #f1f1f1;
+                }
+
+                width: 30px;
+                height: 30px;
+                border-radius: 50%;
+            }
+
+            .actions {
+                display: flex;
+                align-items: center;
+            }
+
+            .row-primary.disabled {
+                pointer-events: none;
+                opacity: 0.3;
+            }
+
+            .row-primary {
+                display: flex;
+                gap: 1rem;
+            }
+
+            .row-form {
+                display: block;
+                padding: 1rem;
+
+                input,
+                textarea {
+                    margin-bottom: 1rem;
+                }
+
+                >div {
+                    display: flex;
+                    justify-content: center;
+                    gap: 1rem;
+                }
+            }
+        }
+    }
+
+    mls-l3-color{
+        .colors-container{
+            margin-top: 1rem;
+            display: grid;
+            padding-top: 1rem;
+            width: 100%;
+            gap: 1rem;
+            grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
+        }
+    }
+
+    mls-l3-color-item {
+        padding: .5rem;
+
+        &.active {
+            border: 1px solid #c7c7c7;
+        }
+
+        .ds-colors-section-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            .thumbnail {
+                height: 128px;
+                width: 128px;
+                cursor: pointer;
+                background-color: var(--mls-gray-200);
+                position: relative;
+                display: flex;
+                flex-direction: column;
+
+                >div {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 64px;
+                    width: 128px;
+
+                    >input {
+                        visibility: hidden;
+                        position: absolute;
+                        bottom: 10px;
+                    }
+                }
+            }
+
+            span {
+                display: block;
+                text-align: center;
+            }
+
+            .color-token-name {
+                margin-top: 5px;
+                font-size: @font-size-12;
+            }
+
+        }
+
+        @keyframes colorpulse {
+            0% {
+                background-color: #ffffff;
+            }
+
+            50% {
+                background-color: #f3f3f3;
+            }
+
+            100% {
+                background-color: #ffffff;
+            }
+        }
+
+    }
+}
+

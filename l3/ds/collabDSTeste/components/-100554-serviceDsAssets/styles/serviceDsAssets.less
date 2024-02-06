@@ -1,0 +1,97 @@
+service-ds-assets-100554 { //don't change this line 
+ 	 :host{
+        height: 100%;
+        font-family: @font-family-primary;
+
+     }
+     .assets-container{
+        display: flex;
+        gap: .3rem;
+        .assets-tree{
+            display: block;
+            min-width: 400px;
+            width: 400px;
+            height: 100%;
+
+             details {
+                margin-top: 0px;
+                margin-bottom:  0px;
+                                
+                summary {
+                    outline: none;
+                    cursor: pointer;
+                    padding: 0.1rem 0;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    width: 100%;
+                    &:hover,&.selected{
+                        background-color: @grey-color-light;
+                    }
+                }   
+            }
+            div{
+                cursor: pointer;
+                &:hover, &.selected{
+                        background-color: @grey-color-light;
+                 }
+            }
+        }
+
+    
+        .assets-details{
+            flex:1;
+            padding: 0.3rem;
+            border-left: 1px solid @grey-color-dark;
+
+            .actions{
+                display: flex;
+                justify-content: center;
+                margin-top: 1rem;
+               
+            }
+
+            .add-file-container {
+                padding: 1rem;
+                display: none;
+                border: 1px solid #cecece;
+                border-radius: 5px;
+                flex-direction: column;
+                gap: 1rem;
+                &.visible{
+                    display: flex;
+                }
+                .add-container-actions{
+                    margin-top: 1rem;
+                    display: flex;
+                    justify-content: center;
+                    gap: 1rem;
+                }
+            }
+
+            table.hidden{
+                height: 100px;
+                opacity: 0.2;
+                pointer-events: none;
+            }
+            table {
+                transition: height 1s ease;
+                input[type="checkbox"]{
+                    margin-top: 5px;
+                }
+                td{
+                    border: none;
+                }
+                tbody {
+                    td{
+                        cursor: pointer;
+                    }
+                    tr.selected, tr:hover{
+                        background-color: @grey-color-light;
+                    }
+                }
+            }
+        }
+     }
+}
+

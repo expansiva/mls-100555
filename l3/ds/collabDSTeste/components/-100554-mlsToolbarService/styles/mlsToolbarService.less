@@ -1,0 +1,203 @@
+mls-toolbar-service-100554 { //don't change this line 
+    :host {
+        z-index: 9999;
+        position: relative;
+    }
+ 	
+    a {
+        color: #000;
+    }
+
+    /* header */
+
+    .header {
+        background-color: @mls-toolbar-bg-3;
+        box-shadow: 1px 1px 4px 0 rgba(0, 0, 0, .1);
+        position: relative;
+        width: 100%;
+        height: 40px;
+        z-index: 3;
+    }
+
+    .header>div {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: nowrap;
+    }
+
+    .header>ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        overflow: hidden;
+        background-color: @mls-toolbar-bg-3;
+        border-top: 1px solid rgba(0, 0, 0, 0.125);
+        box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px;
+        display: none;
+    }
+
+    .header>ul>li {
+        position: relative;
+        display: block;
+        margin-bottom: -1px;
+        cursor: pointer;
+        background: @mls-toolbar-bg-3;
+        // text-transform: uppercase;
+        font-size: 14px;
+    }
+
+    .header>ul>li a {
+        display: block;
+        // padding: 20px 20px;
+        // border-right: 1px solid #f4f4f4;
+        padding: 0.5rem 1.25rem;
+        text-decoration: none;
+    }
+
+    .header>ul>li:hover {
+        background-color: #e1e1e1;
+
+    }
+
+    .header .menu-btn:hover {
+        background-color: #f4f4f4;
+    }
+
+    .header .logo {
+        float: left;
+        font-size: 1em;
+        font-weight: bold;
+        // display: flex;
+        justify-content: center;
+        align-items: center;
+        text-decoration: none;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: auto;
+        flex: 1;
+        display: none;
+    }
+
+    /* menu */
+
+    .header .menu {
+        clear: both;
+        top: 40px;
+        max-height: 0;
+        transition: max-height .0s ease-out;
+        position: absolute;
+        width: 100%;
+        z-index: 9999;
+    }
+
+    .header .action {
+        clear: both;
+        transition: max-height .2s ease-out;
+        height: calc(100vh - 104px);
+        overflow: auto;
+    }
+
+    /* menu icon */
+
+    .header .menu-icon {
+        cursor: pointer;
+        // display: inline-block;
+        float: right;
+        padding: 18px 20px;
+        position: relative;
+        user-select: none;
+    }
+
+    .header .menu-icon .navicon {
+        background: #333;
+        display: block;
+        height: 2px;
+        position: relative;
+        transition: background .2s ease-out;
+        width: 18px;
+    }
+
+    .header .menu-icon .navicon:before,
+    .header .menu-icon .navicon:after {
+        background: #444;
+        content: '';
+        display: block;
+        height: 100%;
+        position: absolute;
+        transition: all .2s ease-out;
+        width: 100%;
+    }
+
+    .header .menu-icon .navicon:before {
+        top: 5px;
+    }
+
+    .header .menu-icon .navicon:after {
+        top: -5px;
+    }
+
+    /* menu btn */
+
+    .header .menu-btn {
+        display: none;
+    }
+
+    .header .menu-icon:has(.menu-btn:checked)~.menu {
+        max-height: 800px;
+    }
+
+    .header>div.checked~.menu {
+        max-height: 800px;
+    }
+
+    .header .menu-icon .menu-btn:checked~.navicon {
+        background: transparent;
+    }
+
+    .header .menu-icon .menu-btn:checked~.navicon:before {
+        transform: rotate(-45deg);
+    }
+
+    .header .menu-icon .menu-btn:checked~.navicon:after {
+        transform: rotate(45deg);
+    }
+
+    .header .menu-icon:not(.steps) .menu-btn:checked~.navicon:before,
+    .header .menu-icon:not(.steps) .menu-btn:checked~.navicon:after {
+        top: 0;
+    }
+
+    .header .icon-menu {
+        flex: 1;
+        margin: 0;
+
+        display: flex;
+        align-items: center;
+        list-style: none;
+        padding: 0 0.5rem;
+        margin-right: 1rem;
+
+        li:first-child {
+            border-left: 1px solid #cecece;
+        }
+
+        li {
+            border-right: 1px solid #cecece;
+            cursor: pointer;
+            padding: 0 0.8rem;
+
+            span {
+                font-size: 14px;
+            }
+
+            .title {
+                margin-left: 0.4rem;
+            }
+
+            &.active {
+                color: #007bff;
+            }
+        }
+    }
+}
+
