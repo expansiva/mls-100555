@@ -1,4 +1,4 @@
-/// <mls shortName="pageLogin" project="100555" enhancement="_blank" />
+/// <mls shortName="pageLogin" project="100555" enhancement="_100554_enhancementPage" /> 
 
 // typescript new file
  
@@ -7,5 +7,5 @@ class Login{
         console.info('oi2') 
     }
 }
-
+ 
 export const login = new Login();
