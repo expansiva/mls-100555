@@ -4,7 +4,7 @@
  
 class Login{ 
     constructor() {
-        console.info('oi3') 
+        console.info('teste pull request')
     }
 }
  
