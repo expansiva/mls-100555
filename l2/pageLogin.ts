@@ -4,7 +4,7 @@
  
 class Login{ 
     constructor() {
-        console.info('oi2') 
+        console.info('oi3') 
     }
 }
  
