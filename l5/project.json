@@ -1,0 +1,14 @@
+{
+  "name": "collab_test",
+  "projectDriver": "github",
+  "projectURL": "/main/expansiva/mls-100555/",
+  "projectSaveMode": "pullRequest",
+  "designSystems": [
+    {
+      "dsIndex": "0",
+      "dsName": "collabDSTeste",
+      "widgetIOName": "_100529_config_ds_default"
+    }
+  ],
+  "languages": []
+}
