@@ -1,92 +1,15 @@
 {
+  "name": "collab_test",
+  "projectDriver": "github",
+  "projectURL": "/main/expansiva/mls-100555/",
+  "projectSaveMode": "pullRequest",
   "designSystems": [
     {
       "dsIndex": "0",
-      "dsName": "collabDesignsystem",
+      "dsName": "collabDSTeste",
       "widgetIOName": "_100529_config_ds_default"
     }
   ],
-  "languages": [
-    {
-      "language": "en",
-      "name": "English",
-      "path": "/"
-    },
-    {
-      "language": "pt",
-      "name": "Portuguese",
-      "path": "/pt"
-    },
-    {
-      "language": "es",
-      "name": "Spanish",
-      "path": "/es"
-    }
-  ],
-  "orgName": "collab",
-  "reasons": {
-    "1": "in development",
-    "2": {
-      "message": "Esta funcionalidade não está incluída neste projeto.",
-      "message_en": "This functionality is not included in this project."
-    }
-  },
-  "services": [
-    ";_100554_serviceUserSettings,_100554_serviceNotification,_100554_serviceAim",
-    "-*{reason:1}",
-    "_100554_serviceListFiles,_100554_serviceSource,_100554_serviceResults,_100554_serviceHistories;_100554_serviceListFiles,_100554_serviceSource,_100554_serviceResults,_100554_serviceHistories,_100554_servicePreview,_100554_serviceAim,_100554_serviceDetail",
-    "_100554_serviceSelectDs,_100554_serviceDsDocList,_100554_serviceDsTokens,_100554_serviceDsAssets,_100554_serviceDsComponentsList,_100554_serviceDsStyles;_100554_serviceDetailsDs,_100554_serviceDsAssetsOverview,_100554_serviceDsAssetsVideo,_100554_serviceDsAssetsImage,_100554_serviceDsAssetsEditor,_100554_servicePreview",
-    "_100554_serviceListFiles,_100554_serviceIca;_100554_servicePreview,_100554_serviceDetail",
-    "_100554_serviceProject,_100554_serviceProjectDetails,_100554_serviceSave,_100554_serviceExploreStories;_100554_servicePreview,_100554_serviceAim,_100554_serviceDetail",
-    "_100554_serviceCreateProject,_100554_serviceExploreProjects,_100554_serviceDashboard;_100554_servicePreview,_100554_serviceDetail",
-    ";_100554_servicePreview,_100554_serviceDetail"
-  ],
-  "servicesConfigEnabled": true,
-  "plugins": {
-    "_100554_pluginExamplesIndex": {
-      "_100554_pluginSiteMonitorDashboardActiveUsers": {
-        "l6Dashboard": {
-          "Examples 1": "tile 2 2 1",
-          "Examples 2": "tile 3 7"
-        },
-        "enabled": "true"
-      },
-      "_100554_pluginSiteMonitorDashboardSpikes": {
-        "l6Dashboard": {
-          "Examples 2": "tile 3 4"
-        },
-        "enabled": "true"
-      },
-      "_100554_pluginSiteMonitorDashboardErrors": {
-        "l6Dashboard": {
-          "Examples 1": "tile 2 2 2"
-        },
-        "enabled": "true"
-      },
-      "_100554_pluginSiteMonitorDashboardExpenses": {
-        "l6Dashboard": {
-          "Examples 1": "tile 2 3 99"
-        },
-        "enabled": "true"
-      },
-      "_100554_pluginSiteMonitorDashboardRegionalLatency": {
-        "l6Dashboard": {
-          "Examples 1": "tile 2 2 99"
-        },
-        "enabled": "true"
-      },
-      "_100554_pluginSiteMonitorDashboardResponseTime": {
-        "l6Dashboard": {
-          "Examples 1": "tile 2 2 99"
-        },
-        "enabled": "true"
-      },
-      "_100554_pluginSiteMonitorDashboardSales": {
-        "l6Dashboard": {
-          "Examples 1": "tile 2 2 99"
-        },
-        "enabled": "true"
-      }
-    }
-  }
+  "languages": [],
+  "orgName": "collab"
 }
