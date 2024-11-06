@@ -12,17 +12,6 @@ on:
       - 'l5/**'
       - 'l6/**'
       - 'l7/**'
-  pull_request:
-    branches:
-      - main
-    paths:
-      - 'l1/**'
-      - 'l2/**'
-      - 'l3/**'
-      - 'l4/**'
-      - 'l5/**'
-      - 'l6/**'
-      - 'l7/**'
 
 jobs:
   build:
