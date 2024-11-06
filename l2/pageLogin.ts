@@ -4,7 +4,7 @@
  
 class Login{ 
     constructor() {
-        console.info('oi alterado por Pereira') 
+        console.info('oi alterado por Pereira 2') 
     }
 }
  
