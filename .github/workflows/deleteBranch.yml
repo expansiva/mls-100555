@@ -1,21 +1,23 @@
-name: Delete branch on fork
+name: Deletar Branch Após Merge ou Fechamento de PR
 
 on:
   pull_request:
-    branches:
-      - main
     types: [closed]
+
 jobs:
-  delete-branch:
+  delete_branch:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Delete branch on fork
+      - name: Checar o código do repositório
+        uses: actions/checkout@v2
+
+      - name: Deletar o branch no fork
         run: |
-          BRANCH_NAME=${{ github.event.pull_request.head.ref }}
-          OWNER=${{ github.event.pull_request.head.repo.owner.login }}
-          REPO=${{ github.event.pull_request.head.repo.name }}
-          echo "Deleting branch $BRANCH_NAME in fork $OWNER/$REPO"
-          curl -X DELETE \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Accept: application/vnd.github.v3+json" \
-            https://api.github.com/repos/$OWNER/$REPO/git/refs/heads/$BRANCH_NAME
+          BRANCH_NAME=$(echo ${GITHUB_REF} | sed 's/refs\/heads\///')
+          if [[ "$BRANCH_NAME" != "main" && "$BRANCH_NAME" != "master" ]]; then
+            echo "Deletando o branch $BRANCH_NAME..."
+            git push origin --delete $BRANCH_NAME
+          else
+            echo "Não é possível deletar o branch main ou master"
+          fi
