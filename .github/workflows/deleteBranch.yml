@@ -10,7 +10,7 @@ jobs:
 
     steps:
       - name: Checar o código do repositório
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Deletar o branch no fork
         run: |
