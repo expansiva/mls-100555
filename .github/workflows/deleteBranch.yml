@@ -2,6 +2,8 @@ name: Delete branch on fork
 
 on:
   pull_request:
+    branches:
+      - main
     types: [closed]
 jobs:
   delete-branch:
