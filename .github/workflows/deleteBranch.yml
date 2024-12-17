@@ -10,6 +10,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Teste
+        run: |
+          echo ${{ github.event_name }} + " " + ${{ github.event.action }} + " "+ ${{ github.event.pull_request.merged }}
+        
       - name: Deletar o branch no fork
         if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
         run: |
