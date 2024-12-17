@@ -1,7 +1,9 @@
 name: Deletar Branch Após Merge ou Fechamento de PR
 
 on:
-  pull_request
+  merge_group:
+    branches: 
+      - main
 
 jobs:
   delete_branch:
