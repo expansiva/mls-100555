@@ -1,0 +1,26 @@
+name: Deletar Branch Após Merge ou Fechamento de PR
+
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  delete_branch:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Teste
+        run: |
+          echo  ${{ github.event_name }}  ${{ github.event.action }}  ${{ github.event.pull_request.merged }}
+        
+      - name: Deletar o branch no fork
+        if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+        run: |
+          BRANCH_NAME=$(echo ${GITHUB_REF} | sed 's/refs\/heads\///')
+          if [[ "$BRANCH_NAME" != "main" && "$BRANCH_NAME" != "master" ]]; then
+            echo "Deletando o branch $BRANCH_NAME..."
+            git push origin --delete $BRANCH_NAME
+          else
+            echo "Não é possível deletar o branch main ou master"
+          fi
