@@ -12,7 +12,6 @@ on:
       - 'l5/**'
       - 'l6/**'
       - 'l7/**'
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -20,6 +19,8 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
 
     - name: Set up Node.js
       uses: actions/setup-node@v4
@@ -32,8 +33,8 @@ jobs:
     - name: Compile CI
       run: npm run buildCI
       env:
-          COLLAB_PROJECT: 100555
-          COLLAB_REPO: "mls-100555"
+          COLLAB_PROJECT: 100554
+          COLLAB_REPO: "mls-100554"
           COLLAB_OWNER: "mls"
           COLLAB_BRANCH: "main"
           COLLAB_DRIVER: "GitHub"
@@ -48,7 +49,14 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Push changes
-      run: git push
+    - name: Push changes (with friendly diff on failure)
+      run: |
+        git fetch origin main
+        if ! git push origin main; then
+          echo "Push failed. The remote repository contains changes you don't have locally."
+          echo "Files that differ between your HEAD and origin/main:"
+          git diff --name-only HEAD origin/main
+          exit 1
+        fi
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
