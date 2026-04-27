@@ -1,4 +1,4 @@
-/// <mls shortName="pageLogin" project="100555" enhancement="_100554_enhancementPage" /> 
+/// <mls shortName="pageLogin" project="100555" enhancement="_blank" /> 
 
 // typescript new file
  
