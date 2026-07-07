@@ -1,3 +1,3 @@
-/// <mls shortName="ateste" project="100555" enhancement="_blank" groupName="other" />
+/// <mls fileReference="_100555_/l2/ateste" enhancement="_blank" />
  
 console.info('Oi santiago 2')  
