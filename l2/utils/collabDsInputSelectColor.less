@@ -1,0 +1,79 @@
+/// <mls fileReference="_100555_/l2/utils/collabDsInputSelectColor.less" enhancement="_102027_/l2/enhancementStyle" />
+
+utils--collab-ds-input-select-color-100555 {
+
+    display: grid;
+    grid-template-columns: auto 1fr auto auto;
+    gap: 8px;
+    align-items: center;
+
+    input,
+    select {
+        height: 25px;
+    }
+
+    input[type="color"] {
+        display: block;
+        font-size: 1rem;
+        background-color: rgb(255, 255, 255);
+        background-clip: padding-box;
+        border: 1px solid rgb(181, 180, 180);
+        border-radius: 0.25rem;
+        transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+        outline: none;
+    }
+
+    select {
+        display: block;
+        font-size: 1rem;
+        background-color: rgb(255, 255, 255);
+        background-clip: padding-box;
+        border: 1px solid rgb(181, 180, 180);
+        border-radius: 0.25rem;
+        transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+        outline: none;
+    }
+
+    >div {
+        display: flex;
+        border: 1px solid rgb(181, 180, 180);
+        border-radius: 5px;
+        background: #fff;
+        input[type="text"] {
+            border: none;
+            padding: .1rem .1rem;
+            outline: none;
+            flex: 1;
+            width: 100%;
+            min-width: 30px;
+            max-width: 100px;
+
+        }
+
+        select {
+            border: 0px;
+            border-top-left-radius: 0px;
+            border-bottom-left-radius: 0px;
+            min-width: 30px;
+            padding: .1rem .1rem;
+            outline: none;
+            -webkit-appearance: none;
+            font-size: 13px;
+            text-align-last: center;
+            transition: all .3s;
+            user-select: none;
+
+            &:hover {
+                background-color: #40404054;
+                color: white;
+                transition: all 0.3s;
+
+            }
+        }
+
+    }
+
+
+}
+
+

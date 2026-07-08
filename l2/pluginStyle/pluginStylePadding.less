@@ -1,0 +1,91 @@
+/// <mls fileReference="_100555_/l2/pluginStyle/pluginStylePadding.less" enhancement="_102027_/l2/enhancementStyle" />
+
+plugin-style--plugin-style-padding-100555 {
+
+    width: 100%;
+    display: block;
+    font-family: @font-family-primary;
+    font-size: @font-size-16;
+    font-weight: @font-weight-normal;
+    line-height: 1.5;
+    color: @text-primary-color;
+    background-color: @bg-primary-color;
+    padding-top: @space-8;
+
+    .helper-group-title {
+        margin: 0;
+        margin-top: @space-16;
+        margin-bottom: @space-8;
+        display: flex;
+        gap: 1.5rem;
+    }
+
+    .helper-group-lock {
+        display: flex;
+        justify-content: start;
+        align-items: center;
+
+        label {
+            cursor: pointer;
+        }
+
+        i {
+            margin-left: @space-8;
+        }
+    }
+
+    .group {
+        margin-left: @space-16;
+        margin-top: @space-8;
+        font-size: @font-size-12;
+        display: flex;
+        flex-direction: column;
+        gap: .7rem;
+
+        .group-edit {
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+
+            i {
+                display: flex;
+                flex-shrink: 0;
+
+            }
+
+        }
+
+    }
+
+    .gallery {
+        display: flex;
+        justify-content: start;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem;
+        flex-wrap: wrap;
+        cursor: pointer;
+
+        .box {
+            background-color: @bg-primary-color;
+            border: 1px solid @text-primary-color;
+
+            >div {
+                background-color: @text-primary-color;
+                width: 50px;
+                height: 50px;
+
+                >span{
+                    background-color: @bg-primary-color;
+                    width: 100%;
+                    height: 100%;
+                    display: block;
+                }
+
+            }
+        }
+    }
+
+}
+
+

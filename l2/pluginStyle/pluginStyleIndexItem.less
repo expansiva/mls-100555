@@ -1,0 +1,133 @@
+/// <mls fileReference="_100555_/l2/pluginStyle/pluginStyleIndexItem.less" enhancement="_102027_/l2/enhancementStyle" />
+
+plugin-style--plugin-style-index-item-100555 {
+
+    .plugin-item:not(:last-child) {
+        border-bottom: 1px solid @grey-color-light;
+    }
+
+    .plugin-item {
+
+
+        .plugin-item-header {
+            text-transform: uppercase;
+            font-size: @font-size-12;
+            font-weight: @font-weight-bold;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            gap: .6rem;
+            padding: .3rem;
+            background: @grey-color-light;
+
+            span {
+                flex: 1;
+            }
+
+            .plugin-item-icons {
+                i {
+                    display: inline-flex;
+                    justify-content: center;
+                    width: 20px;
+                    height: 20px;
+                    user-select: none;
+                    cursor: pointer;
+                    svg {
+                        fill: @text-primary-color;
+                    }
+
+                    &:hover {
+                        font-weight: @font-weight-bold;
+                        
+                        svg {
+                            transform: scale(1.3);
+                        }
+
+                    }
+                }
+
+                i.open svg {
+
+                    animation: rotate .2s linear;
+                    animation-iteration-count: 1;
+                    animation-fill-mode: forwards;
+                }
+
+                i.i-like {
+                    transition: transform 0.2s ease;
+                }
+
+                i.i-question.info {
+                    svg {
+                        fill: @info-color;
+                    }
+                }
+
+                i.i-like.liked {
+                    svg {
+                        fill: @error-color;
+                    }
+                }
+
+                i.i-like.likedAnimation {
+                    svg {
+                        animation: heartBeat 1.5s forwards;
+                    }
+                }
+
+                @keyframes heartBeat {
+                    0% {
+                        transform: scale(1);
+                    }
+
+                    50% {
+                        transform: scale(1.4);
+                    }
+
+                    100% {
+                        transform: scale(1);
+                    }
+                }
+
+                @keyframes rotate {
+                    0% {
+                        transform: rotate(0deg);
+                    }
+
+                    100% {
+                        transform: rotate(90deg);
+                    }
+                }
+
+            }
+        }
+
+        .plugin-item-info {
+            
+            padding: @space-16;
+            svg {
+                fill: @text-primary-color;
+            }
+        }
+
+        .plugin-item-desc {
+            font-size: @font-size-12;
+            color: @text-primary-color-lighter;
+            padding-left: @space-16;
+            text-align: justify;
+        }
+
+        .plugin-item-container {
+            margin-top: @space-8;
+        }
+
+        .plugin-item-container.expanded {
+            height: 200px;
+            overflow: hidden;
+        }
+
+    }
+
+}
+
+

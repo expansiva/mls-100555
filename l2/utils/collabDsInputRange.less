@@ -1,0 +1,73 @@
+/// <mls fileReference="_100555_/l2/utils/collabDsInputRange.less" enhancement="_102027_/l2/enhancementStyle" />
+
+utils--collab-ds-input-range-100555 {
+
+    display: grid;
+    grid-template-columns: auto 1fr auto auto;
+    gap: 8px;
+    align-items: center;
+    input[type="text"] {
+        background-color: #f8f9fa;
+        width: 100%;
+        min-width: 80px;
+        border-width: 0px;
+        border: none;
+        border-radius: 2px 0 0 2px;
+        height: 100%;
+        color: black;
+        font-size: 11.5px;
+        padding: 0;
+    }
+
+    >div {
+        display: flex;
+        border: 1px solid rgb(181, 180, 180);
+        border-radius: 5px;
+        background-color: #f8f9fa;
+
+        input[type="text"] {
+            border: none;
+            padding: .1rem .1rem;
+            outline: none;
+            flex: 1;
+            width: 100%;
+            max-width: 100px;
+            min-width: 50px;
+
+            height: 25px;
+        }
+
+        select {
+            display: block;
+            border: 0px;
+            border-top-left-radius: 0px;
+            border-bottom-left-radius: 0px;
+            min-width: 30px;
+            padding: .1rem .1rem;
+            outline: none;
+            -webkit-appearance: none;
+            font-size: 13px;
+            text-align-last: center;
+            transition: all .3s;
+            user-select: none;
+            background-color: #f8f9fa;
+            background-clip: padding-box;
+            border-radius: 0.25rem;
+            height: 25px;
+            &:hover {
+                background-color: #40404054;
+                color: white;
+                transition: all 0.3s;
+
+            }
+        }
+
+    }
+
+    input[type="range"]::-webkit-input-placeholder {
+        font-size: 6px;
+    }
+
+}
+
+

@@ -1,0 +1,122 @@
+/// <mls fileReference="_100555_/l2/pluginStyle/pluginStyleClippath.less" enhancement="_102027_/l2/enhancementStyle" />
+
+plugin-style--plugin-style-clippath-100555 {
+
+   button {
+      background-color: @active-color;
+      border-radius: 8px;
+      border: none;
+      box-shadow: 0px 1px 3px 0px @grey-color;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      gap: .2rem;
+      font-weight: 700;
+      align-items: center;
+      height: 40px;
+      transition: height 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+      padding: 0.5rem;
+      color: #fff;
+      cursor: pointer;
+      min-width: 80px;
+
+
+      &:hover {
+         background-color: @active-color-hover;
+      }
+   }
+
+   textarea{
+        display: block;
+        width: calc(100% - 2rem);
+        padding: 0.375rem 0.75rem;
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #212529;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #ced4da;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        border-radius: 0.25rem;
+        transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+        outline: none;
+   }
+
+   .gallery {
+      margin-bottom: @space-8;
+      display: flex;
+      justify-content: start;
+      align-items: center;
+      gap: 1rem;
+      padding-top: 1rem;
+      flex-wrap: wrap;
+      cursor: pointer;
+
+      .gallery-item {
+         background: @text-primary-color;
+         width: 30px;
+         height: 45px;
+      }
+   }
+
+   .previewEditable {
+
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      gap: 1rem;
+      padding: 1rem;
+      margin-top: 2rem;
+
+      #previewWrapper {
+         position: relative;
+         display: inline-block;
+      }
+
+      #image {
+         user-select: none;
+         display: block;
+         width: 100%;
+         height: auto;
+         min-height: 300px;
+      }
+
+      #svgOverlay {
+         position: absolute;
+         top: 0;
+         left: 0;
+         width: 100%;
+         height: 100%;
+         pointer-events: none;
+      }
+
+      #pointsContainer {
+         position: absolute;
+         top: 0;
+         left: 0;
+         width: 100%;
+         height: 100%;
+         pointer-events: none;
+      }
+
+      .draggable {
+         position: absolute;
+         width: 10px;
+         height: 10px;
+         background-color: red;
+         border-radius: 50%;
+         cursor: pointer;
+         transform: translate(-50%, -50%);
+         pointer-events: all;
+      }
+
+   }
+
+
+
+}
+
+
