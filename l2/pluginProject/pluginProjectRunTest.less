@@ -1,0 +1,122 @@
+/// <mls fileReference="_100555_/l2/pluginProject/pluginProjectRunTest.less" enhancement="_102027_/l2/enhancementStyle" />
+
+plugin-project--plugin-project-run-test-100555 {
+
+    font-family: @font-family-primary;
+    font-size: @font-size-16;
+    font-weight: @font-weight-normal;
+    line-height: 1.5;
+    color: @text-primary-color;
+    background-color: @bg-primary-color;
+
+    button {
+        background-color: @active-color;
+        border-radius: 8px;
+        border: none;
+        box-shadow: 0px 1px 3px 0px @grey-color;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        gap: .2rem;
+        font-weight: 700;
+        align-items: center;
+        height: 40px;
+        transition: height 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+        padding: 0.5rem;
+        color: #fff;
+        cursor: pointer;
+        min-width: 80px;
+
+        &:hover {
+            background-color: @active-color-hover;
+        }
+    }
+
+    .actions {
+        margin: 1rem 0;
+    }
+
+    .progress-container {
+
+        margin: 1rem 0;
+        width: 100%;
+        background-color: #eee;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .progress-bar {
+        height: 8px;
+        width: 0%;
+        background-color: #007bff;
+        transition: width 0.3s ease-in-out;
+    }
+
+    .final-resume {
+        border: 1px solid #cecece;
+        padding: 1rem;
+        margin-top: 1rem;
+
+    }
+
+    .failed {
+        color: @error-color;
+    }
+
+    .success {
+        color: @success-color;
+    }
+
+    .summary-title {
+        display: inline-flex;
+        align-items: center;
+        gap: 1rem;
+
+        small,
+        h3 {
+            display: inline-block;
+        }
+    }
+
+    .container-test {
+        display: flex;
+        flex-direction: column;
+        gap: 1.2rem;
+        margin-left: 1rem;
+        padding-top: .5rem;
+
+    }
+
+    collab-result-container-100554 {
+        display: flex;
+        overflow: auto;
+        padding: 1rem;
+        background: #f4f4f4;
+        flex-direction: column;
+        gap: .6rem;
+
+        >div {
+            i {
+                cursor: pointer;
+            }
+
+            .icon {
+                font-size: 18px;
+                animation: spin 5s linear infinite;
+            }
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    }
+
+}
+
+

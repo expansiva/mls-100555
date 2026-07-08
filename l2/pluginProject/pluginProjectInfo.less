@@ -1,0 +1,440 @@
+/// <mls fileReference="_100555_/l2/pluginProject/pluginProjectInfo.less" enhancement="_102027_/l2/enhancementStyle" />
+
+plugin-project--plugin-project-info-100555 {
+
+
+    font-family: @font-family-primary;
+    display: block;
+
+    overflow: auto;
+    background: @bg-primary-color;
+    font-size: @font-size-16;
+
+    .saving-ok {
+        color: @success-color;
+        font-size: @font-size-12;
+        display: block;
+        margin-top: 0.5rem;
+    }
+
+    .saving-error {
+        color: @error-color;
+        font-size: @font-size-12;
+        display: block;
+        margin-top: 0.5rem;
+    }
+
+    input,
+    select,
+    textarea {
+        display: block;
+        font-size: 1rem;
+        line-height: 1.5;
+        color: #495057;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        outline: none;
+        padding: 0.375rem 0.75rem;
+
+        &:focus {
+            border-color: @active-color;
+            box-shadow: 0 0 0 0.2rem rgba(24, 144, 255, 0.25);
+        }
+
+        &:disabled {
+            background-color: @grey-color-light;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+    }
+
+    textarea {
+        resize: vertical;
+        min-height: 60px;
+    }
+
+    button {
+        background-color: @info-color;
+        border-radius: 8px;
+        border: none;
+        box-shadow: 0px 1px 3px 0px @grey-color;
+        display: inline-flex;
+        flex-direction: row;
+        justify-content: center;
+        gap: .2rem;
+        font-weight: 700;
+        align-items: center;
+        height: 40px;
+        width: max-content;
+        transition: all 0.2s ease;
+        padding: 0.5rem 1.25rem;
+        color: #ffffff;
+        cursor: pointer;
+
+        &:hover {
+            background-color: @info-color-hover;
+            transform: translateY(-1px);
+        }
+
+        &:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .loader {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top: 2px solid #fff;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+        }
+    }
+
+    .btn-secondary {
+        background-color: transparent;
+        color: @text-primary-color;
+        border: 1px solid @grey-color-dark;
+        box-shadow: none;
+
+        &:hover {
+            background-color: @grey-color-light;
+            transform: translateY(-1px);
+        }
+    }
+
+    .plugin-body {
+        height: 100%;
+        width: -webkit-fill-available;
+        padding: 1rem;
+        overflow: hidden;
+    }
+
+    .plugin-container {
+        padding: 10px 0;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+
+        height: 100%;
+        width: 100%;
+    }
+
+    header {
+        margin-left: 16px;
+    }
+
+    header>div {
+        display: flex;
+        gap: .5rem;
+    }
+
+    icon {
+        margin-right: 10px;
+    }
+
+    h2 {
+        font-size: 18px;
+        font-weight: bold;
+        margin: 0;
+        color: #333;
+    }
+
+    small {
+        color: #888;
+        margin-left: auto;
+        font-size: 14px;
+    }
+
+    p {
+        font-size: 16px;
+        color: #555;
+    }
+
+    .details-card {
+        margin-top: 1rem;
+        border: 1px solid @grey-color-light;
+        padding: 1rem;
+        border-radius: 10px;
+        position: relative;
+    }
+
+    // Estilos para o ícone de edição - posicionado no canto superior direito
+    .edit-icon {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        border-radius: 6px;
+        background-color: @grey-color-light;
+        opacity: 0.8;
+        transition: all 0.2s ease;
+
+        svg {
+            width: 14px;
+            height: 14px;
+            fill: @text-primary-color;
+        }
+
+        &:hover {
+            opacity: 1;
+            background-color: @active-color;
+            
+            svg {
+                fill: #fff;
+            }
+        }
+    }
+
+    .listInfo {
+        list-style: none;
+        margin: 0px;
+        padding: 0px;
+        padding-left: .5rem;
+        margin-bottom: 2rem;
+
+        li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid @grey-color-lighter;
+
+            &:last-child {
+                border-bottom: none;
+            }
+
+            b {
+                color: @text-primary-color-lighter;
+                font-weight: 600;
+            }
+        }
+
+        ul {
+            list-style: none;
+        }
+    }
+
+    // Estilos para o formulário de edição - Design melhorado
+    .info-edit-form {
+        padding: 0.5rem 0;
+        max-width: 100%;
+
+        .form-group {
+            margin-bottom: 1.25rem;
+            
+            &:last-of-type {
+                margin-bottom: 0;
+            }
+
+            label {
+                display: block;
+                font-weight: 600;
+                margin-bottom: 0.5rem;
+                color: @text-primary-color;
+                font-size: @font-size-12;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+
+            input,
+            select,
+            textarea {
+                width: 100%;
+                box-sizing: border-box;
+                padding: 0.75rem 1rem;
+                font-size: @font-size-16;
+                border: 1px solid @grey-color;
+                border-radius: 8px;
+                background-color: #fff;
+                transition: all 0.2s ease;
+
+                &:hover:not(:disabled) {
+                    border-color: @grey-color-darker;
+                }
+
+                &:focus {
+                    border-color: @active-color;
+                    box-shadow: 0 0 0 3px rgba(24, 144, 255, 0.15);
+                    background-color: #fff;
+                }
+
+                &:disabled {
+                    background-color: @grey-color-lighter;
+                    border-color: @grey-color-light;
+                    color: @text-primary-color-lighter;
+                    cursor: not-allowed;
+                }
+
+                &::placeholder {
+                    color: @grey-color-darker;
+                }
+            }
+
+            textarea {
+                min-height: 80px;
+                resize: vertical;
+                line-height: 1.5;
+            }
+
+            // Indicador visual para campos desabilitados
+            &.disabled-field {
+                opacity: 0.7;
+
+                label {
+                    color: @text-primary-color-lighter;
+                }
+
+            }
+        }
+
+        // Linha divisória entre campos editáveis e não editáveis
+        .form-divider {
+            border: none;
+            border-top: 1px dashed @grey-color;
+            margin: 1.5rem 0;
+        }
+    }
+
+    .info-edit-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.75rem;
+        margin-top: 2rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid @grey-color-light;
+    }
+
+    .deps-action {
+        margin-top: 4rem;
+        display: flex;
+        justify-content: end;
+    }
+
+    .deps-details-list {
+        list-style: none;
+        padding-inline-start: 0;
+
+        li.li-add {
+            border: none;
+            display: flex;
+            justify-content: center;
+
+            span {
+                text-decoration: underline;
+                color: @active-color;
+                cursor: pointer;
+            }
+        }
+
+        li {
+            padding: .75rem 1.25rem;
+            border: 1px solid @grey-color-light;
+            display: flex;
+            justify-content: start;
+            align-items: center;
+            border-right-width: 0;
+            border-left-width: 0;
+            border-radius: 0;
+            gap: 1rem;
+
+            &:first-child {
+                border-top-width: 0;
+            }
+
+            .deps-details-tags {
+                span {
+                    display: flex;
+                    align-items: center;
+                    padding: .2em .3em;
+                    font-size: 75%;
+                    text-align: center;
+                    white-space: nowrap;
+                    transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+                    color: #fff;
+                    background-color: #2e6596;
+                    border-radius: .25rem;
+
+                    svg {
+                        height: 8px;
+                        fill: currentColor;
+                    }
+
+                }
+            }
+
+            .deps-details-actions {
+                display: flex;
+                gap: .5rem;
+                margin-left: auto;
+                cursor: pointer;
+
+            }
+        }
+    }
+
+    .add-dep-wrapper {
+        overflow: hidden;
+        max-height: 0;
+        opacity: 0;
+        transform: translateY(-8px);
+        transition:
+            max-height 300ms ease,
+            opacity 200ms ease,
+            transform 200ms ease;
+    }
+
+    .add-dep-wrapper.open {
+        max-height: 120px;
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .add-dep-content {
+        display: flex;
+        gap: 8px;
+        margin-top: 8px;
+    }
+
+    .add-dep-content input {
+        flex: 1;
+    }
+
+    details {
+        margin-bottom: 1rem;
+
+        summary {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+            color: @text-primary-color;
+        }
+
+        >div {
+            padding-left: 2rem;
+            padding-top: 1rem;
+        }
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+}
+
+

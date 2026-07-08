@@ -1,0 +1,190 @@
+/// <mls fileReference="_100555_/l2/pluginProject/pluginProjectFindFiles.less" enhancement="_102027_/l2/enhancementStyle" />
+
+plugin-project--plugin-project-find-files-100555 {
+    background-color: @bg-primary-color;
+    color: @text-primary-color;
+    display: block;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    padding: .2rem;
+
+    .svg-container {
+        width: 22px;
+        margin: 4px;
+        display: inline-flex;
+    }
+
+    header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 24px;
+        border-bottom: 1px solid #ececec;
+        padding-bottom: 12px;
+    }
+
+    header span {
+        font-size: 20px;
+        font-weight: 600;
+        margin: 0;
+    }
+
+    icon svg {
+        width: 22px;
+        height: 22px;
+        color: #4b5563;
+    }
+
+    .body {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: flex-end;
+        justify-content: center;
+        gap: 20px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    label {
+        font-size: 13px;
+        color: #6b7280;
+    }
+
+    select,
+    input {
+        height: 38px;
+        padding: 0 12px;
+        border-radius: 6px;
+        border: 1px solid #d1d5db;
+        font-size: 14px;
+        transition: border 0.2s, box-shadow 0.2s;
+    }
+
+    select:focus,
+    input:focus {
+        outline: none;
+        border-color: #6366f1;
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+    }
+
+    .btn-primary {
+        height: 38px;
+        border-radius: 6px;
+        border: none;
+        background: #6366f1;
+        color: white;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background 0.2s, transform 0.05s;
+    }
+
+    .btn-primary:hover {
+        background: #4f46e5;
+    }
+
+    .btn-primary:active {
+        transform: translateY(1px);
+    }
+
+    .progress-section {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 3px;
+        margin-top: 1rem;
+    }
+
+    progress {
+        width: 85%;
+        height: 8px;
+        appearance: none;
+    }
+
+    progress::-webkit-progress-bar {
+        background: #e5e7eb;
+        border-radius: 8px;
+    }
+
+    progress::-webkit-progress-value {
+        background: #6366f1;
+        border-radius: 8px;
+    }
+
+    .result-info {
+        font-size: 13px;
+        color: #6b7280;
+    }
+
+    .results-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .results-list li {
+        padding: 10px 0;
+        font-size: 14px;
+        border-bottom: 1px solid #f1f1f1;
+        cursor: pointer;
+
+        &:hover {
+            text-decoration: underline;
+            color: #6366f1;
+        }
+    }
+
+
+    .view-toggle {
+        display: inline-flex;
+        align-items: center;
+        background: #f3f4f6;
+        border-radius: 8px;
+        padding: 4px;
+        gap: 4px;
+
+        .btn {
+            width: 36px;
+            height: 36px;
+            border: none;
+            border-radius: 6px;
+            background: transparent;
+            color: #6b7280;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s, transform 0.05s;
+        }
+
+        .btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .btn:hover {
+            background: #e5e7eb;
+            color: #374151;
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        /* Estado ativo (você troca via JS) */
+        .btn.is-active {
+            background: #ffffff;
+            color: #6366f1;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+        }
+    }
+
+
+
+}
+
+

@@ -5,7 +5,7 @@ import { property, customElement } from 'lit/decorators.js';
 import { PluginBaseModule } from '/_102027_/l2/pluginBaseModule.js';
 import { sortByEnvironment, IPluginTestCase } from '/_102027_/l2/plugins/pluginTestUtils.js';
 import { collabImport } from '/_102027_/l2/collabImport.js';
-import { collab_fileTest } from '/_100554_/l2/collabIcons.js';
+import { collab_fileTest } from '/_100555_/l2/utils/collabIcons.js';
 
 /// **collab_i18n_start**
 const message_pt = {

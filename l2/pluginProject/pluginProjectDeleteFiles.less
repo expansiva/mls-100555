@@ -1,0 +1,52 @@
+/// <mls fileReference="_100555_/l2/pluginProject/pluginProjectDeleteFiles.less" enhancement="_102027_/l2/enhancementStyle" />
+
+plugin-project--plugin-project-delete-files-100555 {
+
+    .svg-container {
+        width: 22px;
+        margin: 4px;
+        display: inline-flex;
+    }
+    
+    ul {
+        list-style: none;
+        padding-inline-start: 0;
+        font-size: 12px;
+
+        label {
+            cursor: pointer;
+
+            input {
+                display: inline-block;
+            }
+        }
+    }
+
+    ul.logs {
+        max-height: 500px;
+        overflow: auto;
+        background-color: #000000;
+        color: #fff;
+
+        pre {
+            padding: @space-16;
+        }
+    }
+
+
+    button {
+        margin-top: 2em;
+        padding: 0.5em 1em;
+        border: 1px solid @text-primary-color;
+        background-color: @bg-secondary-color;
+        color: @text-primary-color;
+        cursor: pointer;
+        border-radius: 4px;
+
+        &:hover {
+            background-color: @bg-secondary-color-hover;
+        }
+    }
+}
+
+

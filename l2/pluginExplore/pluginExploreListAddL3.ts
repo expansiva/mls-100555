@@ -6,7 +6,6 @@ import { customElement, state, property, query } from 'lit/decorators.js';
 import { createAllFiles, IReqCreateAllFiles } from '/_102027_/l2/libStor.js';
 import { convertFileNameToTag } from '/_102027_/l2/utils.js';
 import { getInstanceByFile, isNameValid } from '/_102027_/l2/libCommom.js';
-//import { executeAgentByFile } from '/_102027_/l2/aiAgentHelper.js'
 import { collabImport } from '/_102027_/l2/collabImport.js'
 import { PluginBaseModule } from '/_102027_/l2/pluginBaseModule.js';
 import { ServiceBase } from '/_102027_/l2/serviceBase.js';  
@@ -160,7 +159,7 @@ export class PluginExploreListAddL3 extends PluginBaseModule {
 
             const tag = convertFileNameToTag({ folder, project, shortName: name });
 
-            const srcTs = ` /// <mls shortName="${name}" project="${project}" folder="${folder}" enhancement="_100554_enhancementLit" groupName="${folder}" />
+            const srcTs = ` /// <mls shortName="${name}" project="${project}" folder="${folder}" enhancement="_102027_/l2/enhancementLit" groupName="${folder}" />
 
     import { html } from 'lit';
     import { customElement } from 'lit/decorators.js';
