@@ -4,7 +4,7 @@ import { html, TemplateResult } from 'lit';
 import { repeat } from 'lit/directives/repeat.js';
 import { customElement, state, property, query } from 'lit/decorators.js';
 import { createAllFiles, IReqCreateAllFiles } from '/_102027_/l2/libStor.js';
-import { getTemplateImport } from '/_100554_/l2/pluginNewFileBase.js';
+import { getTemplateImport } from '/_100555_/l2/pluginNewFile/pluginNewFileBase.js';
 import { convertFileNameToTag } from '/_102027_/l2/utils.js';
 import { getInstanceByFile, isNameValid } from '/_102027_/l2/libCommom.js';
 //import { executeAgentByFile } from '/_100554_/l2/aiAgentHelper.js'

@@ -5,7 +5,7 @@ import { customElement, property, query } from 'lit/decorators.js';
 import { convertFileNameToTag } from '/_102027_/l2/utils.js';
 import { ServiceBase } from '/_102027_/l2/serviceBase.js';
 import { CollabLitElement } from '/_102029_/l2/collabLitElement.js';
-import { IDetails } from "/_100554_/l2/pluginNewFileBase.js";
+import { IDetails } from "/_100555_/l2/pluginNewFile/pluginNewFileBase.js";
 import { propertyDataSource } from '/_102029_/l2/collabDecorators.js';
 import { getState, setState, initState } from '/_102029_/l2/collabState.js';
 import { loadPluginProject, isNameValid } from '/_102027_/l2/libCommom.js';

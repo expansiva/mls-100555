@@ -62,7 +62,7 @@ export const asis: mls.defs.AsIs = {
         ]
       },
       {
-        "ref": "/_100554_/l2/pluginNewFileBase.js",
+        "ref": "/_100555_/l2/pluginNewFile/pluginNewFileBase.js",
         "dependencies": [
           {
             "name": "IDetails"
