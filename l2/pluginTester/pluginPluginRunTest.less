@@ -2,61 +2,224 @@
 
 plugin-tester--plugin-plugin-run-test-100555 {
 
+    display: block;
     font-family: @font-family-primary;
     font-size: @font-size-16;
     font-weight: @font-weight-normal;
-    line-height: 1.5;
     color: @text-primary-color;
-    background-color: @bg-primary-color;
+
+    .plugin-container {
+        display: flex;
+        flex-direction: column;
+        gap: .75rem;
+    }
 
     header {
         display: flex;
         align-items: center;
-        gap: .5rem;
+        justify-content: space-between;
+        gap: 1rem;
     }
 
-    h2 {
-        font-size: 18px;
-        font-weight: bold;
-        margin: 0;
-    }
-
-    .actions {
-        margin: 1rem 0;
-    }
-
-    button {
-        background-color: @active-color;
-        border-radius: 8px;
-        border: none;
-        box-shadow: 0px 1px 3px 0px @grey-color;
+    .title-group {
         display: flex;
-        flex-direction: row;
-        justify-content: center;
-        gap: .2rem;
-        font-weight: 700;
         align-items: center;
+        gap: .5rem;
+
+        .icon {
+            display: flex;
+            color: @active-color;
+        }
+
+        h2 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    }
+
+    .play-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
         height: 40px;
-        transition: height 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
-        padding: 0.5rem;
+        flex-shrink: 0;
+        border-radius: 50%;
+        border: none;
+        background-color: @active-color;
         color: #fff;
         cursor: pointer;
-        min-width: 80px;
+        transition: background-color .2s ease, transform .1s ease;
 
-        &:hover {
+        &:hover:not(:disabled) {
             background-color: @active-color-hover;
         }
 
+        &:active:not(:disabled) {
+            transform: scale(0.94);
+        }
+
         &:disabled {
-            opacity: .6;
             cursor: not-allowed;
+            opacity: .85;
+        }
+
+        &.running svg {
+            animation: plugin-run-test-spin 1s linear infinite;
         }
     }
 
-    .summary {
-        display: block;
-        margin-top: .5rem;
-        color: @text-primary-color;
+    @keyframes plugin-run-test-spin {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    .terminal {
+        background-color: #0d1117;
+        color: #c9d1d9;
+        font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+        font-size: 13px;
+        line-height: 1.6;
+        border-radius: 8px;
+        padding: .85rem 1rem;
+        max-height: 420px;
+        overflow-y: auto;
+        border: 1px solid #30363d;
+    }
+
+    .terminal-placeholder {
+        color: #6e7681;
+        font-style: italic;
+    }
+
+    .file-result {
+        border-bottom: 1px solid #21262d;
+        padding: .4rem 0;
+
+        &:last-of-type {
+            border-bottom: none;
+        }
+
+        summary {
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+            cursor: pointer;
+            list-style: none;
+            user-select: none;
+
+            &::-webkit-details-marker {
+                display: none;
+            }
+
+            &::before {
+                content: '▸';
+                display: inline-block;
+                width: .8rem;
+                color: #6e7681;
+                transition: transform .15s ease;
+            }
+        }
+
+        &[open] summary::before {
+            transform: rotate(90deg);
+        }
+
+        .status-icon {
+            font-weight: bold;
+        }
+
+        &.pass .status-icon {
+            color: #3fb950;
+        }
+
+        &.fail .status-icon {
+            color: #f85149;
+        }
+
+        &.empty .status-icon {
+            color: #6e7681;
+        }
+
+        .file-name {
+            color: #58a6ff;
+        }
+
+        .file-meta {
+            color: #6e7681;
+            margin-left: auto;
+            white-space: nowrap;
+        }
+    }
+
+    .case-list {
+        margin: .5rem 0 .25rem 1.3rem;
+        display: flex;
+        flex-direction: column;
+        gap: .3rem;
+    }
+
+    .case-line {
+        display: flex;
+        align-items: baseline;
+        flex-wrap: wrap;
+        gap: .5rem;
+
+        .case-status {
+            font-weight: bold;
+        }
+
+        &.pass .case-status {
+            color: #3fb950;
+        }
+
+        &.fail .case-status {
+            color: #f85149;
+        }
+
+        .case-name {
+            color: #c9d1d9;
+        }
+
+        .case-index {
+            color: #6e7681;
+        }
+
+        .case-env {
+            color: #6e7681;
+            font-size: 11px;
+            border: 1px solid #30363d;
+            border-radius: 4px;
+            padding: 0 .35rem;
+        }
+    }
+
+    .case-error {
+        flex-basis: 100%;
+        color: #f85149;
+        padding-left: 1.3rem;
+        white-space: pre-wrap;
+    }
+
+    .terminal-summary {
+        margin-top: .6rem;
+        padding-top: .6rem;
+        border-top: 1px solid #30363d;
+        font-weight: bold;
+
+        &.pass {
+            color: #3fb950;
+        }
+
+        &.fail {
+            color: #f85149;
+        }
     }
 
 }

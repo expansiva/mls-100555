@@ -1,101 +1,101 @@
 /// <mls fileReference="_100555_/l2/pluginSiteMonitorDashboard/pluginActiveUsers.test.ts" enhancement="_blank" />
 
-import { IPluginTestCase, mount, cleanup, comparar, query, montarEVerificar } from '/_102027_/l2/plugins/pluginTestUtils.js';
+import { IPluginTestCase, mount, cleanup, compare, query, mountAndVerify } from '/_102027_/l2/plugins/pluginTestUtils.js';
 import { pluginData, PluginActiveUsers } from '/_100555_/l2/pluginSiteMonitorDashboard/pluginActiveUsers.js';
 
 const TAG = 'plugin-site-monitor-dashboard--plugin-active-users-100555';
 
 export const tests: IPluginTestCase[] = [
 
-    // ---- browser: precisam de DOM/customElements reais ----
+    // ---- browser: need real DOM/customElements ----
 
     { functionName: 'testSmoke', env: 'browser', params: [
-        { expected: { registrado: true, renderizou: true } },
+        { expected: { registered: true, rendered: true } },
     ]},
 
     { functionName: 'testPrepare', env: 'browser', params: [
         { input: { mode: 'full' },
-          expected: { temTitulo: true, temLegenda: true, corpoTemWidget: true } },
+          expected: { hasTitle: true, hasLegend: true, bodyHasWidget: true } },
         { input: { mode: 'simplified' },
-          expected: { temTitulo: false, temLegenda: false, corpoTemWidget: true } },
+          expected: { hasTitle: false, hasLegend: false, bodyHasWidget: true } },
     ]},
 
     { functionName: 'testHandleChange', env: 'browser', params: [
-        { input: { valorSelecionado: 'week' }, expected: { filter: 'week' } },
-        { input: { valorSelecionado: 'all' }, expected: { filter: 'all' } },
+        { input: { selectedValue: 'week' }, expected: { filter: 'week' } },
+        { input: { selectedValue: 'all' }, expected: { filter: 'all' } },
     ]},
 
-    { functionName: 'testRenderRespeitaScope', env: 'browser', params: [
-        { input: { scope: 'dashboard' }, expected: { renderizouContainer: true } },
-        { input: { scope: 'detail' }, expected: { renderizouContainer: false } },
+    { functionName: 'testRenderRespectsScope', env: 'browser', params: [
+        { input: { scope: 'dashboard' }, expected: { containerRendered: true } },
+        { input: { scope: 'detail' }, expected: { containerRendered: false } },
     ]},
 
-    // ---- vscode: lógica pura, não toca em DOM ----
-    // Atenção: pluginActiveUsers.ts registra o customElement no escopo do módulo (@customElement),
-    // então importar este arquivo fora do browser exige um stub de `customElements` no runner de vscode.
-    // A asserção em si (pluginData.title/getSvg) não usa DOM nenhum.
+    // ---- vscode: pure logic, no DOM involved ----
+    // Note: pluginActiveUsers.ts registers the customElement at module scope (@customElement),
+    // so importing this file outside the browser requires a `customElements` stub in the vscode runner.
+    // The assertion itself (pluginData.title/getSvg) doesn't use any DOM.
 
     { functionName: 'testPluginData', env: 'vscode', params: [
-        { expected: { title: 'Active Users', svgContemTagSvg: true } },
+        { expected: { title: 'Active Users', svgHasSvgTag: true } },
     ]},
 ];
 
-export async function testSmoke(caso: { expected: any }): Promise<string> {
+export async function testSmoke(testCase: { expected: any }): Promise<string> {
     try {
-        const resultado = await montarEVerificar(TAG, { scope: 'dashboard' });
-        comparar(resultado, caso.expected);
-        return JSON.stringify(resultado);
+        const result = await mountAndVerify(TAG, { scope: 'dashboard' });
+        compare(result, testCase.expected);
+        return JSON.stringify(result);
     } finally {
         cleanup();
     }
 }
 
-export async function testPrepare(caso: { input: { mode: 'simplified' | 'full' }; expected: any }): Promise<string> {
+export async function testPrepare(testCase: { input: { mode: 'simplified' | 'full' }; expected: any }): Promise<string> {
     try {
-        const el = await mount<PluginActiveUsers>(TAG, { scope: 'dashboard', mode: caso.input.mode });
+        const el = await mount<PluginActiveUsers>(TAG, { scope: 'dashboard', mode: testCase.input.mode });
         await el.prepare();
-        const resultado = {
-            temTitulo: !!el.chartData.title,
-            temLegenda: !!el.chartData.legend,
-            corpoTemWidget: !!query(el, 'widget-collab-chart-100554'),
+        const result = {
+            hasTitle: !!el.chartData.title,
+            hasLegend: !!el.chartData.legend,
+            bodyHasWidget: !!query(el, 'widget-collab-chart-100554'),
         };
-        comparar(resultado, caso.expected);
-        return JSON.stringify(resultado);
+        compare(result, testCase.expected);
+        return JSON.stringify(result);
     } finally {
         cleanup();
     }
 }
 
-export async function testHandleChange(caso: { input: { valorSelecionado: string }; expected: any }): Promise<string> {
+export async function testHandleChange(testCase: { input: { selectedValue: string }; expected: any }): Promise<string> {
     try {
         const el = await mount<PluginActiveUsers>(TAG, { scope: 'dashboard' });
-        el.handleChange({ target: { value: caso.input.valorSelecionado } } as unknown as MouseEvent);
-        const resultado = { filter: el.filter };
-        comparar(resultado, caso.expected);
-        return JSON.stringify(resultado);
+        el.handleChange({ target: { value: testCase.input.selectedValue } } as unknown as MouseEvent);
+        const result = { filter: el.filter };
+        compare(result, testCase.expected);
+        return JSON.stringify(result);
     } finally {
         cleanup();
     }
 }
 
-export async function testRenderRespeitaScope(caso: { input: { scope: string }; expected: any }): Promise<string> {
+export async function testRenderRespectsScope(testCase: { input: { scope: string }; expected: any }): Promise<string> {
     try {
-        const el = await mount<PluginActiveUsers>(TAG, { scope: caso.input.scope as any });
-        const resultado = { renderizouContainer: !!query(el, '.plugin-container') };
-        comparar(resultado, caso.expected);
-        return JSON.stringify(resultado);
+        const el = await mount<PluginActiveUsers>(TAG, { scope: testCase.input.scope as any });
+        const result = { containerRendered: !!query(el, '.plugin-container') };
+        compare(result, testCase.expected);
+        return JSON.stringify(result);
     } finally {
         cleanup();
     }
 }
 
-export async function testPluginData(caso: { expected: any }): Promise<string> {
+export async function testPluginData(testCase: { expected: any }): Promise<string> {
     const svg = pluginData.getSvg() as any;
-    const svgTexto = Array.isArray(svg?.strings) ? svg.strings.join('') : String(svg);
-    const resultado = {
+    const svgText = Array.isArray(svg?.strings) ? svg.strings.join('') : String(svg);
+    const result = {
         title: pluginData.title,
-        svgContemTagSvg: svgTexto.includes('<svg'),
+        svgHasSvgTag: svgText.includes('<svg'),
     };
-    comparar(resultado, caso.expected);
-    return JSON.stringify(resultado);
+    compare(result, testCase.expected);
+    return JSON.stringify(result);
 }
