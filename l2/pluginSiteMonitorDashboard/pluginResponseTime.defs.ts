@@ -49,7 +49,7 @@ export const asis: mls.defs.AsIs = {
         ]
       },
       {
-        "ref": "/_102027_/l2/plugins/pluginBaseModule.js",
+        "ref": "/_102027_/l2/pluginBaseModule.js",
         "dependencies": [
           {
             "name": "PluginBaseModule",
