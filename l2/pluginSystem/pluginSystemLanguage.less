@@ -1,0 +1,61 @@
+/// <mls fileReference="_100555_/l2/pluginSystem/pluginSystemLanguage.less" enhancement="_102027_/l2/enhancementStyle" />
+
+plugin-system--plugin-system-language-100555 {
+
+    font-family: @font-family-primary;
+    font-size: @font-size-16;
+    font-weight: @font-weight-normal;
+    line-height: 1.5;
+    color: @text-primary-color;
+    background-color: @bg-primary-color;
+
+    .plugin-container {
+        padding: .5rem;
+
+        details>div {
+            margin-left: 1rem;
+            margin-top: .3rem;
+        }
+    }
+
+    button {
+        background-color: @active-color;
+        border-radius: 8px;
+        border: none;
+        box-shadow: 0px 1px 3px 0px @grey-color;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        gap: .2rem;
+        font-weight: 700;
+        align-items: center;
+        height: 40px;
+        transition: height 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+        padding: 0.5rem;
+        color: #fff;
+        cursor: pointer;
+        min-width: 80px;
+
+        &:hover {
+            background-color: @active-color-hover;
+        }
+    }
+
+    input,
+    select,
+    textarea {
+        display: block;
+        font-size: 1rem;
+        line-height: 1.5;
+        color: #000000;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        outline: none;
+    }
+
+}
+
+
