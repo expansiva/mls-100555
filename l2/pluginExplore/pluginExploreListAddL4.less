@@ -1,0 +1,126 @@
+/// <mls fileReference="_100555_/l2/pluginExplore/pluginExploreListAddL4.less" enhancement="_102027_/l2/enhancementStyle" />
+
+plugin-explore--plugin-explore-list-add-l4-100555 {
+
+display: block; 
+    .headerNav {
+        height: 40px;
+        background: @bg-primary-color-darker-hover;
+        border-bottom: 1px solid @bg-primary-color-lighter;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        box-shadow: 0 1px 3px @bg-primary-color-lighter;
+    }
+
+    .headerNav h1 {
+        font-size: 16px;
+        font-weight: 500;
+        color: @text-primary-color;
+        margin: 0;
+        pointer-events: none;
+        /* evita clique no texto */
+    }
+
+    .headerNav .btn-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        border: none;
+        background-color: @grey-color-darker;
+        color: @text-primary-color;
+        width: 26px;
+        height: 26px;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+
+    .headerNav.left .btn-nav {
+        left: 10px;
+    }
+
+    .headerNav.right .btn-nav {
+        right: 10px;
+    }
+
+    .headerNav .btn-nav:hover {
+        opacity: .5;
+    }
+
+    .headerNav .btn-nav svg {
+        width: 14px;
+        height: 14px;
+        fill: #fff;
+    }
+
+
+    .form-container {
+        background: @bg-primary-color;
+        color: @text-primary-color;
+        padding: 20px 24px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 14px;
+    }
+
+    .form-group label {
+        font-size: 13px;
+        margin-bottom: 6px;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+        padding: 8px 10px;
+        border: 1px solid @grey-color;
+        border-radius: 6px;
+        font-size: 14px;
+        outline: none;
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .form-group input:disabled {
+        color: @text-primary-color;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+        border-color: #4A90E2;
+        box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+    }
+
+    .form-group textarea {
+        resize: vertical;
+        min-height: 60px;
+    }
+
+    .btn-save {
+        width: 100%;
+        padding: 10px;
+        background-color: @grey-color-darker;
+        color: @text-primary-color;
+        font-size: 14px;
+        font-weight: 500;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+
+    .btn-save:hover {
+        //background: #357ABD;
+        opacity: .5;
+    }
+
+ }
+
+

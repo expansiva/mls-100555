@@ -1,0 +1,91 @@
+/// <mls fileReference="_100555_/l2/pluginExplore/collabInputSearch.less" enhancement="_102027_/l2/enhancementStyle"/>
+
+plugin-explore--collab-input-search-100555 {
+
+    display: inline-flex;
+    font-family: system-ui, sans-serif;
+
+
+    .wrapper {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        background: @bg-primary-color;
+        border: 1.5px solid @bg-primary-color-darker-disabled; 
+        border-radius: 4px;
+        padding: 6px 10px;
+        cursor: text;
+        transition:
+            width 260ms cubic-bezier(0.4, 0, 0.2, 1),
+            border-color 200ms,
+            background 200ms,
+            box-shadow 200ms;
+        width: 160px;
+        box-sizing: border-box;
+        overflow: hidden;
+    }
+
+    .wrapper.focused {
+        width: 300px;
+        background:  @bg-primary-color-darker;
+        border-color: @active-color;
+        box-shadow: 0 0 0 3px rgba(79, 142, 247, 0.15);
+    }
+
+    .wrapper.has-value {
+        width: 300px;
+    }
+
+    .icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        color: @text-primary-color; 
+        transition: color 200ms;
+    }
+
+    .wrapper.focused .icon,
+    .wrapper.has-value .icon {
+        color: @active-color;
+    }
+
+    input {
+        border: none;
+        outline: none;
+        background: transparent;
+        font-size: 14px;
+        color: @text-primary-color; 
+        flex: 1;
+        min-width: 0;
+        caret-color: @active-color;
+    }
+
+    input::placeholder {
+        color: #9aa0a6;
+    }
+
+    .clear-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        background: none;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+        color: #9aa0a6;
+        border-radius: 50%;
+        width: 18px;
+        height: 18px;
+        transition: color 180ms, background 180ms;
+    }
+
+    .clear-btn:hover {
+        color: #202124;
+        background: #e8eaed;
+    }
+
+}
+
+
