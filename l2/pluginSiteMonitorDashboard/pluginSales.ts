@@ -2,7 +2,7 @@
 
 import { html, css, svg, TemplateResult } from 'lit';
 import { query, property, customElement } from 'lit/decorators.js';
-import { PluginBaseModule } from '/_102027_/l2/plugins/pluginBaseModule.js';
+import { PluginBaseModule } from '/_102027_/l2/pluginBaseModule.js';
 
 export const pluginData: mls.plugin.IPluginData = {
     title: "Sales",
