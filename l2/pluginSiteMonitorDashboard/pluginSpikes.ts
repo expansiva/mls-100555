@@ -1,19 +1,20 @@
-/// <mls fileReference="_100555_/l2/pluginSiteMonitorDashboard/pluginSiteMonitorDashboardActiveUsers.ts" enhancement="_102027_/l2/enhancementLit" />
+/// <mls fileReference="_100555_/l2/pluginSiteMonitorDashboard/pluginSpikes.ts" enhancement="_102027_/l2/enhancementLit" />
 
 import { html, css, svg, TemplateResult } from 'lit';
-import { query, property } from 'lit/decorators.js';
+import { query, property, customElement } from 'lit/decorators.js';
 import { PluginBaseModule } from '/_102027_/l2/plugins/pluginBaseModule.js';
 
 export const pluginData: mls.plugin.IPluginData = {
-    title: "Active Users",
+    title: "Spikes",
     getSvg(): TemplateResult {
         return svg`
-     <svg svg width="22" height="22" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M144 0a80 80 0 1 1 0 160A80 80 0 1 1 144 0zM512 0a80 80 0 1 1 0 160A80 80 0 1 1 512 0zM0 298.7C0 239.8 47.8 192 106.7 192l42.7 0c15.9 0 31 3.5 44.6 9.7c-1.3 7.2-1.9 14.7-1.9 22.3c0 38.2 16.8 72.5 43.3 96c-.2 0-.4 0-.7 0L21.3 320C9.6 320 0 310.4 0 298.7zM405.3 320c-.2 0-.4 0-.7 0c26.6-23.5 43.3-57.8 43.3-96c0-7.6-.7-15-1.9-22.3c13.6-6.3 28.7-9.7 44.6-9.7l42.7 0C592.2 192 640 239.8 640 298.7c0 11.8-9.6 21.3-21.3 21.3l-213.3 0zM224 224a96 96 0 1 1 192 0 96 96 0 1 1 -192 0zM128 485.3C128 411.7 187.7 352 261.3 352l117.3 0C452.3 352 512 411.7 512 485.3c0 14.7-11.9 26.7-26.7 26.7l-330.7 0c-14.7 0-26.7-11.9-26.7-26.7z"/></svg>
+     <svg svg width="22" height="22" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M64 116.8c0-15.8 20.5-22 29.3-8.9L192 256l0-139.2c0-15.8 20.5-22 29.3-8.9L320 256l0-139.2c0-15.8 20.5-22 29.3-8.9L448 256l0-139.2c0-15.8 20.5-22 29.3-8.9L606.8 302.2c14.2 21.3-1.1 49.7-26.6 49.7L512 352l-64 0-64 0-64 0-64 0-64 0L64 352l0-235.2zM32 384l576 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 448c-17.7 0-32-14.3-32-32s14.3-32 32-32z"/></svg>
     `;
     }
 };
 
-export class PluginSiteMonitorDashboardActiveUsers extends PluginBaseModule {
+@customElement('plugin-site-monitor-dashboard--plugin-spikes-100555')
+export class PluginSpikes extends PluginBaseModule {
 
     @property({ type: String }) filter: string = "today";
 
@@ -33,42 +34,37 @@ export class PluginSiteMonitorDashboardActiveUsers extends PluginBaseModule {
             "tooltip": {
                 "trigger": "axis"
             },
+            "legend": {
+                "data": ["Number of Requests"]
+            },
             "xAxis": {
                 "type": "category",
                 "boundaryGap": false,
-                "data": ["12:00", "12:05", "12:10", "12:15", "12:20", "12:25", "12:30"]
+                "data": ["00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00"]
             },
             "yAxis": {
                 "type": "value",
-                "name": "Number of Users"
+                "name": "Number of Requests"
             },
             "series": [
                 {
-                    "name": "Anonymous Users",
+                    "name": "Number of Requests",
                     "type": "line",
-                    "data": [120, 132, 101, 134, 90, 230, 210],
+                    "data": [50, 45, 60, 80, 120, 140, 200, 300, 250, 230, 210, 180, 170, 150, 130, 100, 90, 160, 220, 260, 300, 320, 340, 280],
                     "markPoint": {
                         "data": [
-                            { "type": "max", "name": "Max" },
-                            { "type": "min", "name": "Min" }
+                            { "type": "max", "name": "Max Traffic" },
+                            { "type": "min", "name": "Min Traffic" }
                         ]
                     },
                     "markLine": {
-                        "data": [{ "type": "average", "name": "Average" }]
-                    }
-                },
-                {
-                    "name": "Logged-In Users",
-                    "type": "line",
-                    "data": [220, 182, 191, 234, 290, 330, 310],
-                    "markPoint": {
                         "data": [
-                            { "type": "max", "name": "Max" },
-                            { "type": "min", "name": "Min" }
+                            { "type": "average", "name": "Average Traffic" }
                         ]
                     },
-                    "markLine": {
-                        "data": [{ "type": "average", "name": "Average" }]
+                    "smooth": true,
+                    "lineStyle": {
+                        "width": 2
                     }
                 }
             ],
@@ -76,12 +72,8 @@ export class PluginSiteMonitorDashboardActiveUsers extends PluginBaseModule {
 
         if (this.mode === 'full') {
             this.chartData.title = {
-                text: "Active Users",
-            };
-
-            this.chartData.legend = {
-                data: ["Anonymous Users", "Logged-In Users"]
-            };
+                text: "Hourly Traffic Spikes"
+            }
         }
 
         await this.updateComplete;
@@ -95,19 +87,17 @@ export class PluginSiteMonitorDashboardActiveUsers extends PluginBaseModule {
                 .replace(/>/g, "&gt;");
         }
 
-        if (this.body) {
-            this.body.innerHTML = `<widget-collab-chart-100554 renderer="svg" data="${escapeHTML(data)}"></widget-collab-chart-100554>`;
-        }
+        if (this.body) this.body.innerHTML = `<widget-collab-chart-100554 renderer="svg" data="${escapeHTML(data)}"></widget-collab-chart-100554>`;
 
-    }
-
-    createRenderRoot() {
-        return this;
     }
 
     firstUpdated() {
         if (!this.body || !this.autoPrepare) return;
         this.prepare();
+    }
+
+    createRenderRoot() {
+        return this;
     }
 
     render(): TemplateResult {
@@ -151,8 +141,4 @@ export class PluginSiteMonitorDashboardActiveUsers extends PluginBaseModule {
         this.prepare();
     }
 
-}
-
-if (!customElements.get('plugin-site-monitor-dashboard-active-users-100555')) {
-    customElements.define('plugin-site-monitor-dashboard-active-users-100555', PluginSiteMonitorDashboardActiveUsers);
 }

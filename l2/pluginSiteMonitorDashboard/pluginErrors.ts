@@ -1,7 +1,7 @@
-/// <mls fileReference="_100555_/l2/pluginSiteMonitorDashboard/pluginSiteMonitorDashboardErrors.ts" enhancement="_102027_/l2/enhancementLit" />
+/// <mls fileReference="_100555_/l2/pluginSiteMonitorDashboard/pluginErrors.ts" enhancement="_102027_/l2/enhancementLit" />
 
 import { html, css, svg, TemplateResult } from 'lit';
-import { query, property } from 'lit/decorators.js';
+import { query, property, customElement } from 'lit/decorators.js';
 import { PluginBaseModule } from '/_102027_/l2/plugins/pluginBaseModule.js';
 
 export const pluginData: mls.plugin.IPluginData = {
@@ -13,7 +13,8 @@ export const pluginData: mls.plugin.IPluginData = {
     }
 };
 
-export class PluginSiteMonitorDashboardErrors extends PluginBaseModule {
+@customElement('plugin-site-monitor-dashboard--plugin-errors-100555')
+export class PluginErrors extends PluginBaseModule {
 
     @property({ type: String }) filter: string = "today";
 
@@ -139,8 +140,4 @@ export class PluginSiteMonitorDashboardErrors extends PluginBaseModule {
         this.prepare();
     }
 
-}
-
-if (!customElements.get('plugin-site-monitor-dashboard-errors-100555')) {
-    customElements.define('plugin-site-monitor-dashboard-errors-100555', PluginSiteMonitorDashboardErrors);
 }

@@ -1,10 +1,10 @@
-/// <mls fileReference="_100555_/l2/pluginSiteMonitorDashboard/pluginSiteMonitorDashboardActiveUsers.defs.ts" enhancement="_blank" />
+/// <mls fileReference="_100555_/l2/pluginSiteMonitorDashboard/pluginRegionalLatency.defs.ts" enhancement="_blank" />
 
 // Do not change – automatically generated code. 
 
 export const asis: mls.defs.AsIs = {
   "meta": {
-    "fileReference": "_100555_/l2/pluginSiteMonitorDashboard/pluginSiteMonitorDashboardActiveUsers.ts",
+    "fileReference": "_100555_/l2/pluginSiteMonitorDashboard/pluginSiteMonitorDashboardRegionalLatency.ts",
     "componentType": "pluginUI",
     "componentScope": "appFrontEnd",
     "group": "enhancement"
@@ -18,7 +18,8 @@ export const asis: mls.defs.AsIs = {
         "ref": "lit",
         "dependencies": [
           {
-            "name": "html"
+            "name": "html",
+            "type": "function"
           },
           {
             "name": "css"
@@ -27,7 +28,8 @@ export const asis: mls.defs.AsIs = {
             "name": "svg"
           },
           {
-            "name": "TemplateResult"
+            "name": "TemplateResult",
+            "type": "type"
           }
         ]
       },
@@ -46,26 +48,33 @@ export const asis: mls.defs.AsIs = {
         "ref": "/_102027_/l2/plugins/pluginBaseModule.js",
         "dependencies": [
           {
-            "name": "PluginBaseModule"
+            "name": "PluginBaseModule",
+            "type": "class"
           }
         ]
+      },
+      {
+        "ref": "/_100554_/l2/widgetCollabChart.js"
       }
     ]
   },
   "asIs": {
     "semantic": {
-      "generalDescription": "Active Users",
+      "generalDescription": "Regional Latency",
       "businessCapabilities": [
-        "Display active users chart",
-        "Filter by time periods"
+        "Monitor regional latency"
       ],
       "technicalCapabilities": [
-        "Uses Lit for rendering",
-        "Renders chart with widget-collab-chart"
+        "Render bar chart",
+        "Use Lit for templating"
       ],
       "implementedFeatures": [
-        "Chart data for anonymous and logged-in users",
-        "Time filter options"
+        "Filter by time periods",
+        "Display latency data in bar chart",
+        "Support simplified and full modes"
+      ],
+      "constraints": [
+        "Requires dashboard scope"
       ]
     }
   }

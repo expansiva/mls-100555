@@ -1,19 +1,20 @@
-/// <mls fileReference="_100555_/l2/pluginSiteMonitorDashboard/pluginSiteMonitorDashboardSales.ts" enhancement="_102027_/l2/enhancementLit" />
+/// <mls fileReference="_100555_/l2/pluginSiteMonitorDashboard/pluginExpenses.ts" enhancement="_102027_/l2/enhancementLit" />
 
 import { html, css, svg, TemplateResult } from 'lit';
-import { query, property } from 'lit/decorators.js';
+import { query, property, customElement } from 'lit/decorators.js';
 import { PluginBaseModule } from '/_102027_/l2/plugins/pluginBaseModule.js';
 
 export const pluginData: mls.plugin.IPluginData = {
-    title: "Sales",
+    title: "Expenses",
     getSvg(): TemplateResult {
         return svg`
-     <svg svg width="22" height="22" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M24 0C10.7 0 0 10.7 0 24S10.7 48 24 48l45.5 0c3.8 0 7.1 2.7 7.9 6.5l51.6 271c6.5 34 36.2 58.5 70.7 58.5L488 384c13.3 0 24-10.7 24-24s-10.7-24-24-24l-288.3 0c-11.5 0-21.4-8.2-23.6-19.5L170.7 288l288.5 0c32.6 0 61.1-21.8 69.5-53.3l41-152.3C576.6 57 557.4 32 531.1 32L360 32l0 102.1 23-23c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-64 64c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l23 23L312 32 120.1 32C111 12.8 91.6 0 69.5 0L24 0zM176 512a48 48 0 1 0 0-96 48 48 0 1 0 0 96zm336-48a48 48 0 1 0 -96 0 48 48 0 1 0 96 0z"/></svg>
+     <svg svg width="22" height="22" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M64 64C28.7 64 0 92.7 0 128L0 384c0 35.3 28.7 64 64 64l448 0c35.3 0 64-28.7 64-64l0-256c0-35.3-28.7-64-64-64L64 64zm64 320l-64 0 0-64c35.3 0 64 28.7 64 64zM64 192l0-64 64 0c0 35.3-28.7 64-64 64zM448 384c0-35.3 28.7-64 64-64l0 64-64 0zm64-192c-35.3 0-64-28.7-64-64l64 0 0 64zM288 160a96 96 0 1 1 0 192 96 96 0 1 1 0-192z"/></svg>
     `;
     }
 };
 
-export class PluginSiteMonitorDashboardSales extends PluginBaseModule {
+@customElement('plugin-site-monitor-dashboard--plugin-expenses-100555')
+export class PluginExpenses extends PluginBaseModule {
 
     @property({ type: String }) filter: string = "today";
 
@@ -30,46 +31,44 @@ export class PluginSiteMonitorDashboardSales extends PluginBaseModule {
         await import('/_100554_/l2/widgetCollabChart.js');
 
         this.chartData = {
-
-            "tooltip": {
-                "trigger": "item",
-                "formatter": "{a} <br/>{b}: {c} ({d}%)"
+            tooltip: {
+                trigger: "item",
+                formatter: "{a} <br/>{b}: ${c} ({d}%)"
             },
-
-            "series": [
+            series: [
                 {
-                    "name": "Sales",
-                    "type": "pie",
-                    "radius": "50%",
-                    "data": [
-                        { "value": 5000, "name": "Product A" },
-                        { "value": 3000, "name": "Product B" },
-                        { "value": 2000, "name": "Product C" },
-                        { "value": 4000, "name": "Product D" },
-                        { "value": 1000, "name": "Product E" }
+                    name: "Expenses",
+                    type: "pie",
+                    radius: "50%",
+                    data: [
+                        { "value": 300, "name": "CDN" },
+                        { "value": 250, "name": "EC2" },
+                        { "value": 200, "name": "Database" },
+                        { "value": 100, "name": "Domain" },
+                        { "value": 70, "name": "Others" }
                     ],
-                    "emphasis": {
-                        "itemStyle": {
-                            "shadowBlur": 10,
-                            "shadowOffsetX": 0,
-                            "shadowColor": "rgba(0, 0, 0, 0.5)"
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: "rgba(0, 0, 0, 0.5)"
                         }
                     }
                 }
             ],
-        }
+        };
 
         if (this.mode === 'full') {
             this.chartData.title = {
-                text: "Product Sales Distribution",
-                subtext: "Total Sales: $15,000",
+                text: "Expense Breakdown",
+                subtext: "Total Expenses: $920",
                 left: "center"
             };
 
             this.chartData.legend = {
                 orient: "vertical",
                 left: "left",
-                data: ["Product A", "Product B", "Product C", "Product D", "Product E"]
+                data: ["CDN", "EC2", "Database", "Domain", "Others"]
             };
         }
 
@@ -84,7 +83,7 @@ export class PluginSiteMonitorDashboardSales extends PluginBaseModule {
                 .replace(/>/g, "&gt;");
         }
 
-        if (this.body) this.body.innerHTML = `<widget-collab-chart-10055 renderer="svg" data="${escapeHTML(data)}"></widget-collab-chart-10055>`;
+        if (this.body) this.body.innerHTML = `<widget-collab-chart-100554 renderer="svg" data="${escapeHTML(data)}"></widget-collab-chart-100554>`;
 
     }
 
@@ -138,8 +137,4 @@ export class PluginSiteMonitorDashboardSales extends PluginBaseModule {
         this.prepare();
     }
 
-}
-
-if (!customElements.get('plugin-site-monitor-dashboard-sales-100555')) {
-    customElements.define('plugin-site-monitor-dashboard-sales-100555', PluginSiteMonitorDashboardSales);
 }

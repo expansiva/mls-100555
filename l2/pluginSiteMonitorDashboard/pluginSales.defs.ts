@@ -1,17 +1,17 @@
-/// <mls fileReference="_100555_/l2/pluginSiteMonitorDashboard/pluginSiteMonitorDashboardResponseTime.defs.ts" enhancement="_blank" />
+/// <mls fileReference="_100555_/l2/pluginSiteMonitorDashboard/pluginSales.defs.ts" enhancement="_blank" />
 
 // Do not change – automatically generated code. 
 
 export const asis: mls.defs.AsIs = {
   "meta": {
-    "fileReference": "_100555_/l2/pluginSiteMonitorDashboard/pluginSiteMonitorDashboardResponseTime.ts",
+    "fileReference": "_100555_/l2/pluginSiteMonitorDashboard/pluginSiteMonitorDashboardSales.ts",
     "componentType": "pluginUI",
     "componentScope": "appFrontEnd",
     "group": "enhancement"
   },
   "references": {
     "webComponents": [
-      "widget-collab-chart-100554"
+      "widget-collab-chart-10055"
     ],
     "imports": [
       {
@@ -64,19 +64,19 @@ export const asis: mls.defs.AsIs = {
   },
   "asIs": {
     "semantic": {
-      "generalDescription": "Response Time",
+      "generalDescription": "Sales dashboard plugin",
       "businessCapabilities": [
-        "Display average response time over time"
+        "Displays sales data in a pie chart",
+        "Allows filtering by time period"
       ],
       "technicalCapabilities": [
-        "Render SVG icon",
-        "Prepare chart data",
-        "Update DOM with chart widget"
+        "Uses Lit library for web components",
+        "Renders SVG charts"
       ],
       "implementedFeatures": [
-        "Filter by time period",
-        "Chart display with line series",
-        "Mark points and lines"
+        "Pie chart with product sales",
+        "Dropdown for filter selection",
+        "Mode for simplified or full view"
       ]
     }
   }

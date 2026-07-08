@@ -1,19 +1,20 @@
-/// <mls fileReference="_100555_/l2/pluginSiteMonitorDashboard/pluginSiteMonitorDashboardExpenses.ts" enhancement="_102027_/l2/enhancementLit" />
+/// <mls fileReference="_100555_/l2/pluginSiteMonitorDashboard/pluginResponseTime.ts" enhancement="_102027_/l2/enhancementLit" />
 
 import { html, css, svg, TemplateResult } from 'lit';
-import { query, property } from 'lit/decorators.js';
+import { query, property, customElement } from 'lit/decorators.js';
 import { PluginBaseModule } from '/_102027_/l2/plugins/pluginBaseModule.js';
 
 export const pluginData: mls.plugin.IPluginData = {
-    title: "Expenses",
+    title: "Response Time",
     getSvg(): TemplateResult {
         return svg`
-     <svg svg width="22" height="22" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M64 64C28.7 64 0 92.7 0 128L0 384c0 35.3 28.7 64 64 64l448 0c35.3 0 64-28.7 64-64l0-256c0-35.3-28.7-64-64-64L64 64zm64 320l-64 0 0-64c35.3 0 64 28.7 64 64zM64 192l0-64 64 0c0 35.3-28.7 64-64 64zM448 384c0-35.3 28.7-64 64-64l0 64-64 0zm64-192c-35.3 0-64-28.7-64-64l64 0 0 64zM288 160a96 96 0 1 1 0 192 96 96 0 1 1 0-192z"/></svg>
+     <svg svg width="22" height="22" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M464 256A208 208 0 1 1 48 256a208 208 0 1 1 416 0zM0 256a256 256 0 1 0 512 0A256 256 0 1 0 0 256zM232 120l0 136c0 8 4 15.5 10.7 20l96 64c11 7.4 25.9 4.4 33.3-6.7s4.4-25.9-6.7-33.3L280 243.2 280 120c0-13.3-10.7-24-24-24s-24 10.7-24 24z"/></svg>
     `;
     }
 };
 
-export class PluginSiteMonitorDashboardExpenses extends PluginBaseModule {
+@customElement('plugin-site-monitor-dashboard--plugin-response-time-100555')
+export class PluginResponseTime extends PluginBaseModule {
 
     @property({ type: String }) filter: string = "today";
 
@@ -30,44 +31,48 @@ export class PluginSiteMonitorDashboardExpenses extends PluginBaseModule {
         await import('/_100554_/l2/widgetCollabChart.js');
 
         this.chartData = {
-            tooltip: {
-                trigger: "item",
-                formatter: "{a} <br/>{b}: ${c} ({d}%)"
+            "tooltip": {
+                "trigger": "axis"
             },
-            series: [
+            "xAxis": {
+                "type": "category",
+                "data": ["2024-09-01", "2024-09-02", "2024-09-03", "2024-09-04", "2024-09-05", "2024-09-06"]
+            },
+            "yAxis": {
+                "type": "value",
+                "name": "Response Time (ms)",
+                "axisLabel": {
+                    "formatter": "{value} ms"
+                }
+            },
+            "series": [
                 {
-                    name: "Expenses",
-                    type: "pie",
-                    radius: "50%",
-                    data: [
-                        { "value": 300, "name": "CDN" },
-                        { "value": 250, "name": "EC2" },
-                        { "value": 200, "name": "Database" },
-                        { "value": 100, "name": "Domain" },
-                        { "value": 70, "name": "Others" }
-                    ],
-                    emphasis: {
-                        itemStyle: {
-                            shadowBlur: 10,
-                            shadowOffsetX: 0,
-                            shadowColor: "rgba(0, 0, 0, 0.5)"
-                        }
-                    }
+                    "name": "Response Time",
+                    "type": "line",
+                    "data": [120, 200, 150, 80, 70, 110],
+                    "markPoint": {
+                        "data": [
+                            { "type": "max", "name": "Max" },
+                            { "type": "min", "name": "Min" }
+                        ]
+                    },
+                    "markLine": {
+                        "data": [{ "type": "average", "name": "Average" }]
+                    },
+                    "smooth": true
                 }
             ],
+            "grid": {
+                "left": "3%",
+                "right": "4%",
+                "bottom": "3%",
+                "containLabel": true
+            }
         };
 
         if (this.mode === 'full') {
             this.chartData.title = {
-                text: "Expense Breakdown",
-                subtext: "Total Expenses: $920",
-                left: "center"
-            };
-
-            this.chartData.legend = {
-                orient: "vertical",
-                left: "left",
-                data: ["CDN", "EC2", "Database", "Domain", "Others"]
+                text: "Average Response Time Over Time",
             };
         }
 
@@ -86,13 +91,13 @@ export class PluginSiteMonitorDashboardExpenses extends PluginBaseModule {
 
     }
 
-    createRenderRoot() {
-        return this;
-    }
-
     firstUpdated() {
         if (!this.body || !this.autoPrepare) return;
         this.prepare();
+    }
+
+    createRenderRoot() {
+        return this;
     }
 
     render(): TemplateResult {
@@ -136,8 +141,4 @@ export class PluginSiteMonitorDashboardExpenses extends PluginBaseModule {
         this.prepare();
     }
 
-}
-
-if (!customElements.get('plugin-site-monitor-dashboard-expenses-100555')) {
-    customElements.define('plugin-site-monitor-dashboard-expenses-100555', PluginSiteMonitorDashboardExpenses);
 }

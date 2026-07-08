@@ -1,4 +1,4 @@
-/// <mls fileReference="_100555_/l2/pluginSiteMonitorDashboard/pluginSiteMonitorDashboardExpenses.defs.ts" enhancement="_blank" />
+/// <mls fileReference="_100555_/l2/pluginSiteMonitorDashboard/pluginExpenses.defs.ts" enhancement="_blank" />
 
 // Do not change – automatically generated code. 
 

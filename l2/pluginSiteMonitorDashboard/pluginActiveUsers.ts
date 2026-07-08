@@ -1,19 +1,20 @@
-/// <mls fileReference="_100555_/l2/pluginSiteMonitorDashboard/pluginSiteMonitorDashboardResponseTime.ts" enhancement="_102027_/l2/enhancementLit" />
+/// <mls fileReference="_100555_/l2/pluginSiteMonitorDashboard/pluginActiveUsers.ts" enhancement="_102027_/l2/enhancementLit" />
 
 import { html, css, svg, TemplateResult } from 'lit';
-import { query, property } from 'lit/decorators.js';
+import { query, property, customElement } from 'lit/decorators.js';
 import { PluginBaseModule } from '/_102027_/l2/plugins/pluginBaseModule.js';
 
 export const pluginData: mls.plugin.IPluginData = {
-    title: "Response Time",
+    title: "Active Users",
     getSvg(): TemplateResult {
         return svg`
-     <svg svg width="22" height="22" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M464 256A208 208 0 1 1 48 256a208 208 0 1 1 416 0zM0 256a256 256 0 1 0 512 0A256 256 0 1 0 0 256zM232 120l0 136c0 8 4 15.5 10.7 20l96 64c11 7.4 25.9 4.4 33.3-6.7s4.4-25.9-6.7-33.3L280 243.2 280 120c0-13.3-10.7-24-24-24s-24 10.7-24 24z"/></svg>
+     <svg svg width="22" height="22" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M144 0a80 80 0 1 1 0 160A80 80 0 1 1 144 0zM512 0a80 80 0 1 1 0 160A80 80 0 1 1 512 0zM0 298.7C0 239.8 47.8 192 106.7 192l42.7 0c15.9 0 31 3.5 44.6 9.7c-1.3 7.2-1.9 14.7-1.9 22.3c0 38.2 16.8 72.5 43.3 96c-.2 0-.4 0-.7 0L21.3 320C9.6 320 0 310.4 0 298.7zM405.3 320c-.2 0-.4 0-.7 0c26.6-23.5 43.3-57.8 43.3-96c0-7.6-.7-15-1.9-22.3c13.6-6.3 28.7-9.7 44.6-9.7l42.7 0C592.2 192 640 239.8 640 298.7c0 11.8-9.6 21.3-21.3 21.3l-213.3 0zM224 224a96 96 0 1 1 192 0 96 96 0 1 1 -192 0zM128 485.3C128 411.7 187.7 352 261.3 352l117.3 0C452.3 352 512 411.7 512 485.3c0 14.7-11.9 26.7-26.7 26.7l-330.7 0c-14.7 0-26.7-11.9-26.7-26.7z"/></svg>
     `;
     }
 };
 
-export class PluginSiteMonitorDashboardResponseTime extends PluginBaseModule {
+@customElement('plugin-site-monitor-dashboard--plugin-active-users-100555')
+export class PluginActiveUsers extends PluginBaseModule {
 
     @property({ type: String }) filter: string = "today";
 
@@ -35,20 +36,18 @@ export class PluginSiteMonitorDashboardResponseTime extends PluginBaseModule {
             },
             "xAxis": {
                 "type": "category",
-                "data": ["2024-09-01", "2024-09-02", "2024-09-03", "2024-09-04", "2024-09-05", "2024-09-06"]
+                "boundaryGap": false,
+                "data": ["12:00", "12:05", "12:10", "12:15", "12:20", "12:25", "12:30"]
             },
             "yAxis": {
                 "type": "value",
-                "name": "Response Time (ms)",
-                "axisLabel": {
-                    "formatter": "{value} ms"
-                }
+                "name": "Number of Users"
             },
             "series": [
                 {
-                    "name": "Response Time",
+                    "name": "Anonymous Users",
                     "type": "line",
-                    "data": [120, 200, 150, 80, 70, 110],
+                    "data": [120, 132, 101, 134, 90, 230, 210],
                     "markPoint": {
                         "data": [
                             { "type": "max", "name": "Max" },
@@ -57,21 +56,32 @@ export class PluginSiteMonitorDashboardResponseTime extends PluginBaseModule {
                     },
                     "markLine": {
                         "data": [{ "type": "average", "name": "Average" }]
+                    }
+                },
+                {
+                    "name": "Logged-In Users",
+                    "type": "line",
+                    "data": [220, 182, 191, 234, 290, 330, 310],
+                    "markPoint": {
+                        "data": [
+                            { "type": "max", "name": "Max" },
+                            { "type": "min", "name": "Min" }
+                        ]
                     },
-                    "smooth": true
+                    "markLine": {
+                        "data": [{ "type": "average", "name": "Average" }]
+                    }
                 }
             ],
-            "grid": {
-                "left": "3%",
-                "right": "4%",
-                "bottom": "3%",
-                "containLabel": true
-            }
         };
 
         if (this.mode === 'full') {
             this.chartData.title = {
-                text: "Average Response Time Over Time",
+                text: "Active Users",
+            };
+
+            this.chartData.legend = {
+                data: ["Anonymous Users", "Logged-In Users"]
             };
         }
 
@@ -86,17 +96,19 @@ export class PluginSiteMonitorDashboardResponseTime extends PluginBaseModule {
                 .replace(/>/g, "&gt;");
         }
 
-        if (this.body) this.body.innerHTML = `<widget-collab-chart-100554 renderer="svg" data="${escapeHTML(data)}"></widget-collab-chart-100554>`;
+        if (this.body) {
+            this.body.innerHTML = `<widget-collab-chart-100554 renderer="svg" data="${escapeHTML(data)}"></widget-collab-chart-100554>`;
+        }
 
+    }
+
+    createRenderRoot() {
+        return this;
     }
 
     firstUpdated() {
         if (!this.body || !this.autoPrepare) return;
         this.prepare();
-    }
-
-    createRenderRoot() {
-        return this;
     }
 
     render(): TemplateResult {
@@ -140,8 +152,4 @@ export class PluginSiteMonitorDashboardResponseTime extends PluginBaseModule {
         this.prepare();
     }
 
-}
-
-if (!customElements.get('plugin-site-monitor-dashboard-response-time-100555')) {
-    customElements.define('plugin-site-monitor-dashboard-response-time-100555', PluginSiteMonitorDashboardResponseTime);
 }

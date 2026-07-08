@@ -1,16 +1,17 @@
-/// <mls fileReference="_100555_/l2/pluginSiteMonitorDashboard/pluginSiteMonitorDashboardRegionalLatency.defs.ts" enhancement="_blank" />
+/// <mls fileReference="_100555_/l2/pluginSiteMonitorDashboard/pluginErrors.defs.ts" enhancement="_blank" />
 
 // Do not change – automatically generated code. 
 
 export const asis: mls.defs.AsIs = {
   "meta": {
-    "fileReference": "_100555_/l2/pluginSiteMonitorDashboard/pluginSiteMonitorDashboardRegionalLatency.ts",
+    "fileReference": "_100555_/l2/pluginSiteMonitorDashboard/pluginSiteMonitorDashboardErrors.ts",
     "componentType": "pluginUI",
     "componentScope": "appFrontEnd",
     "group": "enhancement"
   },
   "references": {
     "webComponents": [
+      "plugin-site-monitor-dashboard--plugin-errors-100555",
       "widget-collab-chart-100554"
     ],
     "imports": [
@@ -22,10 +23,12 @@ export const asis: mls.defs.AsIs = {
             "type": "function"
           },
           {
-            "name": "css"
+            "name": "css",
+            "type": "function"
           },
           {
-            "name": "svg"
+            "name": "svg",
+            "type": "function"
           },
           {
             "name": "TemplateResult",
@@ -37,10 +40,12 @@ export const asis: mls.defs.AsIs = {
         "ref": "lit/decorators.js",
         "dependencies": [
           {
-            "name": "query"
+            "name": "query",
+            "type": "function"
           },
           {
-            "name": "property"
+            "name": "property",
+            "type": "function"
           }
         ]
       },
@@ -60,21 +65,17 @@ export const asis: mls.defs.AsIs = {
   },
   "asIs": {
     "semantic": {
-      "generalDescription": "Regional Latency",
+      "generalDescription": "Errors",
       "businessCapabilities": [
-        "Monitor regional latency"
+        "Monitor dashboard errors"
       ],
       "technicalCapabilities": [
-        "Render bar chart",
-        "Use Lit for templating"
+        "Render SVG charts",
+        "Use Lit framework"
       ],
       "implementedFeatures": [
-        "Filter by time periods",
-        "Display latency data in bar chart",
-        "Support simplified and full modes"
-      ],
-      "constraints": [
-        "Requires dashboard scope"
+        "Filter by time period",
+        "Display bar chart of error codes"
       ]
     }
   }
