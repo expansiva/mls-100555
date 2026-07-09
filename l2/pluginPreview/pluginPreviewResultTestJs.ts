@@ -56,6 +56,7 @@ export class PluginPreviewResultJs extends PluginBaseModule {
     }
 
     render() {
+        this.style.display =  'block';
         const lang = this.getMessageKey(messages);
         this.msg = messages[lang];
         return html`<collab-monaco-editor-102027></collab-monaco-editor-102027>`

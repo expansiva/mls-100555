@@ -1,0 +1,130 @@
+/// <mls fileReference="_100555_/l2/pluginVerify/pluginVerifyError.less" enhancement="_102027_/l2/enhancementStyle" />
+
+plugin-verify--plugin-verify-error-100555 {
+
+    width: 100%;
+    display: block;
+    font-family: @font-family-primary;
+    font-size: @font-size-16;
+    font-weight: @font-weight-normal;
+    line-height: 1.5;
+    color: @text-primary-color;
+    padding-top: @space-8;
+    position: relative;
+    min-height: 150px;
+    margin-bottom: 3rem;
+    
+    h3 {
+        border-bottom: 1px solid @bg-primary-color-focus;
+    }
+
+    ul {
+        list-style: decimal;
+        display: flex;
+        flex-direction: column;
+        gap: .5rem;
+        padding-left: 1.3rem;
+    }
+
+    .contentloader {
+        padding: 1rem;
+        flex-direction: column;
+        box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+        width: 100%;
+        min-height: 50px;
+        height: 100%;
+        top: 0px;
+        left: 0px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top:.5rem;
+        position: relative;
+
+        button{
+            margin-top:1rem;
+            border: none;
+            cursor: pointer;
+            background: no-repeat;
+            text-decoration: underline;
+            color: var(--text-secondary-color-darker);
+        }
+    }
+
+    .textLoader {
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin-right: .5rem;
+    }
+
+    .loader {
+        width: 25px;
+        height: 15px;
+        margin-top: 20px;
+        --_g: no-repeat radial-gradient(farthest-side, #000 94%, #0000);
+        background:
+            var(--_g) 50% 0,
+            var(--_g) 100% 0;
+        background-size: 5px 5px;
+        position: relative;
+        animation: l23-0 1.5s linear infinite;
+    }
+
+    .loader:before {
+        content: "";
+        position: absolute;
+        height: 5px;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: #000;
+        left: 0;
+        top: 0;
+        animation:
+            l23-1 1.5s linear infinite,
+            l23-2 0.5s cubic-bezier(0, 200, .8, 200) infinite;
+    }
+
+    @keyframes l23-0 {
+
+        0%,
+        31% {
+            background-position: 50% 0, 100% 0
+        }
+
+        33% {
+            background-position: 50% 100%, 100% 0
+        }
+
+        43%,
+        64% {
+            background-position: 50% 0, 100% 0
+        }
+
+        66% {
+            background-position: 50% 0, 100% 100%
+        }
+
+        79% {
+            background-position: 50% 0, 100% 0
+        }
+
+        100% {
+            transform: translateX(calc(-100%/3))
+        }
+    }
+
+    @keyframes l23-1 {
+        100% {
+            left: calc(100% + 7px)
+        }
+    }
+
+    @keyframes l23-2 {
+        100% {
+            top: -0.1px
+        }
+    }
+
+}
+
+

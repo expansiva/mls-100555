@@ -425,7 +425,7 @@ export class MlsFileTree extends CollabLitElement {
         const options = {
             shortName: undefined,
             project: undefined,
-            htmlText: '<plugin-view-file-100554 nameFile="' + key + '"></plugin-view-file-100554>'
+            htmlText: '<plugin-view--plugin-view-file-100555 nameFile="' + key + '"></plugin-view--plugin-view-file-100555>'
         }
 
         mls.events.fire(

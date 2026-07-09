@@ -1,0 +1,165 @@
+/// <mls fileReference="_100555_/l2/pluginArchitecture/pluginQuestionArchitecture.less" enhancement="_102027_/l2/enhancementStyle" />
+
+plugin-architecture--plugin-question-architecture-100555 {
+
+    display: block;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    color: @text-primary-color;
+
+
+    .svg-container {
+        width: 22px;
+        margin: 4px;
+        display: inline-flex;
+        fill: @text-primary-color;
+    }
+
+    header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 24px;
+        border-bottom: 1px solid #ececec;
+        padding-bottom: 12px;
+    }
+
+    header span {
+        font-size: 20px;
+        font-weight: 600;
+        margin: 0;
+    }
+
+    icon svg {
+        width: 22px;
+        height: 22px;
+        color: @text-primary-color;
+        fill: @text-primary-color;
+    }
+
+
+    .agent-box {
+        max-width: 820px;
+        margin: 10px auto;
+        padding: .3rem;
+        border-radius: 18px;
+    }
+
+    /* INPUT AREA */
+
+    .input-area {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .input-area textarea {
+        flex: 1;
+        min-height: 90px;
+        resize: vertical;
+        padding: 16px 18px;
+        border-radius: 14px;
+        border: 1px solid #E2E2E2;
+        font-size: 14px;
+        line-height: 1.6;
+        outline: none;
+        transition: all 0.2s ease;
+        background: #FAFAFA;
+    }
+
+    .input-area textarea:focus {
+        border-color: @active-color;
+        background: #FFFFFF;
+        box-shadow: 0 0 0 4px rgba(191, 175, 159, 0.15);
+    }
+
+    .input-area button {
+        height: 52px;
+        padding: 0 22px;
+        border: none;
+        width: 200px;
+        border-radius: 14px;
+        background: @active-color;
+        color: #FFFFFF;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: all 0.2s ease;
+        box-shadow: 0 6px 18px rgba(74, 63, 53, 0.25);
+    }
+
+    .input-area button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 24px rgba(74, 63, 53, 0.35);
+    }
+
+    .input-area button:active {
+        transform: translateY(0);
+    }
+
+    .input-area button:disabled {
+        transform: translateY(0);
+        opacity: .5;
+        cursor: not-allowed;
+        box-shadow: none;
+        pointer-events: none;
+    }
+
+    /* RESULT AREA */
+
+    .result-area {
+        margin-top: 32px;
+    }
+
+    .result-area h3 {
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 0.6px;
+        text-transform: uppercase;
+        color: #7A7A7A;
+        margin-bottom: 16px;
+    }
+
+    .result-area ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    /* FILE ITEM CARD */
+
+    .file-item {
+        padding: 18px 20px;
+        border-radius: 14px;
+        border: 1px solid #EAEAEA;
+        background: #FBFBFB;
+        transition: all 0.2s ease;
+        cursor: pointer;
+    }
+
+    .file-item:hover {
+        border-color: @active-color;;
+        background: #FFFFFF;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    .file-name {
+        font-size: 14px;
+        font-weight: 600;
+        color: #4A3F35;
+        margin-bottom: 6px;
+        word-break: break-all;
+    }
+
+    .file-desc {
+        font-size: 13px;
+        line-height: 1.6;
+        color: #555555;
+    }
+
+}
+
+

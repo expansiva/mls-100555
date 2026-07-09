@@ -1,0 +1,140 @@
+/// <mls fileReference="_100555_/l2/pluginLink/pluginConfigLinks.less" enhancement="_102027_/l2/enhancementStyle" />
+
+plugin-link--plugin-config-links-100555 {
+
+    font-family: @font-family-primary;
+    font-size: @font-size-20;
+    display: block;
+    padding: 1rem;
+
+    button {
+        display: flex;
+        flex-direction: column;
+        border: 1px solid #aeaeae;
+        justify-content: center;
+        align-items: center;
+        width: 60px;
+        padding: .3rem;
+        border-radius: 5px;
+        cursor: pointer;
+
+        svg {
+            width: 20px;
+        }
+    }
+
+    .plugin-links {
+        display: flex;
+        gap: .5rem;
+        flex-wrap: wrap;
+
+        link-item {
+            position: relative;
+            min-width: 150px;
+            padding: .5rem;
+            background-color: #FCFCFD;
+            border-radius: 4px;
+            box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
+            box-sizing: border-box;
+            cursor: pointer;
+            font-family: "JetBrains Mono", monospace;
+            transition: box-shadow .15s, transform .15s;
+            user-select: none;
+            -webkit-user-select: none;
+            white-space: nowrap;
+            will-change: box-shadow, transform;
+            
+        }
+
+        link-item:focus {
+            box-shadow: #D6D6E7 0 0 0 1.5px inset, rgba(45, 35, 66, 0.4) 0 2px 4px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
+        }
+
+        link-item:hover {
+            box-shadow: rgba(45, 35, 66, 0.4) 0 4px 8px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
+            transform: translateY(-2px);
+            opacity: .8;
+        }
+
+
+        a {
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: .3rem;
+            text-decoration: none;
+            z-index: 98;
+        }
+
+        .del-link {
+            position: absolute;
+            width: 11px;
+            top: 2px;
+            left: 3px;
+            z-index: 99;
+            display: none;
+        }
+    }
+
+    .content-edit {
+        display: none;
+        width: 100%;
+        border-bottom: 1px solid rgb(156, 155, 155);
+        padding: .3rem;
+        margin-bottom: 1rem;
+        justify-content: end;
+
+        content-edit {
+            display: flex;
+            gap: .5rem;
+            justify-content: center;
+            width: 100%;
+
+            .body-edit {
+                display: flex;
+                gap: .5rem;
+                justify-content: center;
+                align-items: center;
+                width: 99%;
+
+                div {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    gap: .3rem;
+
+                    input {
+                        height: 30px;
+                        border-radius: 5px;
+                        border: 1px solid #bdbdbd;
+                    }
+
+                    textarea {
+                        height: 30px;
+                        border-radius: 5px;
+                        border: 1px solid #a9a5a5;
+                    }
+                }
+            }
+        }
+    }
+
+    &.mode-edit {
+        .content-edit {
+            display: flex;
+        }
+
+        .del-link {
+            display: block;
+        }
+
+        .btn-edit {
+            display: none;
+        }
+    }
+
+}
+
+
