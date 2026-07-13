@@ -6,11 +6,10 @@
 
 import { IPluginTestCase, mount, cleanup, compare, query, mountAndVerify, overrideMls } from '/_102027_/l2/plugins/pluginTestUtils.js';
 import { PluginStyleIndexItem } from '/_100555_/l2/pluginStyle/pluginStyleIndexItem.js';
-import { IHelpers } from '/_100555_/l2/utils/cssHelperIndexBase.js';
 
 const TAG = 'plugin-style--plugin-style-index-item-100555';
 
-function makeHelp(overrides: Partial<IHelpers> = {}): IHelpers {
+function makeHelp(overrides: Partial<any> = {}): any {
     return {
         name: 'Padding',
         priority: 1,
