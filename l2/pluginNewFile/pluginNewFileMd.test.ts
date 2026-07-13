@@ -1,0 +1,71 @@
+/// <mls fileReference="_100555_/l2/pluginNewFile/pluginNewFileMd.test.ts" enhancement="_blank" />
+
+import { IPluginTestCase, mount, cleanup, compare, mountAndVerify } from '/_102027_/l2/plugins/pluginTestUtils.js';
+import { PluginNewFileMd } from '/_100555_/l2/pluginNewFile/pluginNewFileMd.js';
+
+const TAG = 'plugin-new-file--plugin-new-file-md-100555';
+
+export const tests: IPluginTestCase[] = [
+
+    // ---- browser: need real DOM/customElements ----
+
+    { functionName: 'testSmoke', env: 'browser', params: [
+        { expected: { registered: true, rendered: true } },
+    ]},
+
+    // Same as pluginNewFileBlank: `template` is the empty string, so getTemplate() only ever
+    // produces the fileReference header line (here with a `.md` extension instead of `.ts`).
+    { functionName: 'testGetTemplateBodyAlwaysEmpty', env: 'browser', params: [
+        { input: { project: 100555, shortName: 'myNote' },
+          expected: { trimmed: '/// <mls fileReference="_100555_/l2/myNote.md" enhancement="_blank"/>' } },
+        { input: { project: 100555, shortName: 'myNote', folder: 'sub' },
+          expected: { trimmed: '/// <mls fileReference="_100555_/l2/sub/myNote.md" enhancement="_blank"/>' } },
+    ]},
+
+    // handleAddFile() here goes through createStorFile()/createModelAnyFile() instead of
+    // createNewFile(), but shares the same missing-service bug: `service` is resolved via
+    // `this.closest(...)` in the constructor, before the element is attached anywhere, so it is
+    // always null under mount() and the guard throws instead of showing a friendly error.
+    { functionName: 'testHandleAddFileGuardThrows', env: 'browser', params: [
+        { expected: { threw: true } },
+    ]},
+];
+
+export async function testSmoke(testCase: { expected: any }): Promise<string> {
+    try {
+        const result = await mountAndVerify(TAG);
+        compare(result, testCase.expected);
+        return JSON.stringify(result);
+    } finally {
+        cleanup();
+    }
+}
+
+export async function testGetTemplateBodyAlwaysEmpty(testCase: { input: { project: number; shortName: string; folder?: string }; expected: any }): Promise<string> {
+    try {
+        const el = await mount<PluginNewFileMd>(TAG, { project: testCase.input.project, shortName: testCase.input.shortName, folder: testCase.input.folder });
+        const template = (el as any).getTemplate() as string;
+        const result = { trimmed: template.trim() };
+        compare(result, testCase.expected);
+        return template;
+    } finally {
+        cleanup();
+    }
+}
+
+export async function testHandleAddFileGuardThrows(testCase: { expected: any }): Promise<string> {
+    try {
+        const el = await mount<PluginNewFileMd>(TAG);
+        let threw = false;
+        try {
+            await (el as any).handleAddFile();
+        } catch (e) {
+            threw = true;
+        }
+        const result = { threw };
+        compare(result, testCase.expected);
+        return JSON.stringify(result);
+    } finally {
+        cleanup();
+    }
+}
