@@ -4,7 +4,6 @@ import { html } from 'lit';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import { customElement, property, state } from 'lit/decorators.js';
 import { CollabLitElement } from '/_102029_/l2/collabLitElement.js';
-import { IHelpers } from '/_100555_/l2/utils/cssHelperIndexBase.js';
 import { convertFileNameToTag, getPath } from '/_102027_/l2/utils.js';
 
 
@@ -20,7 +19,7 @@ import {
 @customElement('plugin-style--plugin-style-index-item-100555')
 export class PluginStyleIndexItem extends CollabLitElement {
 
-    @property({ reflect: false }) help: IHelpers | undefined;
+    @property({ reflect: false }) help: any | undefined;
     @property() position: 'left' | 'right' = 'left';
     @property({ reflect: true }) mode: 'collapsed' | 'expanded' | 'full' = 'collapsed';
     @property() pluginLoaded: boolean = false;
@@ -88,7 +87,7 @@ export class PluginStyleIndexItem extends CollabLitElement {
 
     private pluginEl: HTMLElement | undefined;
 
-    private async openPlugin(container: HTMLElement, help: IHelpers | undefined, close: boolean) {
+    private async openPlugin(container: HTMLElement, help: any | undefined, close: boolean) {
         if (!help) return;
 
         if (close) {
@@ -112,7 +111,7 @@ export class PluginStyleIndexItem extends CollabLitElement {
         container.style.display = 'block';
     }
 
-    async handleOpenPlugin(e: MouseEvent, help: IHelpers, close: boolean = false) {
+    async handleOpenPlugin(e: MouseEvent, help: any, close: boolean = false) {
         e.stopPropagation();
         const target = e.target as HTMLElement;
         if (!target) return;
