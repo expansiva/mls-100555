@@ -12,7 +12,7 @@ import { PluginBaseModule } from '/_102027_/l2/pluginBaseModule.js';
 
 import { isNameValid } from '/_102027_/l2/libCommom.js';
 import '/_100555_/l2/pluginExplore/collabInputSearch.js';
-import '/_100555_/l2/pluginExplore/mlsFileTree.js';
+import '/_100555_/l2/pluginExplore/mlsFileTree2.js';
 
 /// **collab_i18n_start**
 const message_pt = {
@@ -377,7 +377,7 @@ export class PluginExploreList extends PluginBaseModule {
     renderList() {
 
         if (this.modeFilter === 'all' && this.filterProject > 0) {
-            return html`<plugin-explore--mls-file-tree-100555 project="${this.filterProject}" position="${this.position}" filter="${this.searchTerm}"></plugin-explore--mls-file-tree-100555>`
+            return html`<plugin-explore--mls-file-tree2-100555 project="${this.filterProject}" position="${this.position}" filter="${this.searchTerm}"></plugin-explore--mls-file-tree2-100555>`
         }
 
         let letterInit = '';
@@ -1102,7 +1102,7 @@ export class PluginExploreList extends PluginBaseModule {
 
             // In tree mode, push filter into the shadow-DOM tree component directly
             if (this.modeFilter === 'all' && this.filterProject > 0) {
-                const tree = this.querySelector('plugin-explore--mls-file-tree-100555') as any;
+                const tree = this.querySelector('plugin-explore--mls-file-tree2-100555') as any;
                 if (tree) tree.filter = this.searchTerm;
                 return;
             }
