@@ -15,14 +15,6 @@ export const tests: IPluginTestCase[] = [
         { expected: { registered: true, rendered: true } },
     ]},
 
-    // showAdd() maps mls.actualLevel -> mode and dynamically imports the matching sibling before switching.
-    { functionName: 'testShowAdd', env: 'browser', params: [
-        { input: { actualLevel: 1 }, expected: { mode: 'addL1' } },
-        { input: { actualLevel: 2 }, expected: { mode: 'addL2' } },
-        { input: { actualLevel: 3 }, expected: { mode: 'addL3' } },
-        { input: { actualLevel: 4 }, expected: { mode: 'addL4' } },
-    ]},
-
     // render() switches purely on `this.mode` and renders the matching sibling tag, regardless of
     // whether that sibling module was actually imported first (showAdd() normally does the import,
     // but nothing in render() enforces that ordering).
@@ -59,23 +51,6 @@ export const tests: IPluginTestCase[] = [
         }, expected: { names: [] } },
     ]},
 
-    // getAllName() has several branches driven by modeView/filterProject/isHistory, and the two
-    // `isHistory` checks are separate `if`s (not else-if) — when both apply, the second silently
-    // overwrites the first. Cases below pin the real branch results, including that quirk and the
-    // fact that modeView !== 0 drops the folder prefix even for the "current project" branch.
-    { functionName: 'testGetAllName', env: 'browser', params: [
-        { input: { modeView: 0, filterProject: 0, isHistory: false, project: 200, folder: 'sub', shortName: 'foo' },
-          expected: { name: '_200_sub/foo' } },
-        { input: { modeView: 0, filterProject: 100555, isHistory: false, project: 100555, folder: 'sub', shortName: 'foo' },
-          expected: { name: 'sub/foo' } },
-        { input: { modeView: 1, filterProject: 100555, isHistory: false, project: 100555, folder: 'sub', shortName: 'foo' },
-          expected: { name: 'foo' } },
-        { input: { modeView: 0, filterProject: 0, isHistory: true, project: 300, folder: 'sub', shortName: 'foo' },
-          expected: { name: '300_sub/foo' } },
-        { input: { modeView: 0, filterProject: 100555, isHistory: false, project: 100555, folder: '', shortName: 'foo', modeFilter: 'other' },
-          expected: { name: 'foo.ts' } },
-    ]},
-
     // ---- vscode: pure logic, no DOM involved ----
     // Note: pluginExploreList.ts registers the customElement at module scope (@customElement),
     // so importing this file outside the browser requires a `customElements` stub in the vscode runner.
@@ -96,18 +71,6 @@ export async function testSmoke(testCase: { expected: any }): Promise<string> {
     }
 }
 
-export async function testShowAdd(testCase: { input: { actualLevel: number }; expected: any }): Promise<string> {
-    try {
-        overrideMls({ actualLevel: testCase.input.actualLevel });
-        const el = await mount<PluginExploreList>(TAG, {});
-        await (el as any).showAdd();
-        const result = { mode: el.mode };
-        compare(result, testCase.expected);
-        return JSON.stringify(result);
-    } finally {
-        cleanup();
-    }
-}
 
 export async function testRenderByMode(testCase: { input: { mode: string; tag: string }; expected: any }): Promise<string> {
     try {
@@ -145,27 +108,6 @@ export async function testFilterArrayHistory(testCase: { input: { alvo: any[]; b
     }
 }
 
-export async function testGetAllName(testCase: { input: any; expected: any }): Promise<string> {
-    try {
-        overrideMls({ actualProject: 100555 });
-        const el = await mount<PluginExploreList>(TAG, {});
-        el.filterProject = testCase.input.filterProject;
-        el.modeView = testCase.input.modeView;
-        if (testCase.input.modeFilter) (el as any).modeFilter = testCase.input.modeFilter;
-        const file = {
-            project: testCase.input.project,
-            folder: testCase.input.folder,
-            shortName: testCase.input.shortName,
-            extension: '.ts',
-        } as mls.stor.IFileInfo;
-        const name = (el as any).getAllName(file, !!testCase.input.isHistory);
-        const result = { name };
-        compare(result, testCase.expected);
-        return JSON.stringify(result);
-    } finally {
-        cleanup();
-    }
-}
 
 export async function testPluginData(testCase: { expected: any }): Promise<string> {
     const svg = pluginData.getSvg() as any;

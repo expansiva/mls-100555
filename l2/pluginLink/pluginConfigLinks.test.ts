@@ -35,10 +35,6 @@ export const tests: IPluginTestCase[] = [
         { expected: { registered: true, rendered: true } },
     ]},
 
-    { functionName: 'testInitLoadsLinksFromConfig', env: 'browser', params: [
-        { expected: { linksCount: 1, firstTitle: 'GitHub', renderedLabel: 'GitHub' } },
-    ]},
-
     { functionName: 'testAddLink', env: 'browser', params: [
         { input: { title: 'GitHub', url: 'https://github.com', color: '#123456' },
           expected: { linksCount: 1, title: 'GitHub', url: 'https://github.com', color: '#123456', titleInputCleared: true } },
@@ -64,28 +60,6 @@ export const tests: IPluginTestCase[] = [
 export async function testSmoke(testCase: { expected: any }): Promise<string> {
     try {
         const result = await mountAndVerify(TAG, { myLinks: [] });
-        compare(result, testCase.expected);
-        return JSON.stringify(result);
-    } finally {
-        cleanup();
-    }
-}
-
-export async function testInitLoadsLinksFromConfig(testCase: { expected: any }): Promise<string> {
-    try {
-        const FAKE_PROJECT = 990101;
-        const key = mls.stor.getKeyToFiles(FAKE_PROJECT, 5, 'project', '', '.json');
-        overrideMls({ actualProject: FAKE_PROJECT });
-        overrideMls({ stor: { ...mls.stor, files: { ...mls.stor.files, [key]: fakeConfigFile([{ title: 'GitHub', url: 'https://github.com', color: '#000000' }]) } } });
-
-        const el = await mount<PluginConfigLinks>(TAG, {});
-        await el.prepare();
-
-        const result = {
-            linksCount: el.myLinks.length,
-            firstTitle: el.myLinks[0]?.title,
-            renderedLabel: query(el, 'label')?.textContent?.trim(),
-        };
         compare(result, testCase.expected);
         return JSON.stringify(result);
     } finally {

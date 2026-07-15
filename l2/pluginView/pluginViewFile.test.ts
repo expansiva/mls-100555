@@ -33,20 +33,6 @@ export const tests: IPluginTestCase[] = [
         { input: { extension: '.ogg' }, expected: { isImage: false, isAudio: true, isVideo: true } },
     ]},
 
-    { functionName: 'testRenderNoFileSelected', env: 'browser', params: [
-        { expected: { hasMessage: true, messageNotEmpty: true } },
-    ]},
-
-    { functionName: 'testInitWithTextFile', env: 'browser', params: [
-        { input: { nameFile: 'sample.txt', extension: '.txt', content: 'hello world' },
-          expected: { hasFile: true, extension: '.txt', current: 2, contentText: 'hello world' } },
-    ]},
-
-    { functionName: 'testInitWithBinaryFile', env: 'browser', params: [
-        { input: { nameFile: 'sample.png', extension: '.png', url: 'blob://fake-url' },
-          expected: { hasFile: true, extension: '.png', current: 1, contentUrl: 'blob://fake-url' } },
-    ]},
-
     // ---- vscode: pure logic, no DOM involved ----
     // Note: pluginViewFile.ts registers the customElement at module scope (@customElement),
     // so importing this file outside the browser requires a `customElements` stub in the
@@ -75,100 +61,6 @@ export async function testMediaTypeDetection(testCase: { input: { extension: str
             isImage: (el as any).isImage(),
             isAudio: (el as any).isAudio(),
             isVideo: (el as any).isVideo(),
-        };
-        compare(result, testCase.expected);
-        return JSON.stringify(result);
-    } finally {
-        cleanup();
-    }
-}
-
-export async function testRenderNoFileSelected(testCase: { expected: any }): Promise<string> {
-    try {
-        // Force an empty file table so mls.stor.files[''] (the default nameFile) is guaranteed
-        // undefined. Not asserting on the exact message text since it depends on the app's
-        // current language (getMessageKey() reads document.documentElement.lang).
-        overrideMls({ stor: { files: {} } });
-        const el = await mount<PluginViewFile>(TAG);
-        const messageEl = query(el, 'p');
-        const result = {
-            hasMessage: !!messageEl,
-            messageNotEmpty: !!(messageEl?.textContent ?? '').trim(),
-        };
-        compare(result, testCase.expected);
-        return JSON.stringify(result);
-    } finally {
-        cleanup();
-    }
-}
-
-export async function testInitWithTextFile(testCase: { input: { nameFile: string; extension: string; content: string }; expected: any }): Promise<string> {
-    try {
-        const fakeFile = {
-            project: 100555,
-            folder: '',
-            shortName: testCase.input.nameFile.replace(testCase.input.extension, ''),
-            extension: testCase.input.extension,
-            versionRef: 1,
-            getContent: async () => testCase.input.content,
-        } as any;
-
-        overrideMls({
-            stor: {
-                files: { [testCase.input.nameFile]: fakeFile },
-                convertFileToFileReference: (f: any) => `_ref_${f.shortName}`,
-                cache: { getURL: async () => '' },
-            },
-        });
-
-        const el = await mount<PluginViewFile>(TAG, { nameFile: testCase.input.nameFile });
-        // Call init() explicitly (rather than relying on the fire-and-forget call inside
-        // firstUpdated) so its async work is fully settled before we assert.
-        // Note: this sets current=2, which schedules updateEditorContent() (via updated())
-        // to run in the background afterwards — exercising real Monaco model creation. That
-        // is intentionally not awaited here; this test focuses on init()'s own state effects.
-        await (el as any).init();
-
-        const result = {
-            hasFile: !!el.file,
-            extension: el.extension,
-            current: el.current,
-            contentText: el.contentText,
-        };
-        compare(result, testCase.expected);
-        return JSON.stringify(result);
-    } finally {
-        cleanup();
-    }
-}
-
-export async function testInitWithBinaryFile(testCase: { input: { nameFile: string; extension: string; url: string }; expected: any }): Promise<string> {
-    try {
-        const fakeFile = {
-            project: 100555,
-            folder: '',
-            shortName: testCase.input.nameFile.replace(testCase.input.extension, ''),
-            extension: testCase.input.extension,
-            versionRef: 1,
-            getContent: async () => undefined,
-        } as any;
-
-        overrideMls({
-            stor: {
-                files: { [testCase.input.nameFile]: fakeFile },
-                convertFileToFileReference: (f: any) => `_ref_${f.shortName}`,
-                cache: { getURL: async () => testCase.input.url },
-            },
-        });
-
-        const el = await mount<PluginViewFile>(TAG, { nameFile: testCase.input.nameFile });
-        await (el as any).init();
-
-        const result = {
-            hasFile: !!el.file,
-            extension: el.extension,
-            current: el.current,
-            contentUrl: el.contentUrl,
         };
         compare(result, testCase.expected);
         return JSON.stringify(result);

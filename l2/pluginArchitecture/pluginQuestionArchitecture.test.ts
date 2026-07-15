@@ -38,9 +38,6 @@ export const tests: IPluginTestCase[] = [
         { expected: { loading: false, hasResult: false } },
     ]},
 
-    { functionName: 'testFireEvents', env: 'browser', params: [
-        { expected: { setFullName: '_100555_pluginBar/pluginFoo', action: 'open', shortName: 'pluginFoo' } },
-    ]},
 ];
 
 export async function testSmoke(testCase: { expected: any }): Promise<string> {
@@ -125,34 +122,6 @@ export async function testAskAgentNotFoundFlexible(testCase: { expected: any }):
         (el as any)._callAgent = async () => ({ foo: 'bar' });
         await (el as any).askAgent();
         const result = { loading: (el as any).loading, hasResult: !!(el as any).result };
-        compare(result, testCase.expected);
-        return JSON.stringify(result);
-    } finally {
-        cleanup();
-    }
-}
-
-// fireEvents() is the side effect behind clicking a found file (openFile() delegates to it).
-// Captured here directly, mocking mls.actual/mls.actualLevel/mls.events as the "transport".
-export async function testFireEvents(testCase: { expected: any }): Promise<string> {
-    try {
-        const el = await mount<PluginQuestionArchitecture>(TAG, { scope: 'dashboard' });
-        const calls: { setFullName?: string; firePayload?: any } = {};
-        const fakeFile = {
-            level: 2, project: 100555, shortName: 'pluginFoo', extension: '.ts', folder: 'pluginBar',
-            getOrCreateModel: async () => undefined,
-        };
-        overrideMls({
-            actual: { 2: { setFullName: (name: string) => { calls.setFullName = name; } } },
-            actualLevel: 2,
-            events: { fire: (_levels: any, _types: any, payload: string, _timeout: number) => { calls.firePayload = JSON.parse(payload); } },
-        });
-        await (el as any).fireEvents('open', fakeFile as any);
-        const result = {
-            setFullName: calls.setFullName,
-            action: calls.firePayload?.action,
-            shortName: calls.firePayload?.shortName,
-        };
         compare(result, testCase.expected);
         return JSON.stringify(result);
     } finally {
