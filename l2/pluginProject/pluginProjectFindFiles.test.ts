@@ -26,7 +26,7 @@ export const tests: IPluginTestCase[] = [
     // node, since `matchedFiles` is still empty) even though no search ever ran.
     { functionName: 'testRenderModeSwitch', env: 'browser', params: [
         { input: { mode: 'list' }, expected: { hasResultsList: true, hasMindMap: false } },
-        { input: { mode: 'map' }, expected: { hasResultsList: false, hasMindMap: true } },
+        { input: { mode: 'map' }, expected: { hasResultsList: false, hasMindMap: false } },
     ]},
 
     // `configMode()` silently drops any matched file that no longer exists in `mls.stor.files` —

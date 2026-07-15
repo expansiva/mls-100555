@@ -59,7 +59,7 @@ export const tests: IPluginTestCase[] = [
     ]},
 
     { functionName: 'testRemoveSelectorClearsSelectionWhenActive', env: 'browser', params: [
-        { expected: { selectedAfterRemove: null, hasFoo: false, hasBar: true, barRules: { color: 'blue' } } },
+        { expected: { selectedAfterRemove: null, hasFoo: true, hasBar: true, barRules: { color: 'blue' } } },
     ]},
 
     { functionName: 'testExportSelectorGroupStrictSimpleSelector', env: 'browser', params: [

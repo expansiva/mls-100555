@@ -98,6 +98,7 @@ export class PluginProjectFindFiles extends PluginBaseModule {
                         <option value=".ts">.ts - typescript</option>
                         <option value=".html">.html - page</option>
                         <option value=".less">.less - style</option>
+                        <option value=".test.ts">.test.ts - test</option>
                     </select>
                 </div>
                 

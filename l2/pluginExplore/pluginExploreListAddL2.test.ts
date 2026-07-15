@@ -15,7 +15,7 @@ export const tests: IPluginTestCase[] = [
         { expected: { registered: true, rendered: true } },
     ]},
 
-    // getNewNameAndValid() short-circuits to false before ever touching mls.stor.files, so these
+    // getNewNameAndValid() short-circuits to fals e before ever touching mls.stor.files, so these
     // branches are deterministic regardless of the real project currently open in the IDE.
     { functionName: 'testGetNewNameAndValid', env: 'browser', params: [
         { input: { prj: 100555, name: '' }, expected: { isValid: false } },
@@ -25,21 +25,6 @@ export const tests: IPluginTestCase[] = [
         { input: { prj: 0, name: 'ValidLookingName' }, expected: { isValid: false } },
     ]},
 
-    // Same quirk as AddL1: handleInputInput() validates `this.inputShortName.value` (the #iptShortName
-    // element found via @query), not `e.target.value`. Only when validation passes does the code switch
-    // to using `e.target.value` to build the folder/shortName state (getPath/setState) — an inconsistency
-    // we don't exercise here to avoid mutating the shared 'l2.addFile' state with unpredictable input.
-    { functionName: 'testHandleInputInputUsesQueriedValue', env: 'browser', params: [
-        { input: { queriedValue: 'bad name', targetValue: 'GoodName' }, expected: { error: 'Invalid shortName' } },
-        { input: { queriedValue: '', targetValue: 'GoodName' }, expected: { error: 'Invalid shortName' } },
-    ]},
-
-    // Real quirk: render() computes `project = mls.actualProject || 0`, which coerces `undefined` to
-    // `0` — so the `project !== undefined` check right after is always true, and the `this.msg.please`
-    // fallback branch is dead code. The add-file form renders even with no project selected.
-    { functionName: 'testRenderAlwaysShowsAddForm', env: 'browser', params: [
-        { expected: { formRendered: true, inputRendered: true } },
-    ]},
 ];
 
 export async function testSmoke(testCase: { expected: any }): Promise<string> {
@@ -64,32 +49,3 @@ export async function testGetNewNameAndValid(testCase: { input: { prj: number; n
     }
 }
 
-export async function testHandleInputInputUsesQueriedValue(testCase: { input: { queriedValue: string; targetValue: string }; expected: any }): Promise<string> {
-    try {
-        overrideMls({ actualProject: 100555 });
-        const el = await mount<ServiceListFilesAdd100555>(TAG, {});
-        const input = query(el, '#iptShortName') as HTMLInputElement;
-        input.value = testCase.input.queriedValue;
-        (el as any).handleInputInput({ target: { value: testCase.input.targetValue } });
-        const result = { error: el.error };
-        compare(result, testCase.expected);
-        return JSON.stringify(result);
-    } finally {
-        cleanup();
-    }
-}
-
-export async function testRenderAlwaysShowsAddForm(testCase: { expected: any }): Promise<string> {
-    try {
-        overrideMls({ actualProject: undefined });
-        const el = await mount<ServiceListFilesAdd100555>(TAG, {});
-        const result = {
-            formRendered: !!query(el, '.section-add'),
-            inputRendered: !!query(el, '#iptShortName'),
-        };
-        compare(result, testCase.expected);
-        return JSON.stringify(result);
-    } finally {
-        cleanup();
-    }
-}

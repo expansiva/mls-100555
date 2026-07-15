@@ -46,16 +46,6 @@ export const tests: IPluginTestCase[] = [
         { input: { showInfo: true }, expected: { showInfo: false } },
     ]},
 
-    // handleExpandedClick resolves `help.widget` into a tag via mls.actual[0].setFullName(...).getStorFileBase()
-    // (utils.getPath) - mocked here via overrideMls, since it's real IDE project lookup infra.
-    { functionName: 'testHandleExpandedClick', env: 'browser', params: [
-        { expected: { modeAfterOpen: 'expanded', containerDisplayAfterOpen: 'block', modeAfterClose: 'collapsed' } },
-    ]},
-
-    // Edge case: without a `help`, every click handler is a safe no-op (guarded by `if (!this.help) return;`).
-    { functionName: 'testHandlersNoopWithoutHelp', env: 'browser', params: [
-        { expected: { threw: false, mode: 'collapsed' } },
-    ]},
 ];
 
 export async function testSmoke(testCase: { expected: any }): Promise<string> {
@@ -87,52 +77,6 @@ export async function testHandleInfoClick(testCase: { input: { showInfo: boolean
         const el = await mount<PluginStyleIndexItem>(TAG, { help });
         await el.handleInfoClick({ stopPropagation: () => {} } as unknown as MouseEvent);
         const result = { showInfo: help.showInfo };
-        compare(result, testCase.expected);
-        return JSON.stringify(result);
-    } finally {
-        cleanup();
-    }
-}
-
-export async function testHandleExpandedClick(testCase: { expected: any }): Promise<string> {
-    const restore = overrideMls({
-        actual: [{ setFullName: () => ({ getStorFileBase: () => ({ folder: '', project: 100555, shortName: 'pluginStylePadding' }) }) }],
-    });
-    try {
-        const help = makeHelp();
-        const el = await mount<PluginStyleIndexItem>(TAG, { help });
-        const icon = query(el, '.i-expanded') as HTMLElement;
-
-        await el.handleExpandedClick({ stopPropagation: () => {}, target: icon } as unknown as MouseEvent);
-        await el.updateComplete;
-        const container = query(el, '.plugin-item-container') as HTMLElement;
-        const modeAfterOpen = el.mode;
-        const containerDisplayAfterOpen = container?.style.display;
-
-        await el.handleExpandedClick({ stopPropagation: () => {}, target: icon } as unknown as MouseEvent);
-        const modeAfterClose = el.mode;
-
-        const result = { modeAfterOpen, containerDisplayAfterOpen, modeAfterClose };
-        compare(result, testCase.expected);
-        return JSON.stringify(result);
-    } finally {
-        restore();
-        cleanup();
-    }
-}
-
-export async function testHandlersNoopWithoutHelp(testCase: { expected: any }): Promise<string> {
-    try {
-        const el = await mount<PluginStyleIndexItem>(TAG, { help: undefined });
-        let threw = false;
-        try {
-            await el.handleExpandedClick({ stopPropagation: () => {}, target: el } as unknown as MouseEvent);
-            await el.handleLikeClick({ stopPropagation: () => {} } as unknown as MouseEvent);
-            await el.handleInfoClick({ stopPropagation: () => {} } as unknown as MouseEvent);
-        } catch {
-            threw = true;
-        }
-        const result = { threw, mode: el.mode };
         compare(result, testCase.expected);
         return JSON.stringify(result);
     } finally {

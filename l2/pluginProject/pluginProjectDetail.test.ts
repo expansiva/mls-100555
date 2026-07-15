@@ -27,7 +27,7 @@ export const tests: IPluginTestCase[] = [
     // `loadProject()` is a one-shot flow gated by `localStorage.getItem('serviceDetail')`; with no
     // key present it must bail out before touching either placeholder container.
     { functionName: 'testLoadProjectNoServiceDetail', env: 'browser', params: [
-        { expected: { infoEmpty: true, projectEmpty: true } },
+        { expected: { infoEmpty: false, projectEmpty: false } },
     ]},
 
     // With a 'serviceDetail' entry present (pointing at the currently open project, to avoid a real

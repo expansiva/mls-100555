@@ -475,7 +475,7 @@ export class PluginProjectInfo extends PluginBaseModule {
 
         await mls.api.cbeSavePrjSettings(this.project);
         renameProjectInHistory(this.project, this.projectDetails.name);
-        
+
     }
 
     private moveDepUp(index: number) {
@@ -565,7 +565,223 @@ export class PluginProjectInfo extends PluginBaseModule {
         if (!this.project) throw new Error(`Project not found`);
         if (!this.projectDetails) throw new Error(`Project details ${this.project} not found`);
         this.projectDetails.prj_dependencies = this.deps.map((item) => item.id);
+        await this.updateFilesDeps(this.projectDetails.prj_dependencies);
         mls.api.cbeSavePrjSettings(this.project);
+    }
+
+    private async updateFilesDeps(deps: number[]) {
+        try {
+            if (!mls.actualProject) return;
+            const sett = mls.l5.getProjectSettings(mls.actualProject || 0);
+
+            const stPck = this.getStor({ project: mls.actualProject, level: 0, folder: '', shortName: 'package', extension: '.json' });
+            const stPckLib = this.getStor({ project: mls.actualProject, level: 0, folder: '', shortName: 'packagelib', extension: '.json' });
+            const stTs = this.getStor({ project: mls.actualProject, level: 0, folder: '', shortName: 'tsconfig', extension: '.json' });
+            const stTsLib = this.getStor({ project: mls.actualProject, level: 0, folder: '', shortName: 'tsconfiglib', extension: '.json' });
+            const stConfig = this.getStor({ project: mls.actualProject, level: 0, folder: '', shortName: 'config', extension: '.json' });
+
+            if (stPck) await this.updateFilePck(stPck, deps, sett);
+            if (stPckLib) await this.updateFilePck(stPckLib, deps, sett);
+            if (stTs) await this.updateFileTsConfig(stTs, deps);
+            if (stTsLib) await this.updateFileTsConfig(stTsLib, deps);
+            if (stConfig) await this.updateFileConfig(stConfig, deps, sett);
+
+
+        } catch (e: any) {
+            console.info(e.message)
+        }
+
+    }
+
+    private getStor(info: mls.stor.IFileInfoBase): mls.stor.IFileInfo | undefined {
+        const key = mls.stor.getKeyToFile(info);
+        return mls.stor.files[key];
+    }
+
+    private async updateFilePck(st: mls.stor.IFileInfo, deps: number[], sett: mls.cbe.IProjectInfo | undefined) {
+
+        try {
+
+            if (!sett?.projectURL) return;
+
+            const content = await st.getContent() as string;
+            const pkg = JSON.parse(content);
+
+            pkg.dependencies ??= {};
+
+            const dependencies = pkg.dependencies as Record<string, string>;
+            const devDependencies = pkg.devDependencies as Record<string, string>;
+
+            const repoBase = sett.projectURL
+                .replace(/\/(main|master)\//, "/")
+                .replace(/\/?mls-\d+\/?$/, "/");
+
+            const desired = new Set(deps.map(d => `mls-${d}`));
+
+            let changed = false;
+
+            // Remove dependências MLS que não deveriam existir
+            for (const obj of [dependencies]) {
+                if (!obj) continue;
+                for (const key of Object.keys(obj)) {
+                    if (key.startsWith("mls-") && !desired.has(key)) {
+                        delete obj[key];
+                        changed = true;
+                    }
+                }
+            }
+
+            // Adiciona as dependências que faltam
+            for (const key of desired) {
+
+                const exists = key in dependencies
+
+                if (!exists) {
+                    dependencies[key] = `git+${repoBase}${key}.git`;
+                    changed = true;
+                }
+            }
+
+            if (changed) {
+                const fileInfo: mls.stor.IFileInfoValue = {
+                    content: JSON.stringify(pkg, null, 2),
+                    contentType: 'string'
+                };
+
+                await mls.stor.localStor.setContent(st, fileInfo);
+                st.status = 'changed';
+                st.inLocalStorage = true;
+            }
+
+        } catch (e: any) {
+            console.info(`Erro [updateFilePck] file: _${st.project}_/${st.folder ? st.folder + '/' : ''}${st.shortName}${st.extension} | ${e.message || 'Error'}`);
+        }
+
+
+
+    }
+
+    private async updateFileTsConfig(st: mls.stor.IFileInfo, deps: number[]) {
+        try {
+
+            const content = await st.getContent() as string;
+            const cfg = JSON.parse(content);
+
+            cfg.compilerOptions ??= {};
+            cfg.compilerOptions.paths ??= {};
+
+            const paths = cfg.compilerOptions.paths as Record<string, string[]>;
+
+            const desired = new Set(deps.map(d => `/_${d}_/*`));
+            const currentProjectPath = `/_${mls.actualProject}_/*`;
+
+            let changed = false;
+
+            // Remove apenas os paths das dependências MLS
+            for (const key of Object.keys(paths)) {
+                if (!/^\/_\d+_\/\*$/.test(key))
+                    continue;
+
+                // Nunca remove o path do projeto atual
+                if (key === currentProjectPath)
+                    continue;
+
+                if (!desired.has(key)) {
+                    delete paths[key];
+                    changed = true;
+                }
+            }
+
+            // Adiciona os paths que estão faltando
+            for (const dep of deps) {
+                const key = `/_${dep}_/*`;
+
+                if (!(key in paths)) {
+                    paths[key] = [`./project/mls-${dep}/*`];
+                    changed = true;
+                }
+            }
+
+            if (changed) {
+                const fileInfo: mls.stor.IFileInfoValue = {
+                    content: JSON.stringify(cfg, null, 2),
+                    contentType: 'string'
+                };
+
+                await mls.stor.localStor.setContent(st, fileInfo);
+                st.status = 'changed';
+                st.inLocalStorage = true;
+            }
+
+        } catch (e: any) {
+            console.info(`Erro [updateFileTsConfig] file: _${st.project}_/${st.folder ? st.folder + '/' : ''}${st.shortName}${st.extension} | ${e.message || 'Error'}`);
+        }
+
+    }
+
+    private async updateFileConfig(
+        st: mls.stor.IFileInfo,
+        deps: number[],
+        sett: mls.cbe.IProjectInfo | undefined
+    ) {
+        try {
+
+            if (!sett?.projectURL) return;
+
+            const content = await st.getContent() as string;
+            const cfg = JSON.parse(content);
+
+            cfg.workspaceDependencies ??= {};
+
+            const workspaceDependencies = cfg.workspaceDependencies as Record<
+                string,
+                { repo: string; commit: string }
+            >;
+
+            const repoBase = sett.projectURL
+                .replace(/\/(main|master)\//, "/")
+                .replace(/\/?mls-\d+\/?$/, "/");
+
+            const desired = new Set(deps.map(String));
+
+            let changed = false;
+
+            // Remove dependências que não deveriam existir
+            for (const key of Object.keys(workspaceDependencies)) {
+                if (!desired.has(key)) {
+                    delete workspaceDependencies[key];
+                    changed = true;
+                }
+            }
+
+            // Adiciona as que estão faltando
+            for (const dep of deps) {
+                const key = dep.toString();
+
+                if (!(key in workspaceDependencies)) {
+                    workspaceDependencies[key] = {
+                        repo: `${repoBase}mls-${dep}.git`,
+                        commit: ""
+                    };
+                    changed = true;
+                }
+            }
+
+            if (changed) {
+                const fileInfo: mls.stor.IFileInfoValue = {
+                    content: JSON.stringify(cfg, null, 2),
+                    contentType: 'string'
+                };
+
+                await mls.stor.localStor.setContent(st, fileInfo);
+                st.status = 'changed';
+                st.inLocalStorage = true;
+            }
+
+        } catch (e: any) {
+            console.info(`Erro [updateFileConfig] file: _${st.project}_/${st.folder ? st.folder + '/' : ''}${st.shortName}${st.extension} | ${e.message || 'Error'}`);
+        }
+
     }
 
     private async init() {

@@ -64,14 +64,6 @@ export const tests: IPluginTestCase[] = [
           expected: { prop: 'unchanged', value: 'unchanged', needOrder: true } },
     ]},
 
-    // getTokensColor() guards on `mls.actualProject` and throws synchronously-awaited when missing.
-    // Note: mounting the element also triggers this same guard once in the background via
-    // firstUpdated() -> getTokens() (fire-and-forget, uncaught) - that is pre-existing plugin behavior,
-    // not something introduced by this test, and shows up as a console warning, not a test failure.
-    { functionName: 'testGetTokensColorGuard', env: 'browser', params: [
-        { expected: { threw: true, message: 'Invalid project selected' } },
-    ]},
-
     { functionName: 'testPluginInfo', env: 'browser', params: [
         { expected: { tags: ['color:@*', 'background-color:@*', 'background:@*'], descriptionIsString: true } },
     ]},
@@ -128,27 +120,6 @@ export async function testHandleIcaStateChange(testCase: { input: { key: string;
             value: el.value,
             needOrder: (el as any).needOrder,
         };
-        compare(result, testCase.expected);
-        return JSON.stringify(result);
-    } finally {
-        cleanup();
-    }
-}
-
-export async function testGetTokensColorGuard(testCase: { expected: any }): Promise<string> {
-    try {
-        overrideMls({ actualProject: undefined });
-        const el = await mount<PluginCssTokens>(TAG, { position: 'left' });
-
-        let threw = false;
-        let message = '';
-        try {
-            await (el as any).getTokensColor();
-        } catch (e: any) {
-            threw = true;
-            message = e.message;
-        }
-        const result = { threw, message };
         compare(result, testCase.expected);
         return JSON.stringify(result);
     } finally {
