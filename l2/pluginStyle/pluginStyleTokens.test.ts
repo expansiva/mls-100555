@@ -9,6 +9,8 @@
 import { IPluginTestCase, mount, cleanup, compare, mountAndVerify, overrideMls } from '/_102027_/l2/plugins/pluginTestUtils.js';
 import { PluginCssTokens, tags, getDescription } from '/_100555_/l2/pluginStyle/pluginStyleTokens.js';
 
+import '/_100555_/l2/pluginStyle/pluginStyleTokens.js'; // side-effect import: guarantees this module's top-level registration (e.g. @customElement) always runs, regardless of whether the named imports above survive compilation (TS elides imports used only as types)
+
 const TAG = 'plugin-style--plugin-style-tokens-100555';
 
 export const tests: IPluginTestCase[] = [

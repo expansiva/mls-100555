@@ -13,6 +13,8 @@ import {
     createNewFile,
 } from '/_100555_/l2/pluginNewFile/pluginNewFileBase.js';
 
+import '/_100555_/l2/pluginNewFile/pluginNewFileBase.js'; // side-effect import: guarantees this module's top-level registration (e.g. @customElement) always runs, regardless of whether the named imports above survive compilation (TS elides imports used only as types)
+
 // pluginNewFileBase.ts has no @customElement/tag — it's a pure-function module used by the
 // other pluginNewFile* forms, so every case here runs without a DOM.
 

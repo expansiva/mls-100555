@@ -3,6 +3,8 @@
 import { IPluginTestCase, mount, cleanup, compare, mountAndVerify } from '/_102027_/l2/plugins/pluginTestUtils.js';
 import { pluginData, PluginGenerateDist } from '/_100555_/l2/pluginProject/pluginGenerateDist.js';
 
+import '/_100555_/l2/pluginProject/pluginGenerateDist.js'; // side-effect import: guarantees this module's top-level registration (e.g. @customElement) always runs, regardless of whether the named imports above survive compilation (TS elides imports used only as types)
+
 const TAG = 'plugin-project--plugin-generate-dist-100555';
 
 export const tests: IPluginTestCase[] = [

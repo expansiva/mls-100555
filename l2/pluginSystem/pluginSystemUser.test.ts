@@ -8,6 +8,8 @@
 import { IPluginTestCase, mount, cleanup, compare, query, mountAndVerify } from '/_102027_/l2/plugins/pluginTestUtils.js';
 import { pluginData } from '/_100555_/l2/pluginSystem/pluginSystemUser.js';
 
+import '/_100555_/l2/pluginSystem/pluginSystemUser.js'; // side-effect import: guarantees this module's top-level registration (e.g. @customElement) always runs, regardless of whether the named imports above survive compilation (TS elides imports used only as types)
+
 const TAG = 'plugin-system--plugin-system-user-100555';
 
 export const tests: IPluginTestCase[] = [

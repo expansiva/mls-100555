@@ -3,6 +3,8 @@
 import { IPluginTestCase, mount, cleanup, compare, query, mountAndVerify, overrideMls } from '/_102027_/l2/plugins/pluginTestUtils.js';
 import { PluginDeleteModule } from '/_100555_/l2/pluginModule/pluginDeleteModule.js';
 
+import '/_100555_/l2/pluginModule/pluginDeleteModule.js'; // side-effect import: guarantees this module's top-level registration (e.g. @customElement) always runs, regardless of whether the named imports above survive compilation (TS elides imports used only as types)
+
 const TAG = 'plugin-module--plugin-delete-module-100555';
 
 // SAFETY NOTE: handleDelete()'s real success path calls deleteFile()/removeModule()/

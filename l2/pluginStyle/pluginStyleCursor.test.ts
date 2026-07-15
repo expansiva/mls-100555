@@ -7,6 +7,8 @@ import { getState, setState } from '/_102029_/l2/collabState.js';
 // It is aliased on import so this test file reads unambiguously.
 import { PluginStyleClipath as PluginStyleCursor, tags, getDescription } from '/_100555_/l2/pluginStyle/pluginStyleCursor.js';
 
+import '/_100555_/l2/pluginStyle/pluginStyleCursor.js'; // side-effect import: guarantees this module's top-level registration (e.g. @customElement) always runs, regardless of whether the named imports above survive compilation (TS elides imports used only as types)
+
 const TAG = 'plugin-style--plugin-style-cursor-100555';
 
 export const tests: IPluginTestCase[] = [

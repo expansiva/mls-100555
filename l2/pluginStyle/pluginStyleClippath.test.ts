@@ -6,6 +6,8 @@ import { getState, setState } from '/_102029_/l2/collabState.js';
 // `PluginStyleClipath` (single 'p') - a naming inconsistency in the source, kept as-is here.
 import { PluginStyleClipath, tags, getDescription } from '/_100555_/l2/pluginStyle/pluginStyleClippath.js';
 
+import '/_100555_/l2/pluginStyle/pluginStyleClippath.js'; // side-effect import: guarantees this module's top-level registration (e.g. @customElement) always runs, regardless of whether the named imports above survive compilation (TS elides imports used only as types)
+
 const TAG = 'plugin-style--plugin-style-clippath-100555';
 
 export const tests: IPluginTestCase[] = [

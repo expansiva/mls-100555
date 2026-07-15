@@ -3,6 +3,8 @@
 import { IPluginTestCase, mount, cleanup, compare, mountAndVerify } from '/_102027_/l2/plugins/pluginTestUtils.js';
 import { pluginData, PluginSystemTheme100555 } from '/_100555_/l2/pluginSystem/pluginSystemTheme.js';
 
+import '/_100555_/l2/pluginSystem/pluginSystemTheme.js'; // side-effect import: guarantees this module's top-level registration (e.g. @customElement) always runs, regardless of whether the named imports above survive compilation (TS elides imports used only as types)
+
 const TAG = 'plugin-system--plugin-system-theme-100555';
 
 // IMPORTANT: this key is intentionally NOT namespaced to this project — it's shared with

@@ -3,6 +3,8 @@
 import { IPluginTestCase, compare } from '/_102027_/l2/plugins/pluginTestUtils.js';
 import { LessAST } from '/_100555_/l2/pluginEditL3/pluginEditStyleAST.js';
 
+import '/_100555_/l2/pluginEditL3/pluginEditStyleAST.js'; // side-effect import: guarantees this module's top-level registration (e.g. @customElement) always runs, regardless of whether the named imports above survive compilation (TS elides imports used only as types)
+
 // LessAST has no @customElement tag - it's a plain class that parses/edits LESS or CSS text
 // through a Monaco text model. Every case below runs in 'browser' because it needs the real
 // `monaco` global (used elsewhere in this codebase the same way, e.g. enhancementStyle.ts /

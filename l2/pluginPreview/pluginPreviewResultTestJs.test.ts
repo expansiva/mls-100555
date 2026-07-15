@@ -3,6 +3,8 @@
 import { IPluginTestCase, mount, cleanup, compare, query, mountAndVerify } from '/_102027_/l2/plugins/pluginTestUtils.js';
 import { PluginPreviewResultJs as PluginPreviewResultTestJsClass } from '/_100555_/l2/pluginPreview/pluginPreviewResultTestJs.js';
 
+import '/_100555_/l2/pluginPreview/pluginPreviewResultTestJs.js'; // side-effect import: guarantees this module's top-level registration (e.g. @customElement) always runs, regardless of whether the named imports above survive compilation (TS elides imports used only as types)
+
 const TAG = 'plugin-preview--plugin-preview-result-test-js-100555';
 
 // NOTE (pre-existing bug shared with pluginPreviewResultJs.ts): this file's class is also

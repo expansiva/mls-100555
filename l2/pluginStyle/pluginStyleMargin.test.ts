@@ -6,6 +6,8 @@ import { getState, setState } from '/_102029_/l2/collabState.js';
 // all say "margin", only the class identifier drifted to the more generic "Spacing" name.
 import { PluginStyleSpacing, tags, getDescription } from '/_100555_/l2/pluginStyle/pluginStyleMargin.js';
 
+import '/_100555_/l2/pluginStyle/pluginStyleMargin.js'; // side-effect import: guarantees this module's top-level registration (e.g. @customElement) always runs, regardless of whether the named imports above survive compilation (TS elides imports used only as types)
+
 const TAG = 'plugin-style--plugin-style-margin-100555';
 
 export const tests: IPluginTestCase[] = [

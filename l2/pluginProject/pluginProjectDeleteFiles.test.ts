@@ -3,6 +3,8 @@
 import { IPluginTestCase, mount, cleanup, compare, query, mountAndVerify } from '/_102027_/l2/plugins/pluginTestUtils.js';
 import { pluginData, PluginProjectDeleteFiles } from '/_100555_/l2/pluginProject/pluginProjectDeleteFiles.js';
 
+import '/_100555_/l2/pluginProject/pluginProjectDeleteFiles.js'; // side-effect import: guarantees this module's top-level registration (e.g. @customElement) always runs, regardless of whether the named imports above survive compilation (TS elides imports used only as types)
+
 const TAG = 'plugin-project--plugin-project-delete-files-100555';
 
 export const tests: IPluginTestCase[] = [

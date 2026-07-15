@@ -3,6 +3,8 @@
 import { IPluginTestCase, mount, cleanup, compare, query, mountAndVerify, overrideMls } from '/_102027_/l2/plugins/pluginTestUtils.js';
 import { ServiceListFilesAdd100555 } from '/_100555_/l2/pluginExplore/pluginExploreListAddL2.js';
 
+import '/_100555_/l2/pluginExplore/pluginExploreListAddL2.js'; // side-effect import: guarantees this module's top-level registration (e.g. @customElement) always runs, regardless of whether the named imports above survive compilation (TS elides imports used only as types)
+
 const TAG = 'plugin-explore--plugin-explore-list-add-l2-100555';
 
 export const tests: IPluginTestCase[] = [

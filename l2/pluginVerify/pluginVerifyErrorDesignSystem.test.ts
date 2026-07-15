@@ -3,6 +3,8 @@
 import { IPluginTestCase, mount, cleanup, compare, overrideMls, mountAndVerify } from '/_102027_/l2/plugins/pluginTestUtils.js';
 import { PluginVerifyErrorDesignSystem } from '/_100555_/l2/pluginVerify/pluginVerifyErrorDesignSystem.js';
 
+import '/_100555_/l2/pluginVerify/pluginVerifyErrorDesignSystem.js'; // side-effect import: guarantees this module's top-level registration (e.g. @customElement) always runs, regardless of whether the named imports above survive compilation (TS elides imports used only as types)
+
 const TAG = 'plugin-verify--plugin-verify-error-design-system-100555';
 
 export const tests: IPluginTestCase[] = [

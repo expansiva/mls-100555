@@ -5,6 +5,8 @@ import { IPluginTestCase, mount, cleanup, compare, mountAndVerify } from '/_1020
 // it should have been named `PluginNewFileAgent`). Importing with an alias so the test reads naturally.
 import { PluginNewFileBlank as PluginNewFileAgent } from '/_100555_/l2/pluginNewFile/pluginNewFileAgent.js';
 
+import '/_100555_/l2/pluginNewFile/pluginNewFileAgent.js'; // side-effect import: guarantees this module's top-level registration (e.g. @customElement) always runs, regardless of whether the named imports above survive compilation (TS elides imports used only as types)
+
 const TAG = 'plugin-new-file--plugin-new-file-agent-100555';
 
 export const tests: IPluginTestCase[] = [

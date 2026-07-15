@@ -4,6 +4,8 @@ import { IPluginTestCase, mount, cleanup, compare, mountAndVerify } from '/_1020
 import { getState, setState } from '/_102029_/l2/collabState.js';
 import { PluginStyleBorder, tags, getDescription } from '/_100555_/l2/pluginStyle/pluginStyleBorder.js';
 
+import '/_100555_/l2/pluginStyle/pluginStyleBorder.js'; // side-effect import: guarantees this module's top-level registration (e.g. @customElement) always runs, regardless of whether the named imports above survive compilation (TS elides imports used only as types)
+
 const TAG = 'plugin-style--plugin-style-border-100555';
 
 export const tests: IPluginTestCase[] = [

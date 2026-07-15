@@ -3,6 +3,8 @@
 import { IPluginTestCase, mount, cleanup, compare, query, mountAndVerify, overrideMls } from '/_102027_/l2/plugins/pluginTestUtils.js';
 import { PluginQuestionArchitecture } from '/_100555_/l2/pluginArchitecture/pluginQuestionArchitecture.js';
 
+import '/_100555_/l2/pluginArchitecture/pluginQuestionArchitecture.js'; // side-effect import: guarantees this module's top-level registration (e.g. @customElement) always runs, regardless of whether the named imports above survive compilation (TS elides imports used only as types)
+
 const TAG = 'plugin-architecture--plugin-question-architecture-100555';
 
 // _callAgent() is a private instance method, not exposed via mls.*, so it's overridden directly
