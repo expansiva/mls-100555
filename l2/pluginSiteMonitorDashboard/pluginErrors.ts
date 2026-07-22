@@ -25,8 +25,8 @@ export class PluginErrors extends PluginBaseModule {
     @query('.plugin-body') body: HTMLDivElement | undefined;
 
     async prepare() {
-
-        await import('/_100554_/l2/widgetCollabChart.js');
+        const url = '/_100554_/l2/widgetCollabChart.js';
+        await import(url);
 
         const dataByFilter: any = {
             today: [

@@ -4,7 +4,6 @@ import { html } from 'lit';
 import { repeat } from 'lit/directives/repeat.js';
 import { customElement, property } from 'lit/decorators.js';
 import { PluginBaseModule } from '/_102027_/l2/pluginBaseModule.js';
-import { initCompileMonaco } from '/_100554_/l2/collabInit.js';
 
 /// **collab_i18n_start**
 const message_pt = {
@@ -131,6 +130,8 @@ export class PluginVerifyError extends PluginBaseModule {
             const prj = mls.actualProject;
             if (!prj) throw new Error('Not found project');
 
+            const url = '/_100554_/l2/collabInit.js';
+            const initCompileMonaco = await import(url);
             await initCompileMonaco(prj);
 
             const ret = await mls.l2.typescript.compileAll(prj, this.progressCallback.bind(this));

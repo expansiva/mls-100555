@@ -32,7 +32,8 @@ export class PluginRegionalLatency extends PluginBaseModule {
 
     async prepare() {
 
-        await import('/_100554_/l2/widgetCollabChart.js');
+        const url = '/_100554_/l2/widgetCollabChart.js';
+        await import(url);
 
         this.chartDataBar = {
             "tooltip": {

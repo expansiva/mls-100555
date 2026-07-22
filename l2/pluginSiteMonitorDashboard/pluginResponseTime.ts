@@ -28,7 +28,8 @@ export class PluginResponseTime extends PluginBaseModule {
 
     async prepare() {
 
-        await import('/_100554_/l2/widgetCollabChart.js');
+        const url = '/_100554_/l2/widgetCollabChart.js';
+        await import(url);
 
         this.chartData = {
             "tooltip": {
