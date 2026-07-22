@@ -537,7 +537,7 @@ export class TsTestAst {
      * @returns {ITestInfo | undefined} An object containing test metadata, or `undefined` if the test is not found.
      */
     private _getTestInfo(functionName: string, paramsIndex: number): ITestInfo | undefined {
-        if (!this.modelTest || !window.preview.iframe || !window.preview.iframe.contentWindow) throw new Error('Invalid test model');
+        if (!this.modelTest || !(window as any).preview.iframe || !(window as any).preview.iframe.contentWindow) throw new Error('Invalid test model');
         this.ast = this.parse();
         const tests = this._getTests();
         const testFind = tests.find((t) => t.functionName === functionName);

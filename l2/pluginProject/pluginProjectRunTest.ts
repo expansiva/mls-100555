@@ -305,7 +305,7 @@ export class PluginProjectRunTest extends PluginBaseModule {
 
             this.fireEvents(testData.storFile);
             await this.waitForPreviewLoaded();
-            const iframe = window.preview.iframe;
+            const iframe = (window as any).preview.iframe;
             if (iframe) await this.waitForLitComponentsInIframe(iframe);
             // await this.delay(5000);
 
@@ -445,8 +445,8 @@ export class PluginProjectRunTest extends PluginBaseModule {
         this.collabResultContainer?.appendChild(resume);
 
         (mls.actual[2] as any).left = undefined;
-        window.preview.iframe?.remove();
-        window.preview.iframe = undefined;
+        (window as any).preview.iframe?.remove();
+        (window as any).preview.iframe = undefined;
     }
 
 }

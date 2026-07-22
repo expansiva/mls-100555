@@ -153,8 +153,8 @@ export class PluginEditStyleL3 extends PluginBaseModule {
             return;
         }
 
-        const scope = window.preview?.iframe?.contentDocument?.body;
-        const iframeDoc = window.preview?.iframe?.contentWindow;
+        const scope = (window as any).preview?.iframe?.contentDocument?.body;
+        const iframeDoc = (window as any).preview?.iframe?.contentWindow;
 
         if (!scope || !iframeDoc) {
             this.error = 'Not found preview';
