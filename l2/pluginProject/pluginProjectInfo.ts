@@ -7,7 +7,7 @@ import { PluginBaseModule } from '/_102027_/l2/pluginBaseModule.js';
 
 import { renameProjectInHistory } from '/_102027_/l2/libHistoriesRecents.js';
 
-import { collab_trash, collab_lock, collab_lock_open, collab_arrow_up_long, collab_arrow_down_long, collab_pencil } from '/_100555_/l2/utils/collabIcons.js';
+import { collab_trash, collab_lock, collab_lock_open, collab_arrow_up_long,  collab_arrow_down_long, collab_pencil } from '/_100555_/l2/utils/collabIcons.js'; 
 
 /// **collab_i18n_start**
 const message_pt = {
@@ -579,12 +579,14 @@ export class PluginProjectInfo extends PluginBaseModule {
             const stTs = this.getStor({ project: mls.actualProject, level: 0, folder: '', shortName: 'tsconfig', extension: '.json' });
             const stTsLib = this.getStor({ project: mls.actualProject, level: 0, folder: '', shortName: 'tsconfiglib', extension: '.json' });
             const stConfig = this.getStor({ project: mls.actualProject, level: 0, folder: '', shortName: 'config', extension: '.json' });
+            const stDeps = this.getStor({ project: mls.actualProject, level: 0, folder: '', shortName: 'mlsDep', extension: '.json' });
 
             if (stPck) await this.updateFilePck(stPck, deps, sett);
             if (stPckLib) await this.updateFilePck(stPckLib, deps, sett);
             if (stTs) await this.updateFileTsConfig(stTs, deps);
             if (stTsLib) await this.updateFileTsConfig(stTsLib, deps);
             if (stConfig) await this.updateFileConfig(stConfig, deps, sett);
+            if (stDeps) await this.updateFileConfig(stDeps, deps, sett);
 
 
         } catch (e: any) {

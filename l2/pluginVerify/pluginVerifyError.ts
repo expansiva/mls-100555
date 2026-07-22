@@ -131,8 +131,9 @@ export class PluginVerifyError extends PluginBaseModule {
             if (!prj) throw new Error('Not found project');
 
             const url = '/_100554_/l2/collabInit.js';
-            const initCompileMonaco = await import(url);
-            await initCompileMonaco(prj);
+            const mod  = await import(url);
+            //const initCompileMonaco = await import(url);
+            await mod.initCompileMonaco(prj);
 
             const ret = await mls.l2.typescript.compileAll(prj, this.progressCallback.bind(this));
 
