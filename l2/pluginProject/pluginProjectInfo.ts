@@ -638,7 +638,7 @@ export class PluginProjectInfo extends PluginBaseModule {
 
                 const exists = key in dependencies
 
-                if (!exists) {
+                if (!exists && key !== 'mls-100554') {
                     dependencies[key] = `git+${repoBase}${key}.git`;
                     changed = true;
                 }
