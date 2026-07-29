@@ -609,10 +609,12 @@ export class PluginProjectInfo extends PluginBaseModule {
             const content = await st.getContent() as string;
             const pkg = JSON.parse(content);
 
-            pkg.dependencies ??= {};
+            // actionDependencies is a CI-only field (see scripts/buildCI/resolveDeps.mjs,
+            // decision #28): when present it REPLACES `dependencies` for buildCI's closure,
+            // so `dependencies` is left untouched here for `npm install`'s own purposes.
+            pkg.actionDependencies ??= {};
 
-            const dependencies = pkg.dependencies as Record<string, string>;
-            const devDependencies = pkg.devDependencies as Record<string, string>;
+            const actionDependencies = pkg.actionDependencies as Record<string, string>;
 
             const repoBase = sett.projectURL
                 .replace(/\/(main|master)\//, "/")
@@ -623,23 +625,20 @@ export class PluginProjectInfo extends PluginBaseModule {
             let changed = false;
 
             // Remove dependências MLS que não deveriam existir
-            for (const obj of [dependencies]) {
-                if (!obj) continue;
-                for (const key of Object.keys(obj)) {
-                    if (key.startsWith("mls-") && !desired.has(key)) {
-                        delete obj[key];
-                        changed = true;
-                    }
+            for (const key of Object.keys(actionDependencies)) {
+                if (key.startsWith("mls-") && !desired.has(key)) {
+                    delete actionDependencies[key];
+                    changed = true;
                 }
             }
 
             // Adiciona as dependências que faltam
             for (const key of desired) {
 
-                const exists = key in dependencies
+                const exists = key in actionDependencies
 
                 if (!exists && key !== 'mls-100554') {
-                    dependencies[key] = `git+${repoBase}${key}.git`;
+                    actionDependencies[key] = `git+${repoBase}${key}.git`;
                     changed = true;
                 }
             }
