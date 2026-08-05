@@ -112,7 +112,7 @@ plugin-project--plugin-project-info-100555 {
         height: 100%;
         width: -webkit-fill-available;
         padding: 1rem;
-        overflow: hidden;
+        overflow: auto;
     }
 
     .plugin-container {
@@ -195,6 +195,22 @@ plugin-project--plugin-project-info-100555 {
             svg {
                 fill: #fff;
             }
+        }
+    }
+
+    .header-actions {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        display: flex;
+        gap: 0.5rem;
+        z-index: 1;
+
+        button {
+            height: 32px;
+            padding: 0 0.85rem;
+            font-size: @font-size-12;
+            border-radius: 6px;
         }
     }
 
@@ -379,6 +395,16 @@ plugin-project--plugin-project-info-100555 {
                 cursor: pointer;
 
             }
+
+            &.dep-added > span:first-child {
+                color: @success-color;
+                font-weight: 600;
+            }
+
+            &.dep-removed > span:first-child {
+                color: @error-color;
+                font-weight: 600;
+            }
         }
     }
 
@@ -436,5 +462,6 @@ plugin-project--plugin-project-info-100555 {
     }
 
 }
+
 
 
