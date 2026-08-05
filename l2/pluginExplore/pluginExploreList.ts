@@ -962,7 +962,7 @@ export class PluginExploreList extends PluginBaseModule {
     private fireEventLoadProject(): void {
         if (this.fireEventThisProject === mls.actualProject) return;
         this.fireEventThisProject = mls.actualProject as number;
-        readProjectTypescriptAndCompile(mls.actualProject as number, '', false);    
+        //readProjectTypescriptAndCompile(mls.actualProject as number, '', false);    
         //readProjectTypescriptAndCompileL1(mls.actualProject as number, '', true);
     }
 
