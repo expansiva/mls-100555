@@ -168,7 +168,19 @@ export class PluginProjectInfo extends PluginBaseModule {
                     <span class="edit-icon" @click=${this.startEditingInfo} title="${this.msg.edit}">
                         ${collab_pencil}
                     </span>
-                ` : ''}
+                ` : html`
+                    <div class="header-actions">
+                        <button class="btn-secondary" @click=${this.cancelEditingInfo}>
+                            ${this.msg.cancel}
+                        </button>
+                        <button
+                            ?disabled=${this.isSavingInfo || !this.hasInfoChanges}
+                            @click=${this.handleSaveInfo}
+                        >
+                            ${this.isSavingInfo ? html`<span class="loader"></span>` : this.msg.save}
+                        </button>
+                    </div>
+                `}
                 <details open>
                     <summary>${this.msg.detailsInfo}</summary>
                     <div>
@@ -276,18 +288,6 @@ export class PluginProjectInfo extends PluginBaseModule {
                     <input type="text" .value=${this.projectCreatedAt || ''} disabled />
                 </div>
 
-                <div class="info-edit-actions">
-                    <button class="btn-secondary" @click=${this.cancelEditingInfo}>
-                        ${this.msg.cancel}
-                    </button>
-                    <button 
-                        ?disabled=${this.isSavingInfo}
-                        @click=${this.handleSaveInfo}
-                    >
-                        ${this.isSavingInfo ? html`<span class="loader"></span>` : this.msg.save}
-                    </button>
-                </div>
-
                 ${this.labelOkInfo ? html`<small class="saving-ok">${this.labelOkInfo}</small>` : ''}
                 ${this.labelErrorInfo ? html`<small class="saving-error">${this.labelErrorInfo}</small>` : ''}
             </div>
@@ -301,7 +301,19 @@ export class PluginProjectInfo extends PluginBaseModule {
                     <span class="edit-icon" @click=${this.startEditingDeps} title="${this.msg.edit}">
                         ${collab_pencil}
                     </span>
-                ` : ''}
+                ` : html`
+                    <div class="header-actions">
+                        <button class="btn-secondary" @click=${this.cancelEditingDeps}>
+                            ${this.msg.cancel}
+                        </button>
+                        <button
+                            ?disabled=${this.isSavingDeps || !this.hasDepsChanges}
+                            @click=${this.handleSaveDeps}
+                        >
+                            ${this.isSavingDeps ? html`<span class="loader"></span>` : this.msg.save}
+                        </button>
+                    </div>
+                `}
                 <details open>
                     <summary>${this.msg.deps}</summary>
                     <div>
@@ -337,9 +349,14 @@ export class PluginProjectInfo extends PluginBaseModule {
     renderDepsEditMode(): TemplateResult {
         return html`
             <ul class="deps-details-list">
-                ${this.deps.map((dep, index) => html`
-                    <li>
-                        <span>${dep.name} (${dep.id})</span>
+                ${this.deps.map((dep, index) => {
+                const added = this.isDepAdded(dep);
+                const moved = this.isDepMoved(dep);
+                const marker = dep.removed ? ' -' : (added || moved) ? ' *' : '';
+                const statusClass = dep.removed ? 'dep-removed' : added ? 'dep-added' : '';
+                return html`
+                    <li class="${statusClass}">
+                        <span>${dep.name} (${dep.id})${marker}</span>
                         <div class="deps-details-tags">
                             <span>
                                 <i>${dep.auth === 'public' ? collab_lock_open : collab_lock}</i>
@@ -347,18 +364,18 @@ export class PluginProjectInfo extends PluginBaseModule {
                             </span>
                         </div>
                         <div class="deps-details-actions">
-                            <span @click=${() => this.moveDepUp(index)}>${collab_arrow_up_long}</span>
-                            <span @click=${() => this.moveDepDown(index)}>${collab_arrow_down_long}</span>
-                            <span @click=${() => {
-                this.deps.splice(index, 1);
-                this.requestUpdate();
-            }}>
+                            ${!dep.removed ? html`
+                                <span @click=${() => this.moveDepUp(index)}>${collab_arrow_up_long}</span>
+                                <span @click=${() => this.moveDepDown(index)}>${collab_arrow_down_long}</span>
+                            ` : ''}
+                            <span @click=${() => this.toggleRemoveDependency(index)}>
                                 ${collab_trash}
                             </span>
                         </div>
                     </li>
-                `)}
-        
+                `;
+            })}
+
                 <li class="li-add" @click=${this.toggleAddDep}>
                     <span>${this.msg.btnOpenDep}</span>
                 </li>
@@ -376,23 +393,11 @@ export class PluginProjectInfo extends PluginBaseModule {
                         ${this.msg.btnAddDep}
                     </button>
                 </div>
-                ${this.labelErrorDeps ? html`<small class="saving-error">${this.labelErrorDeps}</small>` : ''}      
-            </div>
-
-            <div class="info-edit-actions">
-                <button class="btn-secondary" @click=${this.cancelEditingDeps}>
-                    ${this.msg.cancel}
-                </button>
-                <button
-                    ?disabled=${this.isSavingDeps}
-                    @click=${this.handleSaveDeps}
-                >
-                    ${this.isSavingDeps ? html`<span class="loader"></span>` : this.msg.save}
-                </button>
+                ${this.labelErrorDeps ? html`<small class="saving-error">${this.labelErrorDeps}</small>` : ''}
             </div>
 
             ${this.labelOk ? html`<small class="saving-ok">${this.labelOk}</small>` : ''}
-            ${this.labelError ? html`<small class="saving-error">${this.labelError}</small>` : ''}      
+            ${this.labelError ? html`<small class="saving-error">${this.labelError}</small>` : ''}
         `;
     }
 
@@ -478,17 +483,70 @@ export class PluginProjectInfo extends PluginBaseModule {
 
     }
 
+    private getActiveDeps(): IDependenciesInfo[] {
+        return this.deps.filter(dep => !dep.removed);
+    }
+
+    private isDepAdded(dep: IDependenciesInfo): boolean {
+        return !this.originalDeps.some(o => o.id === dep.id);
+    }
+
+    private isDepMoved(dep: IDependenciesInfo): boolean {
+        if (dep.removed || this.isDepAdded(dep)) return false;
+
+        const activeDeps = this.getActiveDeps();
+        const activeIds = new Set(activeDeps.map(d => d.id));
+        // compara apenas contra os itens originais que ainda estão ativos, senão remover
+        // um item desloca o índice dos itens seguintes e marca falsamente como "movido"
+        const expectedOrder = this.originalDeps.filter(o => activeIds.has(o.id));
+
+        const activeIndex = activeDeps.findIndex(d => d.id === dep.id);
+        const expectedIndex = expectedOrder.findIndex(o => o.id === dep.id);
+        return activeIndex !== expectedIndex;
+    }
+
+    private get hasDepsChanges(): boolean {
+        const activeIds = this.getActiveDeps().map(d => d.id);
+        const originalIds = this.originalDeps.map(d => d.id);
+        if (activeIds.length !== originalIds.length) return true;
+        return activeIds.some((id, i) => id !== originalIds[i]);
+    }
+
+    private get hasInfoChanges(): boolean {
+        return this.editName !== (this.projectName || '')
+            || this.editProjectURL !== (this.projectURL || '')
+            || this.editProjectDriver !== (this.projectDriver || '')
+            || this.editProjectDescription !== (this.projectDescription || '');
+    }
+
     private moveDepUp(index: number) {
-        if (index === 0) return;
         const deps = [...this.deps];
-        [deps[index - 1], deps[index]] = [deps[index], deps[index - 1]];
+        let prev = index - 1;
+        while (prev >= 0 && deps[prev].removed) prev--;
+        if (prev < 0) return;
+        [deps[prev], deps[index]] = [deps[index], deps[prev]];
         this.deps = deps;
     }
 
     private moveDepDown(index: number) {
-        if (index === this.deps.length - 1) return;
         const deps = [...this.deps];
-        [deps[index], deps[index + 1]] = [deps[index + 1], deps[index]];
+        let next = index + 1;
+        while (next < deps.length && deps[next].removed) next++;
+        if (next >= deps.length) return;
+        [deps[index], deps[next]] = [deps[next], deps[index]];
+        this.deps = deps;
+    }
+
+    private toggleRemoveDependency(index: number) {
+        const dep = this.deps[index];
+
+        if (!dep.removed && this.isDepAdded(dep)) {
+            this.deps = [...this.deps.slice(0, index), ...this.deps.slice(index + 1)];
+            return;
+        }
+
+        const deps = [...this.deps];
+        deps[index] = { ...deps[index], removed: !deps[index].removed };
         this.deps = deps;
     }
 
@@ -511,8 +569,17 @@ export class PluginProjectInfo extends PluginBaseModule {
             return;
         }
 
-        const exists = this.deps.some(dep => dep.id === this.newDepId);
-        if (exists) {
+        const existingIndex = this.deps.findIndex(dep => dep.id === this.newDepId);
+        if (existingIndex !== -1) {
+            if (this.deps[existingIndex].removed) {
+                const deps = [...this.deps];
+                deps[existingIndex] = { ...deps[existingIndex], removed: false };
+                this.deps = deps;
+                this.newDepId = null;
+                this.isAddingDep = false;
+                this.labelErrorDeps = '';
+                return;
+            }
             this.labelErrorDeps = this.msg.errorDepAlreadyAdded;
             return;
         }
@@ -564,9 +631,15 @@ export class PluginProjectInfo extends PluginBaseModule {
     private async saveDeps() {
         if (!this.project) throw new Error(`Project not found`);
         if (!this.projectDetails) throw new Error(`Project details ${this.project} not found`);
-        this.projectDetails.prj_dependencies = this.deps.map((item) => item.id);
+
+        const finalDeps = this.getActiveDeps().map(dep => ({ id: dep.id, name: dep.name, auth: dep.auth }));
+
+        this.projectDetails.prj_dependencies = finalDeps.map(dep => dep.id);
         await this.updateFilesDeps(this.projectDetails.prj_dependencies);
-        mls.api.cbeSavePrjSettings(this.project);
+        await mls.api.cbeSavePrjSettings(this.project);
+
+        this.deps = finalDeps;
+        this.originalDeps = JSON.parse(JSON.stringify(finalDeps));
     }
 
     private async updateFilesDeps(deps: number[]) {
@@ -858,4 +931,5 @@ interface IDependenciesInfo {
     name: string,
     auth: string,
     unknown?: boolean,
+    removed?: boolean,
 }
