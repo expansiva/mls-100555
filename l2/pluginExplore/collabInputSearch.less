@@ -10,8 +10,8 @@ plugin-explore--collab-input-search-100555 {
         display: flex;
         align-items: center;
         gap: 6px;
-        background: @bg-primary-color;
-        border: 1.5px solid @bg-primary-color-darker-disabled; 
+        background: @surface-bg;
+        border: 1.5px solid @border-subtle-disabled; 
         border-radius: 4px;
         padding: 6px 10px;
         cursor: text;
@@ -27,8 +27,8 @@ plugin-explore--collab-input-search-100555 {
 
     .wrapper.focused {
         width: 300px;
-        background:  @bg-primary-color-darker;
-        border-color: @active-color;
+        background:  @surface-alt-bg;
+        border-color: @selected-border;
         box-shadow: 0 0 0 3px rgba(79, 142, 247, 0.15);
     }
 
@@ -41,13 +41,13 @@ plugin-explore--collab-input-search-100555 {
         align-items: center;
         justify-content: center;
         flex-shrink: 0;
-        color: @text-primary-color; 
+        color: @text-default; 
         transition: color 200ms;
     }
 
     .wrapper.focused .icon,
     .wrapper.has-value .icon {
-        color: @active-color;
+        color: @selected-text;
     }
 
     input {
@@ -55,10 +55,10 @@ plugin-explore--collab-input-search-100555 {
         outline: none;
         background: transparent;
         font-size: 14px;
-        color: @text-primary-color; 
+        color: @text-default; 
         flex: 1;
         min-width: 0;
-        caret-color: @active-color;
+        caret-color: @selected-text;
     }
 
     input::placeholder {

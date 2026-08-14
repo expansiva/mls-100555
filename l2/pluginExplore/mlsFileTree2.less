@@ -3,8 +3,8 @@
 plugin-explore--mls-file-tree2-100555 {
 
     display: block;
-    background: @bg-primary-color;
-    color: @text-primary-color;
+    background: @surface-bg;
+    color: @text-default;
     font-family: 'Segoe UI', 'Helvetica Neue', sans-serif;
     font-size: 13px;
     min-height: 200px;
@@ -33,7 +33,7 @@ plugin-explore--mls-file-tree2-100555 {
         position: relative;
 
         &:hover {
-            background: @bg-primary-color-darker-disabled;
+            background: @surface-alt-bg-disabled;
 
             .actions {
                 display: flex;
@@ -41,7 +41,7 @@ plugin-explore--mls-file-tree2-100555 {
         }
 
         &.selected {
-            background: @active-color;
+            background: @button-primary-bg;
             color: #ffffff;
 
             .label,
@@ -173,7 +173,7 @@ plugin-explore--mls-file-tree2-100555 {
 
         &.deleted {
             text-decoration: line-through;
-            color: @error-color;
+            color: @status-error-text;
         }
     }
 
@@ -228,7 +228,7 @@ plugin-explore--mls-file-tree2-100555 {
         }
 
         svg {
-            fill: @text-primary-color;
+            fill: @text-default;
         }
     }
 
@@ -254,10 +254,10 @@ plugin-explore--mls-file-tree2-100555 {
             justify-content: center;
             border-radius: 4px;
             font-size: 12px;
-            color: @text-primary-color;
+            color: @text-default;
 
             svg {
-                fill: @text-primary-color;
+                fill: @text-default;
             }
 
             &:hover {

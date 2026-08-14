@@ -3,7 +3,7 @@
 plugin-style--plugin-style-index-item-100555 {
 
     .plugin-item:not(:last-child) {
-        border-bottom: 1px solid @grey-color-light;
+        border-bottom: 1px solid @border-subtle;
     }
 
     .plugin-item {
@@ -18,7 +18,7 @@ plugin-style--plugin-style-index-item-100555 {
             justify-content: space-between;
             gap: .6rem;
             padding: .3rem;
-            background: @grey-color-light;
+            background: @surface-alt-bg;
 
             span {
                 flex: 1;
@@ -33,7 +33,7 @@ plugin-style--plugin-style-index-item-100555 {
                     user-select: none;
                     cursor: pointer;
                     svg {
-                        fill: @text-primary-color;
+                        fill: @text-default;
                     }
 
                     &:hover {
@@ -59,13 +59,13 @@ plugin-style--plugin-style-index-item-100555 {
 
                 i.i-question.info {
                     svg {
-                        fill: @info-color;
+                        fill: @status-info-text;
                     }
                 }
 
                 i.i-like.liked {
                     svg {
-                        fill: @error-color;
+                        fill: @status-error-text;
                     }
                 }
 
@@ -106,13 +106,13 @@ plugin-style--plugin-style-index-item-100555 {
             
             padding: @space-16;
             svg {
-                fill: @text-primary-color;
+                fill: @text-default;
             }
         }
 
         .plugin-item-desc {
             font-size: @font-size-12;
-            color: @text-primary-color-lighter;
+            color: @text-muted;
             padding-left: @space-16;
             text-align: justify;
         }

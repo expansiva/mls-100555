@@ -170,7 +170,7 @@ export class PluginProjectReadMe extends PluginBaseModule {
             display: block;
             height: calc(100% - 55px);
             overflow: auto;
-            background: @bg-primary-color;
+            background: @surface-bg;
             font-size: @font-size-16;
         }
 

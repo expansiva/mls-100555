@@ -72,9 +72,9 @@ export class MlsFileTree2 extends CollabLitElement {
         return html`
             <style>@keyframes mft2-spin{100%{transform:rotate(360deg)}}</style>
             <div style="position:absolute;inset:0;background:rgba(0,0,0,.55);z-index:99999;display:flex;align-items:center;justify-content:center">
-                <div style="background:var(--bg-secondary-color,#252526);border-radius:10px;padding:1.75rem 2.5rem;display:flex;flex-direction:column;align-items:center;gap:1rem;min-width:240px;box-shadow:0 8px 32px rgba(0,0,0,.6)">
+                <div style="background:var(--surface-alt-bg,#252526);border-radius:10px;padding:1.75rem 2.5rem;display:flex;flex-direction:column;align-items:center;gap:1rem;min-width:240px;box-shadow:0 8px 32px rgba(0,0,0,.6)">
                     <div style="width:38px;height:38px;border:4px solid rgba(255,255,255,.15);border-top-color:#4fa3e0;border-radius:50%;animation:mft2-spin .75s linear infinite"></div>
-                    <span style="color:var(--text-primary-color,#ccc);font-size:.9rem;text-align:center;white-space:pre-wrap">${this._loadingMsg}</span>
+                    <span style="color:var(--text-default,#ccc);font-size:.9rem;text-align:center;white-space:pre-wrap">${this._loadingMsg}</span>
                 </div>
             </div>
         `;

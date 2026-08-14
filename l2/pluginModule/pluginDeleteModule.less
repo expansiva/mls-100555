@@ -21,18 +21,18 @@ plugin-module--plugin-delete-module-100555 {
     }
 
     input.invalid {
-        border-color: @error-color;
+        border-color: @status-error-text;
         background: #ffe6e6;
     }
 
     .error-msg {
         font-size: 0.9rem;
-        color: @error-color;
+        color: @status-error-text;
     }
 
     .feedback-msg {
         padding: 0.5rem 1rem;
-        color: @text-primary-color;
+        color: @text-default;
         border-radius: 4px;
         font-size: 0.9rem;
     }
@@ -42,7 +42,7 @@ plugin-module--plugin-delete-module-100555 {
         border: none;
         border-radius: 6px;
         cursor: pointer;
-        background: @error-color;
+        background: @button-danger-bg;
         color: white;
         font-weight: bold;
         transition: opacity 0.2s;

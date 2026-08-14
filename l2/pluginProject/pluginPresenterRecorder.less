@@ -2,9 +2,9 @@
 
 plugin-project--plugin-presenter-recorder-100555 {
     font-family: @font-family-primary;
-    //background: @bg-primary-color;
+    //background: @surface-bg;
     background: transparent;
-    color: @text-primary-color;
+    color: @text-default;
     font-size: @font-size-16;
     padding: @space-24;
     border-radius: 12px;
@@ -16,12 +16,12 @@ plugin-project--plugin-presenter-recorder-100555 {
     h3 {
         font-size: @font-size-20;
         font-weight: @font-weight-bold;
-        color: @text-primary-color;
+        color: @text-default;
         margin-bottom: @space-16;
     }
 
     p {
-        color: @text-primary-color-lighter;
+        color: @text-muted;
         font-size: @font-size-16;
         margin-bottom: @space-24;
     }
@@ -31,39 +31,39 @@ plugin-project--plugin-presenter-recorder-100555 {
         font-size: @font-size-16;
         padding: @space-8 @space-24;
         border-radius: 8px;
-        border: 1px solid @grey-color;
-        background: @bg-secondary-color;
-        color: @text-secondary-color-darker;
+        border: 1px solid @border-subtle;
+        background: @surface-alt-bg;
+        color: @link-text;
         cursor: pointer;
         transition: background @transition-slow;
 
         &:hover {
-            background: @bg-secondary-color-hover;
-            color: @text-secondary-color;
-            border-color: @grey-color-dark;
+            background: @surface-alt-bg-hover;
+            color: @link-text;
+            border-color: @border-default;
         }
 
         &:active,
         &:focus {
             outline: none;
-            border-color: @active-color;
+            border-color: @selected-border;
         }
 
         &:disabled {
-            background: @bg-secondary-color-disabled;
-            color: @text-primary-color-disabled;
+            background: @surface-alt-bg-disabled;
+            color: @text-default-disabled;
             cursor: not-allowed;
         }
     }
 
     a[download] {
         font-size: @font-size-16;
-        color: @link-color;
+        color: @link-text;
         text-decoration: underline;
         margin-left: @space-16;
 
         &:hover {
-            color: @link-color-hover;
+            color: @link-text-hover;
         }
     }
 
@@ -74,7 +74,7 @@ plugin-project--plugin-presenter-recorder-100555 {
         width: 160px;
         height: 160px;
         background: #000;
-        border: 3px solid @active-color;
+        border: 3px solid @selected-border;
         box-shadow: 0 2px 12px rgba(0, 0, 0, 0.18);
         z-index: 9999;
         overflow: hidden;
@@ -146,7 +146,7 @@ plugin-project--plugin-presenter-recorder-100555 {
         display: flex;
         flex-direction: column;
         gap: 1rem;
-        border: 1px solid @grey-color-light;
+        border: 1px solid @border-subtle;
         border-radius: 10px;
         padding: 1rem 1.5rem 1.5rem 1.5rem;
         margin-bottom: @space-24;
@@ -157,7 +157,7 @@ plugin-project--plugin-presenter-recorder-100555 {
         font-size: @font-size-16;
         font-weight: @font-weight-bold;
         margin-bottom: @space-8;
-        color: @text-primary-color;
+        color: @text-default;
     }
 
     .radio-row {

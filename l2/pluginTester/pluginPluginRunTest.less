@@ -6,7 +6,7 @@ plugin-tester--plugin-plugin-run-test-100555 {
     font-family: @font-family-primary;
     font-size: @font-size-16;
     font-weight: @font-weight-normal;
-    color: @text-primary-color;
+    color: @text-default;
 
     .plugin-container {
         display: flex;
@@ -28,7 +28,7 @@ plugin-tester--plugin-plugin-run-test-100555 {
 
         .icon {
             display: flex;
-            color: @active-color;
+            color: @selected-text;
         }
 
         h2 {
@@ -47,13 +47,13 @@ plugin-tester--plugin-plugin-run-test-100555 {
         flex-shrink: 0;
         border-radius: 50%;
         border: none;
-        background-color: @active-color;
+        background-color: @button-primary-bg;
         color: #fff;
         cursor: pointer;
         transition: background-color .2s ease, transform .1s ease;
 
         &:hover:not(:disabled) {
-            background-color: @active-color-hover;
+            background-color: @button-primary-bg-hover;
         }
 
         &:active:not(:disabled) {

@@ -66,9 +66,9 @@ export class MlsFileTree extends CollabLitElement {
         return html`
             <style>@keyframes mft-spin{100%{transform:rotate(360deg)}}</style>
             <div style="position:absolute;inset:0;background:rgba(0,0,0,.55);z-index:99999;display:flex;align-items:center;justify-content:center">
-                <div style="background:var(--bg-secondary-color,#252526);border-radius:10px;padding:1.75rem 2.5rem;display:flex;flex-direction:column;align-items:center;gap:1rem;min-width:240px;box-shadow:0 8px 32px rgba(0,0,0,.6)">
+                <div style="background:var(--surface-alt-bg,#252526);border-radius:10px;padding:1.75rem 2.5rem;display:flex;flex-direction:column;align-items:center;gap:1rem;min-width:240px;box-shadow:0 8px 32px rgba(0,0,0,.6)">
                     <div style="width:38px;height:38px;border:4px solid rgba(255,255,255,.15);border-top-color:#4fa3e0;border-radius:50%;animation:mft-spin .75s linear infinite"></div>
-                    <span style="color:var(--text-primary-color,#ccc);font-size:.9rem;text-align:center;white-space:pre-wrap">${this._loadingMsg}</span>
+                    <span style="color:var(--text-default,#ccc);font-size:.9rem;text-align:center;white-space:pre-wrap">${this._loadingMsg}</span>
                 </div>
             </div>
         `;
@@ -179,7 +179,7 @@ export class MlsFileTree extends CollabLitElement {
                         <info-item>
                             <span class="classClick" @click="${this.clickGroupHidden}">
                                 <span class="groupHiddenListIcon" >
-                                    <svg xmlns='http://www.w3.org/2000/svg' style='height: 21px;' viewBox='0 0 128 512' ><path style='fill:var(--text-primary-color)' d='M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z' fill='rgb(66,65,65,1)'/></svg>
+                                    <svg xmlns='http://www.w3.org/2000/svg' style='height: 21px;' viewBox='0 0 128 512' ><path style='fill:var(--text-default)' d='M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z' fill='rgb(66,65,65,1)'/></svg>
                                 </span>
                             </span>
                             </span>

@@ -118,12 +118,12 @@ export class PluginProjectDetail extends PluginBaseModule {
             display: block;
             height: calc(100% - 55px);
             overflow: auto;
-            background: @bg-primary-color;
+            background: @surface-bg;
             font-size: @font-size-16;
         }   
 
         details{
-            border: 1px solid var(--grey-color-light);
+            border: 1px solid var(--border-subtle);
             padding: 1rem;
             border-radius: 10px;
             margin-bottom: 1rem;

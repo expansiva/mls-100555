@@ -533,7 +533,7 @@ export class PluginExploreList extends PluginBaseModule {
                     <info-item>
                         <span class="classClick" @click="${this.clickGroupHidden}">
                            <span class="groupHiddenListIcon" >
-                               <svg xmlns='http://www.w3.org/2000/svg' style='height: 21px;' viewBox='0 0 128 512' ><path style='fill:var(--text-primary-color)' d='M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z' fill='rgb(66,65,65,1)'/></svg>
+                               <svg xmlns='http://www.w3.org/2000/svg' style='height: 21px;' viewBox='0 0 128 512' ><path style='fill:var(--text-default)' d='M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z' fill='rgb(66,65,65,1)'/></svg>
                            </span>
                        </span>
                         </span>

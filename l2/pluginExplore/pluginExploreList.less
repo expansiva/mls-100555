@@ -8,13 +8,13 @@ plugin-explore--plugin-explore-list-100555 {
     font-size: @font-size-20;
     font-weight: @font-weight-normal;
     line-height: 1.5;
-    color: @text-primary-color;
-    background-color: @bg-primary-color;
+    color: @text-default;
+    background-color: @surface-bg;
 
     .contentServiceList {
         padding: 1rem;
         position: relative;
-        background-color: @bg-primary-color;
+        background-color: @surface-bg;
     }
 
     &.breakContent {
@@ -66,7 +66,7 @@ plugin-explore--plugin-explore-list-100555 {
             align-items: center;
             justify-content: space-between;
             padding: 0rem 0rem;
-            background-color: @bg-primary-color;
+            background-color: @surface-bg;
             gap: 1rem;
 
 
@@ -113,34 +113,34 @@ plugin-explore--plugin-explore-list-100555 {
                     span {
                         display: inline-block;
                         padding: 0.3rem 0.6rem;
-                        border: 1px solid @grey-color;
+                        border: 1px solid @border-subtle;
                         border-radius: 4px;
-                        background: @bg-primary-color;
+                        background: @surface-bg;
                         cursor: pointer;
                         font-size: 0.8rem;
                         line-height: 1;
                         transition: all 0.2s ease;
 
                         svg {
-                            fill: @text-primary-color;
+                            fill: @text-default;
                         }
 
                         &:hover {
-                            background-color: @grey-color;
+                            background-color: @surface-alt-bg;
                         }
                     }
 
                     /*input[type="radio"]:checked+span {
-                        background-color: @grey-color-dark;
-                        color: @text-primary-color;
-                        border-color: @bg-secondary-color-darker-disabled;
+                        background-color: @border-default;
+                        color: @text-default;
+                        border-color: @border-default-disabled;
                         font-weight: 600;
                     }*/
 
                     span.checked {
-                        background-color: @grey-color-dark;
-                        color: @text-primary-color;
-                        border-color: @bg-secondary-color-darker-disabled;
+                        background-color: @border-default;
+                        color: @text-default;
+                        border-color: @border-default-disabled;
                         font-weight: 600;
                     }
                 }
@@ -148,14 +148,14 @@ plugin-explore--plugin-explore-list-100555 {
                 select {
                     display: inline-block;
                     padding: 0.3rem 0.3rem;
-                    border: 1px solid @grey-color;
+                    border: 1px solid @border-subtle;
                     border-radius: 4px;
-                    background: @bg-primary-color;
+                    background: @surface-bg;
                     cursor: pointer;
                     font-size: 0.8rem;
                     line-height: 1;
                     transition: all 0.2s ease;
-                    color: @text-primary-color;
+                    color: @text-default;
 
                 }
             }
@@ -170,13 +170,13 @@ plugin-explore--plugin-explore-list-100555 {
                 font-size: 0.9rem;
                 border: none;
                 border-radius: 6px;
-                background-color:  @bg-primary-color-disabled;
-                color: @text-primary-color;
+                background-color:  @surface-bg-disabled;
+                color: @text-default;
                 cursor: pointer;
                 transition: background-color 0.2s ease;
 
                 &:hover {
-                    background-color: @grey-color-darker;
+                    background-color: @border-default;
                 }
 
             }
@@ -210,7 +210,7 @@ plugin-explore--plugin-explore-list-100555 {
             align-items: center;
             gap: .4rem;
             margin-bottom: 1rem;
-            color: @text-primary-color;
+            color: @text-default;
             ;
 
             span {
@@ -249,14 +249,14 @@ plugin-explore--plugin-explore-list-100555 {
     }
 
     .mls-gpbtnslider-item {
-        color: @text-primary-color;
+        color: @text-default;
     }
 
     .groupHiddenList .mls-gpbtnslider-item {
         display: block;
         transition: 0.5s;
         z-index: 10;
-        color: @text-primary-color;
+        color: @text-default;
         border-bottom: 1px solid #c7c4c4;
         padding: .2rem;
         font-size: 13px;
@@ -264,7 +264,7 @@ plugin-explore--plugin-explore-list-100555 {
 
     .groupHiddenList .mls-gpbtnslider-item:hover {
         background: #2f2f2f17;
-        color: var(--active-color);
+        color: var(--selected-text);
     }
 
     .groupHiddenList.activegpbtnslider {
@@ -291,7 +291,7 @@ plugin-explore--plugin-explore-list-100555 {
         list-style: none;
 
         li.selected {
-            background: @grey-color-dark;
+            background: @border-default;
         }
 
         li {
@@ -303,7 +303,7 @@ plugin-explore--plugin-explore-list-100555 {
 
             .fileDeleted {
                 text-decoration: line-through;
-                color: @error-color;
+                color: @status-error-text;
             }
 
             .elContent {
@@ -335,7 +335,7 @@ plugin-explore--plugin-explore-list-100555 {
                 }
 
                 input {
-                    border: 1px solid @grey-color;
+                    border: 1px solid @border-subtle;
                     border-radius: 5px;
                     padding-left: 0.3rem;
                     font-size: 13px;
@@ -420,7 +420,7 @@ plugin-explore--plugin-explore-list-100555 {
             }
 
             &:hover:not(.headerTitle) {
-                background: @grey-color-dark;
+                background: @border-default;
             }
         }
     }

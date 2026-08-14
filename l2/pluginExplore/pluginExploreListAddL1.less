@@ -7,24 +7,24 @@ overflow-y: auto;
     font-size: @font-size-16;
     font-weight: @font-weight-normal;
     line-height: 1.5;
-    color: @text-primary-color;
-    background-color: @bg-primary-color;
+    color: @text-default;
+    background-color: @surface-bg;
 
     .headerNav {
         height: 40px;
-        background: @bg-primary-color-darker-hover;
-        border-bottom: 1px solid @bg-primary-color-lighter;
+        background: @surface-alt-bg-hover;
+        border-bottom: 1px solid @border-subtle;
         display: flex;
         align-items: center;
         justify-content: center;
         position: relative;
-        box-shadow: 0 1px 3px @bg-primary-color-lighter;
+        box-shadow: 0 1px 3px @border-subtle;
     }
 
     .headerNav h1 {
         font-size: 16px;
         font-weight: 500;
-        color: @text-primary-color;
+        color: @text-default;
         margin: 0;
         pointer-events: none;
         /* evita clique no texto */
@@ -35,8 +35,8 @@ overflow-y: auto;
         top: 50%;
         transform: translateY(-50%);
         border: none;
-        background-color: @grey-color-darker;
-        color: @text-primary-color;
+        background-color: @border-default;
+        color: @text-default;
         width: 26px;
         height: 26px;
         border-radius: 6px;
@@ -67,10 +67,10 @@ overflow-y: auto;
 
 
     button {
-        background-color: @bg-secondary-color-lighter;
+        background-color: @surface-alt-bg;
         border-radius: 8px;
         border: none;
-        box-shadow: 0px 1px 3px 0px @grey-color;
+        box-shadow: 0px 1px 3px 0px @border-subtle;
         display: flex;
         flex-direction: row;
         justify-content: center;
@@ -80,11 +80,11 @@ overflow-y: auto;
         height: 40px;
         transition: height 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
         padding: 0.5rem;
-        color: @text-primary-color;
+        color: @text-default;
         cursor: pointer;
 
         &:hover {
-            background-color: @grey-color-light;
+            background-color: @surface-alt-bg;
         }
     }
 
@@ -120,14 +120,14 @@ overflow-y: auto;
         }
 
         span {
-            color: @error-color;
+            color: @status-error-text;
             width: 100px;
             top: -5px;
             font-size: 12px;
         }
 
         .btn-cancel:hover {
-            color: @error-color;
+            color: @status-error-text;
         }
     }
 
@@ -150,7 +150,7 @@ overflow-y: auto;
             cursor: pointer;
 
             &:hover {
-                background-color: @grey-color-light;
+                background-color: @surface-alt-bg;
             }
 
             .template-item-content {

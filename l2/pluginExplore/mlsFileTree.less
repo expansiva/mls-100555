@@ -4,8 +4,8 @@ plugin-explore--mls-file-tree-100555 {
 
 
     display: block;
-    background: @bg-primary-color;
-    color: @text-primary-color-lighter-disabled;
+    background: @surface-bg;
+    color: @text-muted-disabled;
     font-family: 'Segoe UI', sans-serif;
     font-size: 13px;
     min-height: 200px;
@@ -28,11 +28,11 @@ plugin-explore--mls-file-tree-100555 {
     }
 
     .tree-item:hover {
-        background: @bg-primary-color-darker-disabled;
+        background: @surface-alt-bg-disabled;
     }
 
     .tree-item.selected {
-        background: @active-color;
+        background: @button-primary-bg;
         color: #ffffff;
     }
 
@@ -105,12 +105,12 @@ plugin-explore--mls-file-tree-100555 {
         padding-left: calc(var(--depth, 0) * 16px + 8px) !important;
 
         svg {
-            fill: @text-primary-color;
+            fill: @text-default;
         }
 
         .fileDeleted {
             text-decoration: line-through;
-            color: @error-color;
+            color: @status-error-text;
         }
 
         .elContent {
@@ -142,7 +142,7 @@ plugin-explore--mls-file-tree-100555 {
             }
 
             input {
-                border: 1px solid @grey-color;
+                border: 1px solid @border-subtle;
                 border-radius: 5px;
                 padding-left: 0.3rem;
                 font-size: 13px;
@@ -230,7 +230,7 @@ plugin-explore--mls-file-tree-100555 {
         }
 
         &:hover:not(.headerTitle) {
-            background: @grey-color-dark;
+            background: @border-default;
         }
 
 
@@ -260,14 +260,14 @@ plugin-explore--mls-file-tree-100555 {
         }
 
         .mls-gpbtnslider-item {
-            color: @text-primary-color;
+            color: @text-default;
         }
 
         .groupHiddenList .mls-gpbtnslider-item {
             display: block;
             transition: 0.5s;
             z-index: 10;
-            color: @text-primary-color;
+            color: @text-default;
             border-bottom: 1px solid #c7c4c4;
             padding: .2rem;
             font-size: 13px;
@@ -275,7 +275,7 @@ plugin-explore--mls-file-tree-100555 {
 
         .groupHiddenList .mls-gpbtnslider-item:hover {
             background: #2f2f2f17;
-            color: var(--active-color);
+            color: var(--selected-text);
         }
 
         .groupHiddenList.activegpbtnslider {

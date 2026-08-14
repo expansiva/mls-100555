@@ -6,8 +6,8 @@ plugin-system--plugin-system-theme-100555 {
     font-size: @font-size-16;
     font-weight: @font-weight-normal;
     line-height: 1.5;
-    color: @text-primary-color;
-    background-color: @bg-primary-color;
+    color: @text-default;
+    background-color: @surface-bg;
 
     .plugin-container {
         padding: .5rem;
@@ -19,10 +19,10 @@ plugin-system--plugin-system-theme-100555 {
     }
 
     button {
-        background-color: @active-color;
+        background-color: @button-primary-bg;
         border-radius: 8px;
         border: none;
-        box-shadow: 0px 1px 3px 0px @grey-color;
+        box-shadow: 0px 1px 3px 0px @border-subtle;
         display: flex;
         flex-direction: row;
         justify-content: center;
@@ -38,7 +38,7 @@ plugin-system--plugin-system-theme-100555 {
 
 
         &:hover {
-            background-color: @active-color-hover;
+            background-color: @button-primary-bg-hover;
         }
     }
 
