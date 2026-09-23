@@ -6,8 +6,10 @@ import { customElement, query, property, state } from 'lit/decorators.js';
 import { PluginBaseModule } from '/_102027_/l2/pluginBaseModule.js';
 
 import { renameProjectInHistory } from '/_102027_/l2/libHistoriesRecents.js';
+import { getConfigProject } from '/_102027_/l2/libProjectConfig.js';
+import { resolveAddDependency, saveWorkspaceDependencies } from '/_100555_/l2/pluginProject/depsWorkspace.js';
 
-import { collab_trash, collab_lock, collab_lock_open, collab_arrow_up_long,  collab_arrow_down_long, collab_pencil } from '/_100555_/l2/utils/collabIcons.js'; 
+import { collab_trash, collab_lock, collab_lock_open, collab_arrow_up_long, collab_arrow_down_long, collab_pencil } from '/_100555_/l2/utils/collabIcons.js';
 
 /// **collab_i18n_start**
 const message_pt = {
@@ -110,6 +112,7 @@ export class PluginProjectInfo extends PluginBaseModule {
     @property() labelError: string = '';
     @property() labelErrorDeps: string = '';
     @property() isAddingDep = false;
+    @property() isVerifyingDep = false;
     @property() newDepId: number | null = null;
 
     @state() isEditingDeps: boolean = false;
@@ -350,11 +353,11 @@ export class PluginProjectInfo extends PluginBaseModule {
         return html`
             <ul class="deps-details-list">
                 ${this.deps.map((dep, index) => {
-                const added = this.isDepAdded(dep);
-                const moved = this.isDepMoved(dep);
-                const marker = dep.removed ? ' -' : (added || moved) ? ' *' : '';
-                const statusClass = dep.removed ? 'dep-removed' : added ? 'dep-added' : '';
-                return html`
+            const added = this.isDepAdded(dep);
+            const moved = this.isDepMoved(dep);
+            const marker = dep.removed ? ' -' : (added || moved) ? ' *' : '';
+            const statusClass = dep.removed ? 'dep-removed' : added ? 'dep-added' : '';
+            return html`
                     <li class="${statusClass}">
                         <span>${dep.name} (${dep.id})${marker}</span>
                         <div class="deps-details-tags">
@@ -374,7 +377,7 @@ export class PluginProjectInfo extends PluginBaseModule {
                         </div>
                     </li>
                 `;
-            })}
+        })}
 
                 <li class="li-add" @click=${this.toggleAddDep}>
                     <span>${this.msg.btnOpenDep}</span>
@@ -389,7 +392,7 @@ export class PluginProjectInfo extends PluginBaseModule {
                         .value=${this.newDepId ?? ''}
                         @input=${(e: any) => this.newDepId = Number(e.target.value)}
                     />
-                    <button @click=${this.addDependency}>
+                    <button @click=${this.addDependency} ?disabled=${this.isVerifyingDep}>
                         ${this.msg.btnAddDep}
                     </button>
                 </div>
@@ -558,51 +561,48 @@ export class PluginProjectInfo extends PluginBaseModule {
         }
     }
 
-    private addDependency() {
-        if (this.newDepId === null) {
-            this.labelErrorDeps = this.msg.errorDepNull;
-            return;
-        }
+    // The rules live in depsWorkspace.ts: this element cannot be imported outside a DOM,
+    // so the gate is tested there — including the GitHub check, with `fetch` injected.
+    private async addDependency() {
+        if (this.isVerifyingDep) return;
 
-        if (this.newDepId === this.project) {
-            this.labelErrorDeps = this.msg.errorDepSame;
-            return;
-        }
+        this.isVerifyingDep = true;
+        try {
+            const result = await resolveAddDependency({
+                newDepId: this.newDepId,
+                project: this.project,
+                deps: this.deps,
+                getProjectDetails: (id: number) => mls.l5.getProjectDetails(id),
+                orgName: await this.getOrgName(),
+                fetchImpl: (url: string) => fetch(url),
+            });
 
-        const existingIndex = this.deps.findIndex(dep => dep.id === this.newDepId);
-        if (existingIndex !== -1) {
-            if (this.deps[existingIndex].removed) {
-                const deps = [...this.deps];
-                deps[existingIndex] = { ...deps[existingIndex], removed: false };
-                this.deps = deps;
-                this.newDepId = null;
-                this.isAddingDep = false;
-                this.labelErrorDeps = '';
-                return;
+            switch (result.status) {
+                case 'errorNull': this.labelErrorDeps = this.msg.errorDepNull; return;
+                case 'errorSame': this.labelErrorDeps = this.msg.errorDepSame; return;
+                case 'errorAlready': this.labelErrorDeps = this.msg.errorDepAlreadyAdded; return;
+                case 'errorInvalid': this.labelErrorDeps = this.msg.errorDepInvalid; return;
             }
-            this.labelErrorDeps = this.msg.errorDepAlreadyAdded;
-            return;
+
+            this.deps = result.deps;
+            this.newDepId = null;
+            this.isAddingDep = false;
+            this.labelErrorDeps = '';
+        } finally {
+            this.isVerifyingDep = false;
         }
+    }
 
-        const depDetails = mls.l5.getProjectDetails(this.newDepId);
-
-        if (!depDetails) {
-            this.labelErrorDeps = this.msg.errorDepInvalid;
-            return;
-        }
-
-        this.deps = [
-            ...this.deps,
-            {
-                id: this.newDepId,
-                name: depDetails.name,
-                auth: depDetails.userAuth
-            }
-        ];
-
-        this.newDepId = null;
-        this.isAddingDep = false;
-        this.labelErrorDeps = '';
+    /**
+     * Never a literal in the code: this is the same source `makeDefaultRepo` uses in
+     * scripts/buildCI/resolveDeps.mjs, and the two have to agree — otherwise the plugin
+     * approves a repository the build will not go looking for.
+     */
+    private async getOrgName(): Promise<string | undefined> {
+        const project = this.project ? +this.project : mls.actualProject;
+        if (!project) return undefined;
+        const config = await getConfigProject(project);
+        return config?.orgName;
     }
 
     private async handleSaveDeps() {
@@ -631,12 +631,20 @@ export class PluginProjectInfo extends PluginBaseModule {
     private async saveDeps() {
         if (!this.project) throw new Error(`Project not found`);
         if (!this.projectDetails) throw new Error(`Project details ${this.project} not found`);
+        if (mls.l5.actualOrg === undefined) throw new Error('No organization selected');
 
         const finalDeps = this.getActiveDeps().map(dep => ({ id: dep.id, name: dep.name, auth: dep.auth }));
 
         this.projectDetails.prj_dependencies = finalDeps.map(dep => dep.id);
-        await this.updateFilesDeps(this.projectDetails.prj_dependencies);
-        await mls.api.cbeSavePrjSettings(this.project);
+
+        const driver = mls.stor.others.getDefaultDriver(this.project);
+        if (!driver) throw new Error('Not found driver in this project');
+
+        if (driver.shortName === "vm" as  mls.cbe.Provider) {
+            await this.updateFilesDeps(this.projectDetails.prj_dependencies);
+        } else {
+            await mls.api.cbeSavePrjSettings(this.project);
+        }
 
         this.deps = finalDeps;
         this.originalDeps = JSON.parse(JSON.stringify(finalDeps));
@@ -646,20 +654,22 @@ export class PluginProjectInfo extends PluginBaseModule {
         try {
             if (!mls.actualProject) return;
             const sett = mls.l5.getProjectSettings(mls.actualProject || 0);
+            // l5/config.json is the build's source of truth (resolveDeps.mjs reads it and
+            // nothing else). mlsDep.json is deliberately NOT written any more.
+            const stL5Config = this.getStor({ project: mls.actualProject, level: 5, folder: '', shortName: 'config', extension: '.json' });
 
-            const stPck = this.getStor({ project: mls.actualProject, level: 0, folder: '', shortName: 'package', extension: '.json' });
-            const stPckLib = this.getStor({ project: mls.actualProject, level: 0, folder: '', shortName: 'packagelib', extension: '.json' });
-            const stTs = this.getStor({ project: mls.actualProject, level: 0, folder: '', shortName: 'tsconfig', extension: '.json' });
-            const stTsLib = this.getStor({ project: mls.actualProject, level: 0, folder: '', shortName: 'tsconfiglib', extension: '.json' });
-            const stConfig = this.getStor({ project: mls.actualProject, level: 0, folder: '', shortName: 'config', extension: '.json' });
-            const stDeps = this.getStor({ project: mls.actualProject, level: 0, folder: '', shortName: 'mlsDep', extension: '.json' });
-
-            if (stPck) await this.updateFilePck(stPck, deps, sett);
-            if (stPckLib) await this.updateFilePck(stPckLib, deps, sett);
-            if (stTs) await this.updateFileTsConfig(stTs, deps);
-            if (stTsLib) await this.updateFileTsConfig(stTsLib, deps);
-            if (stConfig) await this.updateFileConfig(stConfig, deps, sett);
-            if (stDeps) await this.updateFileConfig(stDeps, deps, sett);
+            // Goes through `mls.stor.setContents`, which is the actual save: DriverVm answers
+            // the fork/branch/PR ceremony with `true` without doing anything. From there the
+            // host writes to disk, commits and schedules the rebuild on its own.
+            if (stL5Config) {
+                await saveWorkspaceDependencies({
+                    file: stL5Config,
+                    deps,
+                    setContent: (file, value) => mls.stor.localStor.setContent(file as mls.stor.IFileInfo, value),
+                    setContents: (files, message) => mls.stor.setContents(files as mls.stor.IFileInfo[], message),
+                    message: `deps: ${deps.join(' ')}`,
+                });
+            }
 
 
         } catch (e: any) {
@@ -671,126 +681,6 @@ export class PluginProjectInfo extends PluginBaseModule {
     private getStor(info: mls.stor.IFileInfoBase): mls.stor.IFileInfo | undefined {
         const key = mls.stor.getKeyToFile(info);
         return mls.stor.files[key];
-    }
-
-    private async updateFilePck(st: mls.stor.IFileInfo, deps: number[], sett: mls.cbe.IProjectInfo | undefined) {
-
-        try {
-
-            if (!sett?.projectURL) return;
-
-            const content = await st.getContent() as string;
-            const pkg = JSON.parse(content);
-
-            // actionDependencies is a CI-only field (see scripts/buildCI/resolveDeps.mjs,
-            // decision #28): when present it REPLACES `dependencies` for buildCI's closure,
-            // so `dependencies` is left untouched here for `npm install`'s own purposes.
-            pkg.actionDependencies ??= {};
-
-            const actionDependencies = pkg.actionDependencies as Record<string, string>;
-
-            const repoBase = sett.projectURL
-                .replace(/\/(main|master)\//, "/")
-                .replace(/\/?mls-\d+\/?$/, "/");
-
-            const desired = new Set(deps.map(d => `mls-${d}`));
-
-            let changed = false;
-
-            // Remove dependências MLS que não deveriam existir
-            for (const key of Object.keys(actionDependencies)) {
-                if (key.startsWith("mls-") && !desired.has(key)) {
-                    delete actionDependencies[key];
-                    changed = true;
-                }
-            }
-
-            // Adiciona as dependências que faltam
-            for (const key of desired) {
-
-                const exists = key in actionDependencies
-
-                if (!exists && key !== 'mls-100554') {
-                    actionDependencies[key] = `git+${repoBase}${key}.git`;
-                    changed = true;
-                }
-            }
-
-            if (changed) {
-                const fileInfo: mls.stor.IFileInfoValue = {
-                    content: JSON.stringify(pkg, null, 2),
-                    contentType: 'string'
-                };
-
-                await mls.stor.localStor.setContent(st, fileInfo);
-                st.status = 'changed';
-                st.inLocalStorage = true;
-            }
-
-        } catch (e: any) {
-            console.info(`Erro [updateFilePck] file: _${st.project}_/${st.folder ? st.folder + '/' : ''}${st.shortName}${st.extension} | ${e.message || 'Error'}`);
-        }
-
-
-
-    }
-
-    private async updateFileTsConfig(st: mls.stor.IFileInfo, deps: number[]) {
-        try {
-
-            const content = await st.getContent() as string;
-            const cfg = JSON.parse(content);
-
-            cfg.compilerOptions ??= {};
-            cfg.compilerOptions.paths ??= {};
-
-            const paths = cfg.compilerOptions.paths as Record<string, string[]>;
-
-            const desired = new Set(deps.map(d => `/_${d}_/*`));
-            const currentProjectPath = `/_${mls.actualProject}_/*`;
-
-            let changed = false;
-
-            // Remove apenas os paths das dependências MLS
-            for (const key of Object.keys(paths)) {
-                if (!/^\/_\d+_\/\*$/.test(key))
-                    continue;
-
-                // Nunca remove o path do projeto atual
-                if (key === currentProjectPath)
-                    continue;
-
-                if (!desired.has(key)) {
-                    delete paths[key];
-                    changed = true;
-                }
-            }
-
-            // Adiciona os paths que estão faltando
-            for (const dep of deps) {
-                const key = `/_${dep}_/*`;
-
-                if (!(key in paths)) {
-                    paths[key] = [`./project/mls-${dep}/*`];
-                    changed = true;
-                }
-            }
-
-            if (changed) {
-                const fileInfo: mls.stor.IFileInfoValue = {
-                    content: JSON.stringify(cfg, null, 2),
-                    contentType: 'string'
-                };
-
-                await mls.stor.localStor.setContent(st, fileInfo);
-                st.status = 'changed';
-                st.inLocalStorage = true;
-            }
-
-        } catch (e: any) {
-            console.info(`Erro [updateFileTsConfig] file: _${st.project}_/${st.folder ? st.folder + '/' : ''}${st.shortName}${st.extension} | ${e.message || 'Error'}`);
-        }
-
     }
 
     private async updateFileConfig(
