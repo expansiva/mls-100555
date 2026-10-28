@@ -97,7 +97,7 @@ export class PluginProjectDetail extends PluginBaseModule {
                 const script = document.createElement('script');
                 script.type = 'module';
                 script.id = `_${info.project}_${info.shortName}`;
-                script.src = (`/_${info.project}_${info.shortName}`);
+                script.src = (`/_${info.project}_/l2/${info.folder ? info.folder + '/' : ''}${info.shortName}`);
                 this.contentproject?.appendChild(script)
             }
 

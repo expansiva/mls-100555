@@ -545,7 +545,8 @@ export class TsTestAst {
 
         const fcName = testFind.functionName;
         const params = testFind.params[paramsIndex];
-        const fileName = `./_${this.modelTest.storFile.project}_${this.modelTest.storFile.shortName}.test.js?cacheBuster=${Date.now()}`;
+        const testFile = this.modelTest.storFile;
+        const fileName = `/_${testFile.project}_/l2/${testFile.folder ? testFile.folder + '/' : ''}${testFile.shortName}.test.js?cacheBuster=${Date.now()}`;
 
         const info: ITestInfo = {
             fileName,
