@@ -419,6 +419,94 @@ plugin-explore--plugin-explore-list-100555 {
                 }
             }
 
+            &.folderBreadcrumb {
+                flex-wrap: wrap;
+                gap: 0.25rem;
+
+                .folderCrumb {
+                    cursor: pointer;
+
+                    &:hover {
+                        text-decoration: underline;
+                    }
+                }
+            }
+
+            &.fileInFolder {
+
+                .classClick {
+                    position: static;
+                    order: 10;
+                    margin-left: auto;
+                    flex-shrink: 0;
+                    width: 24px;
+                    height: auto;
+                    align-self: stretch;
+                }
+
+                .fileIcon {
+                    display: flex;
+                    flex-shrink: 0;
+
+                    svg {
+                        width: 13px;
+                        fill: #8a8f98;
+                    }
+                }
+
+                .spanFileName {
+                    margin-left: 4px;
+                }
+
+                &::after {
+                    display: none;
+                }
+            }
+
+            &.folderItem {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                padding-right: 25px !important;
+                user-select: none;
+
+                .folderIcon {
+                    display: flex;
+
+                    svg {
+                        width: 16px;
+                        fill: #e8b84a;
+                    }
+                }
+
+                .folderName {
+                    flex: 1;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+
+                .folderCount {
+                    font-size: .8rem;
+                    opacity: .6;
+                }
+
+                .folderDel {
+                    display: flex;
+                    opacity: .5;
+
+                    svg {
+                        width: 13px;
+                        fill: currentColor;
+                        pointer-events: none;
+                    }
+
+                    &:hover {
+                        opacity: 1;
+                    }
+                }
+            }
+
             &:hover:not(.headerTitle) {
                 background: @border-default;
             }

@@ -36,7 +36,18 @@ const message_pt = {
     others: 'Filtrar por Outros arquivos',
     orderName: 'Ordenar por nome',
     orderFolder: 'Ordenar por pasta',
-    allFiles: 'Todos os arquivos'
+    allFiles: 'Todos os arquivos',
+    root: 'Raiz',
+    upFolder: 'Voltar para a pasta anterior',
+    filesInFolder: 'arquivos nesta pasta',
+    deleteFolder: 'excluir todos os arquivos desta pasta',
+    pinTask: 'fixar tarefa',
+    pinTaskDesc: 'Escreva aqui sua task',
+    pinColor: 'Clique para mudar a cor',
+    save: 'Salvar',
+    remove: 'Remover',
+    cancel: 'Cancelar',
+    close: 'Fechar'
 }
 
 const message_en = {
@@ -60,7 +71,18 @@ const message_en = {
     others: 'Filter by Other Files',
     orderName: 'Sort by name',
     orderFolder: 'Sort by folder',
-    allFiles: 'All files'
+    allFiles: 'All files',
+    root: 'Root',
+    upFolder: 'Back to parent folder',
+    filesInFolder: 'files in this folder',
+    deleteFolder: 'delete all files in this folder',
+    pinTask: 'pin task',
+    pinTaskDesc: 'Write your task here',
+    pinColor: 'Click to change the color',
+    save: 'Save',
+    remove: 'Remove',
+    cancel: 'Cancel',
+    close: 'Close'
 }
 
 type MessageType = typeof message_en;
@@ -124,6 +146,18 @@ export class PluginExploreList extends PluginBaseModule {
     @property({ type: Array }) history: mls.stor.IFileInfo[] = [];
 
     @state() modeFilter: string | undefined;
+
+    @state() private currentFolder: string[] = []; // folder navigation path (modeView 1)
+
+    @state() private pinTasks: IPinTask[] = [];
+
+    @state() private pinEditKey: string = ''; // li whose pin form is open
+
+    @state() private pinViewKey: string = ''; // li whose pin task is visible
+
+    @state() private pinViewDirty: boolean = false; // desc changed in the open pin task
+
+    @state() private pinNewColor: string = '#e53935'; // color chosen in the add pin form
 
     @queryAll('li') lis: HTMLElement[] | undefined;
 
@@ -410,53 +444,81 @@ export class PluginExploreList extends PluginBaseModule {
 
     renderFolder() {
 
-        const folders: Record<string, mls.stor.IFileInfo[]> = {};
-        this.files.forEach((f) => {
-            let folder = f.folder;
-            let aux = this.filterProject === 0 ? f.project + '/' : '';
-            if (!f.folder) folder = 'root';
+        if (this.files.length <= 0) return html``;
 
-            const keyFolder = aux + folder;
-            if (folders[keyFolder]) folders[keyFolder].push(f);
-            else folders[keyFolder] = [f];
+        const entries = this.files.map((file) => ({ file, path: this.getFolderPath(file) }));
+
+        // if the current folder no longer exists (delete, rename, filter change), fall back to the nearest existing parent
+        let cur = this.currentFolder;
+        while (cur.length > 0 && !entries.some((e) => this.isInFolder(e.path, cur))) cur = cur.slice(0, -1);
+
+        const subFolders: Record<string, mls.stor.IFileInfo[]> = {};
+        const filesHere: mls.stor.IFileInfo[] = [];
+
+        entries.forEach(({ file, path }) => {
+            if (!this.isInFolder(path, cur)) return;
+            if (path.length === cur.length) {
+                filesHere.push(file);
+                return;
+            }
+            const name = path[cur.length];
+            if (subFolders[name]) subFolders[name].push(file);
+            else subFolders[name] = [file];
         });
-        let keys = Object.keys(folders).sort();
 
-        if (keys.length <= 0) return html``;
+        const folderNames = Object.keys(subFolders).sort((a, b) => a.localeCompare(b));
+        filesHere.sort((a, b) => a.shortName.localeCompare(b.shortName));
 
         return html`
-        ${repeat(keys, ((item: string) => item) as any, ((key: string, index: any) => {
-
-            return html`
-                <li class="headerTitle" style="display:flex; justify-content: space-between;">${key} 
-                
-                    <span style="cursor:pointer; display:flex; position:relative; z-index:1;" title="delete all this folder" @click=${(e: MouseEvent) => { e.stopPropagation(); e.preventDefault(); this.delAllByFolders(folders[key], key); }}><svg xmlns="http://www.w3.org/2000/svg" style="width:15px; pointer-events:none;" viewBox="0 0 640 640"><!--!Font Awesome Free v7.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M232.7 69.9L224 96L128 96C110.3 96 96 110.3 96 128C96 145.7 110.3 160 128 160L512 160C529.7 160 544 145.7 544 128C544 110.3 529.7 96 512 96L416 96L407.3 69.9C402.9 56.8 390.7 48 376.9 48L263.1 48C249.3 48 237.1 56.8 232.7 69.9zM512 208L128 208L149.1 531.1C150.7 556.4 171.7 576 197 576L443 576C468.3 576 489.3 556.4 490.9 531.1L512 208z"/></svg></span>
+            <li class="headerTitle folder folderBreadcrumb">
+                <span class="folderCrumb" @click=${() => this.openFolder([])}>${this.msg.root}</span>
+                ${cur.map((seg, i) => html`<span>/</span><span class="folderCrumb" @click=${() => this.openFolder(cur.slice(0, i + 1))}>${seg}</span>`)}
+            </li>
+            ${cur.length <= 0 ? '' : html`
+                <li class="folder folderItem" title="${this.msg.upFolder}" @click=${() => this.openFolder(cur.slice(0, -1))}>
+                    <span class="folderIcon">${this.folderSvg()}</span>
+                    <span class="folderName">..</span>
                 </li>
-                ${this.renderFolder2(folders[key])}
-            `
-        }) as any
-        )}`
-
+            `}
+            ${repeat(folderNames, ((item: string) => 'f_' + item) as any, ((name: string) => html`
+                <li class="folder folderItem" @click=${() => this.openFolder([...cur, name])}>
+                    <span class="folderIcon">${this.folderSvg()}</span>
+                    <span class="folderName">${name}</span>
+                    <span class="folderCount" title="${this.msg.filesInFolder}">${subFolders[name].length}</span>
+                    <span class="folderDel" title="${this.msg.deleteFolder}" @click=${(e: MouseEvent) => { e.stopPropagation(); e.preventDefault(); this.delAllByFolders(subFolders[name], [...cur, name].join('/')); }}><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M232.7 69.9L224 96L128 96C110.3 96 96 110.3 96 128C96 145.7 110.3 160 128 160L512 160C529.7 160 544 145.7 544 128C544 110.3 529.7 96 512 96L416 96L407.3 69.9C402.9 56.8 390.7 48 376.9 48L263.1 48C249.3 48 237.1 56.8 232.7 69.9zM512 208L128 208L149.1 531.1C150.7 556.4 171.7 576 197 576L443 576C468.3 576 489.3 556.4 490.9 531.1L512 208z"/></svg></span>
+                </li>
+            `) as any)}
+            ${repeat(
+                filesHere,
+                ((item: mls.stor.IFileInfo) => item.project + '_' + item.shortName + '_' + item.folder) as any,
+                ((file: mls.stor.IFileInfo, index: any) => this.renderLiItem(file, index, false)) as any
+            )}
+        `;
 
     }
 
-    renderFolder2(files: mls.stor.IFileInfo[]) {
+    private folderSvg() {
+        return html`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M64 480H448c35.3 0 64-28.7 64-64V160c0-35.3-28.7-64-64-64H288c-10.1 0-19.6-4.7-25.6-12.8L243.2 57.6C231.1 41.5 212.1 32 192 32H64C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64z"/></svg>`;
+    }
 
-        return html`
-            ${files.length <= 0 ? '' :
-                html`
-                    ${repeat(
-                    files,
-                    ((item: mls.stor.IFileInfo) => item.project + '_' + item.shortName + '_' + item.folder) as any,
-                    ((file: mls.stor.IFileInfo, index: any) => {
+    private fileSvg() {
+        return html`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path d="M0 64C0 28.7 28.7 0 64 0H224V128c0 17.7 14.3 32 32 32H384V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V64zm384 64H256V0L384 128z"/></svg>`;
+    }
 
-                        return this.renderLiItem(file, index, false)
+    private getFolderPath(file: mls.stor.IFileInfo): string[] {
+        const segs = file.folder ? file.folder.split('/').filter((s) => s) : [];
+        return this.filterProject === 0 ? [file.project.toString(), ...segs] : segs;
+    }
 
-                    }) as any
-                )}
-                `
-            }
-        `;
+    private isInFolder(path: string[], folder: string[]): boolean {
+        return folder.every((seg, i) => path[i] === seg);
+    }
+
+    private async openFolder(path: string[]) {
+        this.currentFolder = path;
+        this.closeAllMenus();
+        await this.updateComplete;
+        if (this.inFilter) this.applyLiFilter();
     }
 
     getTitleInLocalStorage(ts: mls.stor.IFileInfo, html: mls.stor.IFileInfo, less: mls.stor.IFileInfo, test: mls.stor.IFileInfo, defs: mls.stor.IFileInfo) {
@@ -527,10 +589,17 @@ export class PluginExploreList extends PluginBaseModule {
 
         let auxValidProject = '';
 
+        const inFolderView = this.modeView === 1 && !inHistory;
+        const liClass = (file.shortName === actualL2 && file.folder === actualL2Folder ? 'selected' : '') + (inFolderView ? ' fileInFolder' : '');
+
+        const pin = this.pinTasks.find((p) => this.isSamePin(p, file));
+        const keyPin = (inHistory ? 'h_' : '') + file.project + '_' + file.folder + '_' + file.shortName;
+
         return html`
-            <li @click="${this.clickOptOpen}" class="${file.shortName === actualL2 && file.folder === actualL2Folder ? 'selected' : ''}" style="${style}${auxValidProject}" .myFile=${file} .nameFilter="${nameFilter}" ?disabled=${!validProject}>
+            <li @click="${this.clickOptOpen}" class="${liClass}" style="${style}${auxValidProject}" .myFile=${file} .nameFilter="${nameFilter}" ?disabled=${!validProject}>
                 <div class="elContent">
                     <info-item>
+                        ${inFolderView ? html`<span class="fileIcon">${this.fileSvg()}</span>` : ''}
                         <span class="classClick" @click="${this.clickGroupHidden}">
                            <span class="groupHiddenListIcon" >
                                <svg xmlns='http://www.w3.org/2000/svg' style='height: 21px;' viewBox='0 0 128 512' ><path style='fill:var(--text-default)' d='M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z' fill='rgb(66,65,65,1)'/></svg>
@@ -539,19 +608,71 @@ export class PluginExploreList extends PluginBaseModule {
                         </span>
                         <span class="spanFileName ${file.status === 'deleted' ? 'fileDeleted' : ''}">${name}</span>
                         <div style="display:flex; gap:.5rem" .innerHTML="${auxStorage + auxBug + auxVersion + auxHtml}"></div>
+                        ${pin ? html`<span class="pinTaskIcon" title="${pin.desc.length > 50 ? pin.desc.slice(0, 50) + '...' : pin.desc}" style="display:flex; align-items:center; cursor:pointer" @click=${(e: MouseEvent) => this.clickPinIcon(e, keyPin)}>${this.pinSvg(pin.color)}</span>` : ''}
                     </info-item>
-                    <div class="groupHiddenList">
+                    ${pin && this.pinViewKey === keyPin ? this.renderPinView(file, pin) : ''}
+                    ${!pin && this.pinEditKey === keyPin ? this.renderPinForm(file) : ''}
+                    <div class="groupHiddenList" @click=${(e: MouseEvent) => e.stopPropagation()}>
                         <span class="mls-gpbtnslider-item" title="${this.msg.undo}" @click="${this.clickOptUndo}"><span class="fa fa-undo"></span> Undo</span>
                         <span class="mls-gpbtnslider-item" title="${this.msg.clone}" @click="${this.clickOptClone}" style="display:${this.hiddenFiles ? 'none' : ''}"><span class=" fa fa-clone"></span> Clone</span>
                         <span class="mls-gpbtnslider-item" title="${this.msg.rename}" @click="${this.clickOptRename}" style="display:${this.hiddenFiles ? 'none' : ''}"><span class=" fa fa-file-pen"></span> Rename</span>
                         <span class="mls-gpbtnslider-item" title="${this.msg.delete}" @click="${this.clickOptDel}"><span class=" fa fa-trash"></span> Delete</span>
-                        <span class="mls-gpbtnslider-item" title="${this.msg.security}" @click="${this.clickOptOpenSecurity}" style="display:${this.hiddenFiles ? 'none' : ''}"><span class=" fa-solid fa-shield-halved"></span> Security</span> 
+                        <span class="mls-gpbtnslider-item" title="${this.msg.security}" @click="${this.clickOptOpenSecurity}" style="display:${this.hiddenFiles ? 'none' : ''}"><span class=" fa-solid fa-shield-halved"></span> Security</span>
+                        <span class="mls-gpbtnslider-item" title="${this.msg.pinTask}" @click=${(e: MouseEvent) => this.clickOptPinTask(e, keyPin, pin)}><span class=" fa fa-thumbtack"></span> PinTask</span>
                     </div>
                     
                 </div>
             </li>
         `;
 
+    }
+
+    private renderPinForm(file: mls.stor.IFileInfo) {
+        const textColor = this.getContrastColor(this.pinNewColor);
+        return html`
+            <div class="pinTaskForm" style="margin:.25rem 0; border:1px solid ${this.pinNewColor}; border-radius:4px; overflow:hidden" @click=${(e: MouseEvent) => e.stopPropagation()}>
+                <div class="pinTaskHeader" style="display:flex; align-items:center; gap:.5rem; padding:.25rem .5rem; background:${this.pinNewColor}; color:${textColor}">
+                    <div title="${this.msg.pinColor}" style="flex:1; position:relative; display:flex; align-items:center; gap:.5rem; cursor:pointer">
+                        <span class="fa fa-palette"></span>
+                        <span>PinTask</span>
+                        <input type="color" .value=${this.pinNewColor} style="position:absolute; inset:0; width:100%; height:100%; opacity:0; cursor:pointer; border:0; padding:0" @input=${(e: InputEvent) => { this.pinNewColor = (e.target as HTMLInputElement).value; }}>
+                    </div>
+                    <span class="fa fa-xmark" title="${this.msg.cancel}" style="cursor:pointer" @click=${() => { this.pinEditKey = ''; }}></span>
+                </div>
+                <div style="display:flex; flex-direction:column; gap:.25rem; padding:.5rem">
+                    <textarea class="pinTaskDesc" rows="3" placeholder="${this.msg.pinTaskDesc}" style="resize:vertical; width:100%; box-sizing:border-box"></textarea>
+                    <button style="align-self:flex-end" @click=${(e: MouseEvent) => this.clickPinSave(e, file)}>${this.msg.save}</button>
+                </div>
+            </div>
+        `;
+    }
+
+    private renderPinView(file: mls.stor.IFileInfo, pin: IPinTask) {
+        const textColor = this.getContrastColor(pin.color);
+        return html`
+            <div class="pinTaskView" style="margin:.25rem 0; border:1px solid ${pin.color}; border-radius:4px; overflow:hidden" @click=${(e: MouseEvent) => e.stopPropagation()}>
+                <div class="pinTaskHeader" style="display:flex; align-items:center; gap:.5rem; padding:.25rem .5rem; background:${pin.color}; color:${textColor}">
+                    <span style="flex:1">PinTask</span>
+                    <span class="fa fa-trash" title="${this.msg.remove}" style="cursor:pointer" @click=${() => this.clickPinRemove(file)}></span>
+                    <span class="fa fa-xmark" title="${this.msg.close}" style="cursor:pointer" @click=${() => { this.pinViewKey = ''; this.pinViewDirty = false; }}></span>
+                </div>
+                <div style="display:flex; flex-direction:column; gap:.25rem; padding:.5rem">
+                    <textarea class="pinTaskViewDesc" rows="3" style="resize:vertical; width:100%; box-sizing:border-box" .value=${pin.desc} @input=${(e: InputEvent) => { this.pinViewDirty = (e.target as HTMLTextAreaElement).value.trim() !== pin.desc; }}></textarea>
+                    ${this.pinViewDirty ? html`<button style="align-self:flex-end" @click=${(e: MouseEvent) => this.clickPinViewSave(e, file, pin)}>${this.msg.save}</button>` : ''}
+                </div>
+            </div>
+        `;
+    }
+
+    private getContrastColor(hex: string): string {
+        const m = /^#?([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i.exec(hex);
+        if (!m) return '#000';
+        const [r, g, b] = [m[1], m[2], m[3]].map((c) => parseInt(c, 16));
+        return (r * 299 + g * 587 + b * 114) / 1000 > 140 ? '#000' : '#fff';
+    }
+
+    private pinSvg(color: string) {
+        return html`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" style="height:14px; fill:${color}"><path d="M32 32C32 14.3 46.3 0 64 0L320 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-29.5 0 11.4 148.2c36.7 19.9 65.7 53.2 79.5 94.7l1 3c3.3 9.8 1.6 20.5-4.4 28.8s-15.7 13.3-26 13.3L32 352c-10.3 0-19.9-4.9-26-13.3s-7.7-19.1-4.4-28.8l1-3c13.8-41.5 42.8-74.8 79.5-94.7L93.5 64 64 64C46.3 64 32 49.7 32 32zM160 384l64 0 0 96c0 17.7-14.3 32-32 32s-32-14.3-32-32l0-96z"/></svg>`;
     }
 
     renderAddL1() {
@@ -584,6 +705,8 @@ export class PluginExploreList extends PluginBaseModule {
         } else {
             name = file.shortName;
         }
+
+        if (this.modeView === 1 && !isHistory) name = file.shortName; // the folder is already shown by the navigation
 
         if (isHistory && folder) name = folder + '/' + file.shortName;
         if (isHistory && this.filterProject === 0) name = file.project + '_' + folder + '/' + file.shortName;
@@ -692,6 +815,55 @@ export class PluginExploreList extends PluginBaseModule {
         this.fireEvents('open', mfile, {});
         this.closeAllMenus();
 
+    }
+
+    private clickOptPinTask(e: MouseEvent, keyPin: string, pin: IPinTask | undefined) {
+        e.stopPropagation();
+        this.closeAllMenus();
+        if (pin) {
+            this.pinViewKey = keyPin;
+            this.pinViewDirty = false;
+            return;
+        }
+        this.pinNewColor = '#e53935';
+        this.pinEditKey = this.pinEditKey === keyPin ? '' : keyPin;
+    }
+
+    private clickPinIcon(e: MouseEvent, keyPin: string) {
+        e.stopPropagation();
+        this.pinViewKey = this.pinViewKey === keyPin ? '' : keyPin;
+        this.pinViewDirty = false;
+    }
+
+    private clickPinViewSave(e: MouseEvent, file: mls.stor.IFileInfo, pin: IPinTask) {
+        const view = (e.target as HTMLElement).closest('.pinTaskView');
+        if (!view) return;
+        const desc = (view.querySelector('.pinTaskViewDesc') as HTMLTextAreaElement).value.trim();
+        const pins = this.getPinTasks().filter((p) => !this.isSamePin(p, file));
+        pins.push({ ...pin, desc });
+        this.savePinTasks(pins);
+        this.pinViewDirty = false;
+    }
+
+    private clickPinSave(e: MouseEvent, file: mls.stor.IFileInfo) {
+        const form = (e.target as HTMLElement).closest('.pinTaskForm');
+        if (!form) return;
+        const desc = (form.querySelector('.pinTaskDesc') as HTMLTextAreaElement).value.trim();
+        const pins = this.getPinTasks().filter((p) => !this.isSamePin(p, file));
+        pins.push({ project: file.project, file: file.shortName, folder: file.folder || '', desc, color: this.pinNewColor });
+        this.savePinTasks(pins);
+        this.pinEditKey = '';
+    }
+
+    private clickPinRemove(file: mls.stor.IFileInfo) {
+        this.savePinTasks(this.getPinTasks().filter((p) => !this.isSamePin(p, file)));
+        this.pinEditKey = '';
+        this.pinViewKey = '';
+        this.pinViewDirty = false;
+    }
+
+    private isSamePin(pin: IPinTask, file: mls.stor.IFileInfo): boolean {
+        return pin.project === file.project && pin.file === file.shortName && pin.folder === (file.folder || '');
     }
 
     private clickOptRename(e: MouseEvent) {
@@ -1004,6 +1176,7 @@ export class PluginExploreList extends PluginBaseModule {
         const prjs = mls.l5.getProjectDetails(this.project)?.prj_dependencies || []
         this.myDep = [this.project, ...prjs];
         this.projectLabel = this.project.toString();
+        this.pinTasks = this.getPinTasks();
         this.fireEventLoadProject();
         await this.getFiles();
 
@@ -1059,6 +1232,7 @@ export class PluginExploreList extends PluginBaseModule {
         this.info.storage = 0;
         this.info.error = 0;
         this.filterProject = +e.target.value;
+        this.currentFolder = [];
         this.filterByLevel[mls.actualLevel] = { prj: this.filterProject, group: this.modeView };
         await this.getFiles();
 
@@ -1107,23 +1281,29 @@ export class PluginExploreList extends PluginBaseModule {
                 return;
             }
 
-            const contentServiceList = el.closest('.contentServiceList');
-            if (!contentServiceList) return;
-
-            const all = contentServiceList.querySelectorAll('li');
-            all.forEach((li: any) => {
-
-                const name = li.nameFilter ? li.nameFilter : '******';
-                const inp = el.value.toLocaleLowerCase();
-
-                if (name.indexOf(inp) >= 0 || li.classList.contains('folder')) {
-                    li.style.display = '';
-                } else {
-                    li.style.display = 'none';
-                }
-            });
+            this.applyLiFilter();
 
         }, 500);
+
+    }
+
+    private applyLiFilter() {
+
+        const contentServiceList = this.querySelector('.contentServiceList');
+        if (!contentServiceList) return;
+
+        const inp = this.searchTerm.toLocaleLowerCase();
+        const all = contentServiceList.querySelectorAll('li');
+        all.forEach((li: any) => {
+
+            const name = li.nameFilter ? li.nameFilter : '******';
+
+            if (name.indexOf(inp) >= 0 || li.classList.contains('folder')) {
+                li.style.display = '';
+            } else {
+                li.style.display = 'none';
+            }
+        });
 
     }
 
@@ -1433,6 +1613,41 @@ export class PluginExploreList extends PluginBaseModule {
         localStorage.setItem('_100555_/l2/pluginExplore/pluginExploreList', JSON.stringify(j));
     }
 
+    private getPinTasks(): IPinTask[] {
+        const js = localStorage.getItem('_100555_/l2/pluginExplore/pluginExploreList');
+        if (!js) return [];
+        try {
+            const j = JSON.parse(js);
+            return Array.isArray(j.pinTask) ? j.pinTask : [];
+        } catch (e) {
+            return [];
+        }
+    }
+
+    private savePinTasks(pins: IPinTask[]) {
+        const js = localStorage.getItem('_100555_/l2/pluginExplore/pluginExploreList');
+        let j: any = {};
+        if (js) {
+            try {
+                j = JSON.parse(js);
+            } catch (e) {
+
+            }
+        }
+
+        j.pinTask = pins;
+        localStorage.setItem('_100555_/l2/pluginExplore/pluginExploreList', JSON.stringify(j));
+        this.pinTasks = pins;
+    }
+
 }
 
 type TModeExploreList = 'list' | 'addL1' | 'addL2' | 'addL3' | 'addL4';
+
+interface IPinTask {
+    project: number,
+    file: string,
+    folder: string,
+    desc: string,
+    color: string
+}
