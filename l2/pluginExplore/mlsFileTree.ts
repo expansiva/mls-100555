@@ -3,7 +3,7 @@
 import { html, css, nothing, TemplateResult } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { CollabLitElement } from '/_102029_/l2/collabLitElement.js';
-import { undoFile, deleteFile, createStorFile, IReqCreateStorFile } from '/_102027_/l2/libStor.js';
+import { undoFile, undoFiles, deleteFile, createStorFile, IReqCreateStorFile } from '/_102027_/l2/libStor.js';
 import { getBaseTemplate } from '/_102027_/l2/libCommom.js';
 import { createModel } from '/_102027_/l2/libModel.js';
 
@@ -395,11 +395,12 @@ export class MlsFileTree extends CollabLitElement {
         await this.updateComplete;
 
         try {
+            const batch: mls.stor.IFileInfo[] = [];
             for (let i = 0; i < files.length; i++) {
-                if (!files[i]) continue;
-                this._loadingMsg = `Undoing ${label}\n${i + 1} / ${files.length}`;
-                await undoFile(files[i]);
+                if (files[i]) batch.push(files[i]);
             }
+            this._loadingMsg = `Undoing ${label}\n${batch.length} / ${batch.length}`;
+            await undoFiles(batch);
         } finally {
             this._loading = false;
             this._loadingMsg = '';
