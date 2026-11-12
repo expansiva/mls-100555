@@ -20,7 +20,7 @@ export const tests: IPluginTestCase[] = [
     // `[stateName]` — so those two calls are harmless no-ops.
     { functionName: 'testGetTemplateTS', env: 'browser', params: [
         { input: { project: 100555, shortName: 'myPage' },
-          expected: { hasTag: true, hasClassName: true, widgetSubstitutionIsNoOp: true, hasNoLeftoverPlaceholders: true } },
+          expected: { hasTag: true, hasClassName: true, widgetSubstitutionIsNoOp: true, hasNoLeftoverPlaceholders: true, importsCollabStateFrom102029: true, importsOnlyExistingModules: true } },
     ]},
 
     { functionName: 'testGetTemplateHTML', env: 'browser', params: [
@@ -54,11 +54,19 @@ export async function testGetTemplateTS(testCase: { input: { project: number; sh
     try {
         const el = await mount<PluginNewFilePage>(TAG, { project: testCase.input.project, shortName: testCase.input.shortName });
         const template = (el as any).getTemplateTS() as string;
+        // Paths checked against disk: mls-102027/l2/collabPageElement.ts and mls-102029/l2/collabState.ts.
+        const modelImports = [...template.matchAll(/from '(\/_\d+_\/l2\/[A-Za-z0-9_]+\.js)'/g)].map((m) => m[1]);
+        const existingModules = new Set([
+            '/_102027_/l2/collabPageElement.js',
+            '/_102029_/l2/collabState.js',
+        ]);
         const result = {
             hasTag: template.includes(`@customElement('my-page-100555')`),
             hasClassName: template.includes('export class MyPage100555'),
             widgetSubstitutionIsNoOp: !template.includes('_100555_myPage'),
             hasNoLeftoverPlaceholders: !template.includes('[tagName]') && !template.includes('[className]'),
+            importsCollabStateFrom102029: template.includes('/_102029_/l2/collabState.js'),
+            importsOnlyExistingModules: modelImports.length > 0 && modelImports.every((p) => existingModules.has(p)),
         };
         compare(result, testCase.expected);
         return template;

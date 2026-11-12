@@ -72,7 +72,7 @@ export class PluginNewFilePage extends StateLitElement {
     private template: string = `
 import { CollabPageElement } from '${getTemplateImport(102027,'collabPageElement', '')}';
 import { customElement } from 'lit/decorators.js';
-import { globalState, initState, setState } from '${getTemplateImport(102027,'collabState', '')}';
+import { globalState, initState, setState } from '${getTemplateImport(102029,'collabState', '')}';
 
 @customElement('[tagName]')
 export class [className] extends CollabPageElement {

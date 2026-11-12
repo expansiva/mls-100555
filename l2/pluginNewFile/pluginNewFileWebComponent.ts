@@ -69,7 +69,7 @@ export class PluginNewFileWebComponent extends StateLitElement {
     private template: string = `
  import { html } from 'lit'; 
  import { customElement, property } from 'lit/decorators.js';
- import { StateLitElement } from '${getTemplateImport(102027, 'stateLitElement', '')}';
+ import { StateLitElement } from '${getTemplateImport(102029, 'stateLitElement', '')}';
 
  @customElement('[tagName]')
  export class [className] extends StateLitElement {
