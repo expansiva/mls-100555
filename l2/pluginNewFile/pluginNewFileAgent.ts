@@ -141,7 +141,7 @@ export class PluginNewFileBlank extends StateLitElement {
 const templates: Record<AgentTemplateType, string> = {
 
   agent: `
-import { IAgentAsync, IAgentMeta } from '${getTemplateImport(100554,'aiAgentBase', '')}';
+import { IAgentAsync, IAgentMeta } from '${getTemplateImport(102027,'aiAgentBase', '')}';
 
 export function createAgent(): IAgentAsync {
     return {
@@ -251,7 +251,7 @@ export type Output =
     `,
 
   agentParallel: `
-import { IAgentAsync, IAgentMeta } from '${getTemplateImport(100554,'aiAgentBase', '')}';
+import { IAgentAsync, IAgentMeta } from '${getTemplateImport(102027,'aiAgentBase', '')}';
 
 export function createAgent(): IAgentAsync {
   return {
@@ -376,8 +376,8 @@ export type Output =
 `,
 
   agentWithClarification: `
-import { IAgentAsync, IAgentMeta } from '${getTemplateImport(100554,'aiAgentBase', '')}';
-import { finishClarification } from '${getTemplateImport(100554,'aiAgentOrchestration', '')}'; 
+import { IAgentAsync, IAgentMeta } from '${getTemplateImport(102027,'aiAgentBase', '')}';
+import { finishClarification } from '${getTemplateImport(102027,'aiAgentOrchestration', '')}'; 
 
 export function createAgent(): IAgentAsync {
   return {
