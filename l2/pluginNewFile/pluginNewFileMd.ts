@@ -14,26 +14,37 @@ import '/_100555_/l2/pluginNewFile/widgetTextCode.js';
 
 /// **collab_i18n_start**
 const message_pt = {
-    title: "Criar um arquivo MD em branco.",
-    desc: "Criar um arquivo em branco md.",
+    title: "Markdown",
+    desc: "Criar um arquivo md em branco.",
+    header: "Arquivo Markdown",
+    subtitle: "Arquivo .md em branco, para documentação ou anotações.",
+    btnCreate: "Criar arquivo",
     project: "Projeto",
     shortName: "Nome",
-    header: "Arquivo em branco",
-    btnCreate: 'Criar arquivo',
-    loading: 'Criando arquivo...',
-    error: 'Nome do arquivo em branco ou invalido'
-
+    folder: "Pasta",
+    rootFolder: "(raiz)",
+    willCreate: "Será criado",
+    preview: "Prévia do código",
+    loading: "Criando arquivo...",
+    emptyName: "Digite um nome para o arquivo",
+    error: "Nome do arquivo em branco ou invalido",
 }
 
 const message_en = {
-    title: "Create a MD blank file.",
-    desc: "Create a blank file md.",
+    title: "Markdown",
+    desc: "Create a blank md file.",
+    header: "Markdown file",
+    subtitle: "Blank .md file, for documentation or notes.",
+    btnCreate: "Create file",
     project: "Project",
-    shortName: "ShortName",
-    header: "Blank File",
-    btnCreate: 'Create file',
-    loading: 'Creating File...',
-    error: 'Blank or invalid file name'
+    shortName: "Name",
+    folder: "Folder",
+    rootFolder: "(root)",
+    willCreate: "Will be created",
+    preview: "Code preview",
+    loading: "Creating file...",
+    emptyName: "Type a name for the file",
+    error: "Blank or invalid file name",
 }
 
 type MessageType = typeof message_en;
@@ -131,24 +142,46 @@ export class PluginNewFileMd extends StateLitElement {
     }
 
     render() {
+        const hasName = !!(this.shortName && this.project);
+        const folder = this.folder ? `${this.folder}/` : '';
+        const filePath = hasName ? `_${this.project}_/l2/${folder}${this.shortName}.md` : '';
+
         return html`
-            ${this.loading ?
-                html`<div>${msg.loading}</div>`
-                :
-                html`   
-                <div>
-                    <h2>${msg.header} </h2>
-                    <hr>
-                    <div>
-                        <span> <b>${msg.project}:</b> ${this.project}</span>
-                        <span> <b>${msg.shortName}:</b> ${this.shortName}</span>    
+            <div class="nf-card">
+                <div class="nf-head">
+                    <div class="nf-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M8 18v-4l2 2 2-2v4"/><path d="M16 14v4"/><path d="M14.5 16.5L16 18l1.5-1.5"/></svg>
                     </div>
-                    <div style="margin-top:1rem;">
-                        <button @click=${this.handleAddFile}>${msg.btnCreate}</button>
+                    <div class="nf-head-text">
+                        <h2>${msg.header}</h2>
+                        <p>${msg.subtitle}</p>
                     </div>
-                    <plugin-new-file--widget-text-code-100555 language="typescript" text="${this.getTemplate()}"></plugin-new-file--widget-text-code-100555>
-                </div>`
-            }
+                </div>
+
+                <div class="nf-summary">
+                    <div class="nf-summary-label">${msg.willCreate}</div>
+                    ${hasName ? html`
+                        <code class="nf-path">${filePath}</code>
+                    ` : html`<div class="nf-hint">${msg.emptyName}</div>`}
+                    <dl class="nf-meta">
+                        <div><dt>${msg.project}</dt><dd>${this.project ?? '-'}</dd></div>
+                        <div><dt>${msg.folder}</dt><dd>${this.folder || msg.rootFolder}</dd></div>
+                        <div><dt>${msg.shortName}</dt><dd>${this.shortName || '-'}</dd></div>
+                    </dl>
+                </div>
+
+                <button class="nf-create" ?disabled=${!hasName || this.loading} @click=${this.handleAddFile}>
+                    ${this.loading ? html`<span class="nf-spinner"></span>${msg.loading}` : msg.btnCreate}
+                </button>
+
+                <div class="nf-code">
+                    <div class="nf-code-head">
+                        <span>${msg.preview}</span>
+                        <span class="nf-lang">Markdown</span>
+                    </div>
+                    <plugin-new-file--widget-text-code-100555 language="markdown" text="${this.getTemplate()}"></plugin-new-file--widget-text-code-100555>
+                </div>
+            </div>
         `
     }
 

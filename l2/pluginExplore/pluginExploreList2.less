@@ -1,0 +1,659 @@
+/// <mls fileReference="_100555_/l2/pluginExplore/pluginExploreList2.less" enhancement="_102027_/l2/enhancementStyle" />
+
+plugin-explore--plugin-explore-list2-100555 {
+
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    font-family: @font-family-primary;
+    font-size: 14px;
+    font-weight: @font-weight-normal;
+    line-height: 1.4;
+    color: @text-default;
+    background-color: @surface-bg;
+
+    // os modos "add" continuam rolando no próprio host
+    > :not(.ex2) {
+        overflow-y: auto;
+    }
+
+    .ex2 {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        min-height: 0;
+    }
+
+    svg {
+        flex: 0 0 auto;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
+
+    button {
+        font: inherit;
+        color: inherit;
+    }
+
+    // ---------------- header ----------------
+    .ex2-header {
+        display: flex;
+        flex-direction: column;
+        gap: .5rem;
+        padding: .75rem .75rem .6rem;
+        border-bottom: 1px solid @border-subtle;
+        background-color: @surface-bg;
+    }
+
+    .ex2-row {
+        display: flex;
+        align-items: center;
+        gap: .5rem;
+        min-width: 0;
+    }
+
+    .ex2-search {
+        position: relative;
+        flex: 1;
+        min-width: 0;
+
+        svg {
+            position: absolute;
+            left: .55rem;
+            top: 50%;
+            width: 15px;
+            height: 15px;
+            transform: translateY(-50%);
+            color: @text-muted;
+            pointer-events: none;
+        }
+
+        input {
+            width: 100%;
+            box-sizing: border-box;
+            height: 32px;
+            padding: 0 .6rem 0 1.9rem;
+            font: inherit;
+            color: @text-default;
+            background-color: @surface-alt-bg;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            outline: none;
+            transition: border-color .15s, background-color .15s;
+
+            &::placeholder {
+                color: @text-muted;
+            }
+
+            &:focus {
+                background-color: @surface-bg;
+                border-color: @border-subtle-focus;
+            }
+        }
+    }
+
+    .ex2-add {
+        flex: 0 0 auto;
+        width: 32px;
+        height: 32px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        border-radius: 8px;
+        background-color: @button-primary-bg;
+        color: #fff;
+        cursor: pointer;
+        transition: background-color .15s;
+
+        svg {
+            width: 18px;
+            height: 18px;
+            stroke-width: 2.2;
+        }
+
+        &:hover {
+            background-color: @button-primary-bg-hover;
+        }
+    }
+
+    .ex2-filters {
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    .ex2-seg {
+        display: inline-flex;
+        gap: 2px;
+        padding: 2px;
+        border-radius: 8px;
+        background-color: @surface-alt-bg;
+
+        &[hidden] {
+            display: none;
+        }
+
+        button {
+            height: 26px;
+            padding: 0 .7rem;
+            border: none;
+            border-radius: 6px;
+            background: transparent;
+            color: @text-muted;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+
+            &:hover {
+                color: @text-default;
+            }
+
+            &.active {
+                background-color: @surface-bg;
+                color: @text-default;
+                box-shadow: 0 1px 2px @border-subtle;
+            }
+        }
+    }
+
+    .ex2-selects {
+        display: inline-flex;
+        gap: .35rem;
+        min-width: 0;
+
+        select {
+            height: 28px;
+            max-width: 140px;
+            padding: 0 .4rem;
+            font: inherit;
+            font-size: 12px;
+            color: @text-default;
+            background-color: @surface-bg;
+            border: 1px solid @border-subtle;
+            border-radius: 6px;
+            outline: none;
+            cursor: pointer;
+
+            &:focus {
+                border-color: @border-subtle-focus;
+            }
+        }
+    }
+
+    .ex2-stats {
+        flex-wrap: wrap;
+        gap: .35rem;
+        font-size: 12px;
+    }
+
+    .ex2-total {
+        color: @text-muted;
+        margin-right: .25rem;
+    }
+
+    .ex2-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: .35rem;
+        height: 22px;
+        padding: 0 .55rem;
+        border: 1px solid @border-subtle;
+        border-radius: 999px;
+        background: transparent;
+        font-size: 12px;
+        cursor: pointer;
+        transition: background-color .15s, border-color .15s;
+
+        &:hover {
+            background-color: @surface-alt-bg-hover;
+        }
+
+        &.active {
+            background-color: @surface-alt-bg;
+            border-color: @border-subtle-focus;
+            font-weight: 600;
+        }
+
+        &.err .ex2-dot { background-color: #d93025; }
+        &.loc .ex2-dot { background-color: #4a9fe0; }
+        &.out .ex2-dot { background-color: #f29900; }
+    }
+
+    .ex2-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+    }
+
+    // ---------------- body ----------------
+    .ex2-scroll {
+        flex: 1;
+        min-height: 0;
+        overflow-y: auto;
+        padding: .35rem .4rem 1rem;
+    }
+
+    .ex2-empty {
+        padding: 2rem 1rem;
+        text-align: center;
+        color: @text-muted;
+        font-size: 13px;
+    }
+
+    ul.ex2-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .ex2-section {
+        margin-bottom: .35rem;
+        padding-bottom: .35rem;
+        border-bottom: 1px solid @border-subtle;
+    }
+
+    .ex2-section-head,
+    .ex2-module-head {
+        display: flex;
+        align-items: center;
+        gap: .4rem;
+        width: 100%;
+        height: 30px;
+        padding: 0 .4rem;
+        border: none;
+        border-radius: 6px;
+        background: transparent;
+        text-align: left;
+        cursor: pointer;
+        user-select: none;
+
+        &:hover {
+            background-color: @surface-alt-bg-hover;
+        }
+    }
+
+    .ex2-section-head {
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .05em;
+        color: @text-muted;
+    }
+
+    .ex2-chev {
+        width: 14px;
+        height: 14px;
+        color: @text-muted;
+        transition: transform .15s;
+
+        &.open {
+            transform: rotate(90deg);
+        }
+    }
+
+    .ex2-count {
+        margin-left: auto;
+        min-width: 18px;
+        padding: 0 .4rem;
+        border-radius: 999px;
+        background-color: @surface-alt-bg;
+        color: @text-muted;
+        font-size: 11px;
+        font-weight: 600;
+        text-align: center;
+        text-transform: none;
+        letter-spacing: 0;
+    }
+
+    .ex2-badge.err {
+        padding: 0 .4rem;
+        border-radius: 999px;
+        background-color: #d93025;
+        color: #fff;
+        font-size: 11px;
+        font-weight: 600;
+    }
+
+    // ---------------- modules ----------------
+    .ex2-module {
+        list-style: none;
+
+        & + .ex2-module {
+            margin-top: 2px;
+        }
+    }
+
+    .ex2-module-head {
+        font-weight: 600;
+    }
+
+    .ex2-module-icon {
+        display: inline-flex;
+        color: @text-muted;
+
+        svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        &.is-module {
+            color: @text-default;
+        }
+    }
+
+    .ex2-module-name {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .ex2-prj {
+        font-size: 11px;
+        font-weight: 500;
+        color: @text-muted;
+    }
+
+    .ex2-module-del {
+        display: none;
+        align-items: center;
+        padding: 2px;
+        border-radius: 4px;
+        color: @text-muted;
+
+        svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        &:hover {
+            color: @status-error-text;
+        }
+    }
+
+    .ex2-module-head:hover .ex2-module-del,
+    .ex2-folder:hover .ex2-module-del {
+        display: inline-flex;
+    }
+
+    .ex2-module-files {
+        margin: 1px 0 4px 14px !important;
+        padding-left: 6px !important;
+        border-left: 1px solid @border-subtle;
+    }
+
+    // ---------------- A-Z / folders ----------------
+    .ex2-letter {
+        padding: .6rem .5rem .2rem;
+        font-size: 11px;
+        font-weight: 700;
+        color: @text-muted;
+        letter-spacing: .05em;
+    }
+
+    .ex2-crumbs {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: .2rem;
+        padding: .3rem .5rem .4rem;
+        font-size: 12px;
+        color: @text-muted;
+    }
+
+    .ex2-crumb {
+        padding: 0 .25rem;
+        border-radius: 4px;
+        cursor: pointer;
+
+        &:hover {
+            background-color: @surface-alt-bg-hover;
+            color: @text-default;
+        }
+
+        &:last-child {
+            color: @text-default;
+            font-weight: 600;
+        }
+    }
+
+    .ex2-folder {
+        display: flex;
+        align-items: center;
+        gap: .5rem;
+        height: 30px;
+        padding: 0 .5rem;
+        border-radius: 6px;
+        cursor: pointer;
+
+        &:hover {
+            background-color: @surface-alt-bg-hover;
+        }
+
+        .ex2-icon {
+            color: @text-muted;
+        }
+    }
+
+    // ---------------- file row ----------------
+    .ex2-file {
+        position: relative;
+        border-radius: 6px;
+        cursor: pointer;
+
+        &:hover {
+            background-color: @surface-alt-bg-hover;
+        }
+
+        &.selected {
+            background-color: @surface-alt-bg;
+            box-shadow: inset 2px 0 0 @border-subtle-focus;
+
+            .spanFileName {
+                font-weight: 600;
+            }
+        }
+
+        &[disabled] {
+            opacity: .55;
+        }
+
+        &.menu-open {
+            background-color: @surface-alt-bg-hover;
+        }
+    }
+
+    .ex2-file-row {
+        display: flex;
+        align-items: center;
+        gap: .5rem;
+        min-height: 30px;
+        padding: 0 .3rem 0 .5rem;
+    }
+
+    .ex2-icon {
+        display: inline-flex;
+        color: @text-muted;
+
+        svg {
+            width: 15px;
+            height: 15px;
+        }
+    }
+
+    .ex2-file-text {
+        display: flex;
+        align-items: baseline;
+        gap: .4rem;
+        flex: 1;
+        min-width: 0;
+    }
+
+    .spanFileName {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+
+        &[contenteditable] {
+            padding: 0 .3rem;
+            border-radius: 4px;
+            outline: 1px solid @border-subtle-focus;
+            background-color: @surface-bg;
+            white-space: normal;
+            cursor: text;
+        }
+
+        &.fileDeleted {
+            text-decoration: line-through;
+            color: @status-error-text;
+        }
+    }
+
+    .ex2-sub {
+        flex: 0 1 auto;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 12px;
+        color: @text-muted;
+    }
+
+    .ex2-flags {
+        display: inline-flex;
+        gap: 3px;
+    }
+
+    .ex2-flag {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+
+        &.err { background-color: #d93025; }
+        &.loc { background-color: #4a9fe0; }
+        &.out { background-color: #f29900; }
+    }
+
+    .ex2-pin {
+        display: inline-flex;
+        align-items: center;
+        cursor: pointer;
+    }
+
+    .ex2-more {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 24px;
+        height: 24px;
+        border: none;
+        border-radius: 5px;
+        background: transparent;
+        color: @text-muted;
+        cursor: pointer;
+        opacity: 0;
+        transition: opacity .1s, background-color .1s;
+
+        svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+            stroke: none;
+        }
+
+        &:hover {
+            background-color: @border-subtle;
+            color: @text-default;
+        }
+    }
+
+    .ex2-file:hover .ex2-more,
+    .ex2-file.menu-open .ex2-more,
+    .ex2-file.selected .ex2-more,
+    .ex2-more:focus-visible {
+        opacity: 1;
+    }
+
+    // ---------------- action menu ----------------
+    .ex2-menu {
+        display: flex;
+        flex-wrap: wrap;
+        gap: .25rem;
+        margin: 0 .4rem .4rem 1.9rem;
+        padding: .3rem;
+        border: 1px solid @border-subtle;
+        border-radius: 8px;
+        background-color: @surface-bg;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, .08);
+
+        button {
+            display: inline-flex;
+            align-items: center;
+            gap: .35rem;
+            height: 26px;
+            padding: 0 .55rem;
+            border: none;
+            border-radius: 5px;
+            background: transparent;
+            font-size: 12px;
+            cursor: pointer;
+            text-transform: capitalize;
+
+            .fa,
+            .fa-solid {
+                font-size: 11px;
+                color: @text-muted;
+            }
+
+            &:hover {
+                background-color: @surface-alt-bg-hover;
+            }
+
+            &.danger:hover {
+                color: @status-error-text;
+
+                .fa {
+                    color: @status-error-text;
+                }
+            }
+        }
+    }
+
+    // ---------------- pin task ----------------
+    .pinTaskForm,
+    .pinTaskView {
+        margin: 0 .4rem .4rem 1.9rem !important;
+        border-radius: 8px !important;
+        cursor: default;
+
+        textarea {
+            font: inherit;
+            font-size: 13px;
+            padding: .4rem;
+            border: 1px solid @border-subtle;
+            border-radius: 6px;
+            color: @text-default;
+            background-color: @surface-bg;
+            outline: none;
+        }
+
+        button {
+            height: 26px;
+            padding: 0 .75rem;
+            border: none;
+            border-radius: 6px;
+            background-color: @button-primary-bg;
+            color: #fff;
+            cursor: pointer;
+        }
+    }
+}

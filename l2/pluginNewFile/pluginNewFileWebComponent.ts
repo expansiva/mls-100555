@@ -12,26 +12,37 @@ import '/_100555_/l2/pluginNewFile/widgetTextCode.js';
 
 /// **collab_i18n_start**
 const message_pt = {
-    title: 'Criar um web component em lit',
-    description: "Criar um web component em lit 3 ,que será utilizado em páginas.\n O Lit é um framework para criar web componentes rápidos e com atualizações dinâmicas sem ter que repintar toda a tela.\n Após criar o arquivo use a inteligência artificial para preparar o web component.",
+    title: "Web component",
+    description: "Criar um web component em lit 3, que será utilizado em páginas.\nO Lit é um framework para criar web componentes rápidos e com atualizações dinâmicas sem ter que repintar toda a tela.\nApós criar o arquivo use a inteligência artificial para preparar o web component.",
+    header: "Novo web component",
+    subtitle: "Componente Lit 3 para usar em páginas. Depois de criar, use a IA para prepará-lo.",
+    btnCreate: "Criar componente",
     project: "Projeto",
     shortName: "Nome",
-    header: "Criar um web component em Lit",
-    btnCreate: 'Criar arquivo',
-    loading: 'Criando arquivo...',
-    error: 'Nome do arquivo em branco ou invalido'
+    folder: "Pasta",
+    rootFolder: "(raiz)",
+    willCreate: "Será criado",
+    preview: "Prévia do código",
+    loading: "Criando arquivo...",
+    emptyName: "Digite um nome para o arquivo",
+    error: "Nome do arquivo em branco ou invalido",
 }
 
 const message_en = {
-    title: 'Create a web component in Lit',
-    description: "Create a web component in Lit 3 that will be used on pages.\n Lit is a framework for creating fast web components with dynamic updates without repainting the entire screen.\n After creating the file, use artificial intelligence to prepare the web component.",
+    title: "Web component",
+    description: "Create a web component in Lit 3 that will be used on pages.\nLit is a framework for creating fast web components with dynamic updates without repainting the entire screen.\nAfter creating the file, use artificial intelligence to prepare the web component.",
+    header: "New web component",
+    subtitle: "Lit 3 component to use on pages. After creating it, use AI to prepare it.",
+    btnCreate: "Create component",
     project: "Project",
-    shortName: "ShortName",
-    header: "Create a web component in Lit",
-    btnCreate: 'Create file',
-    loading: 'Creating File...',
-    error: 'Blank or invalid file name'
-
+    shortName: "Name",
+    folder: "Folder",
+    rootFolder: "(root)",
+    willCreate: "Will be created",
+    preview: "Code preview",
+    loading: "Creating file...",
+    emptyName: "Type a name for the file",
+    error: "Blank or invalid file name",
 }
 
 type MessageType = typeof message_en;
@@ -126,26 +137,48 @@ export class PluginNewFileWebComponent extends StateLitElement {
     }
 
     render() {
-        return html`
-            ${this.loading ?
-                html`<div>${msg.loading}</div>`
-                :
-                html`   
-                <div>
-                    <h2>${msg.header} </h2>
-                    <hr>
-                    <div>
-                        <span> <b>${msg.project}:</b> ${this.project}</span>
-                        <span> <b>${msg.shortName}:</b> ${this.shortName}</span>    
-                    </div>
-                    <div style="margin-top:1rem;">
-                        <button @click=${this.handleAddFile}>${msg.btnCreate}</button>
-                    </div>
+        const hasName = !!(this.shortName && this.project);
+        const folder = this.folder ? `${this.folder}/` : '';
+        const filePath = hasName ? `_${this.project}_/l2/${folder}${this.shortName}.ts` : '';
+        const tagName = hasName ? convertFileNameToTag({ project: this.project as number, shortName: this.shortName as string, folder: this.folder }) : '';
 
+        return html`
+            <div class="nf-card">
+                <div class="nf-head">
+                    <div class="nf-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><path d="M8 6l-6 6 6 6"/><path d="M16 6l6 6-6 6"/><path d="M14 4l-4 16"/></svg>
+                    </div>
+                    <div class="nf-head-text">
+                        <h2>${msg.header}</h2>
+                        <p>${msg.subtitle}</p>
+                    </div>
+                </div>
+
+                <div class="nf-summary">
+                    <div class="nf-summary-label">${msg.willCreate}</div>
+                    ${hasName ? html`
+                        <code class="nf-path">${filePath}</code>
+                        <code class="nf-tag">&lt;${tagName}&gt;</code>
+                    ` : html`<div class="nf-hint">${msg.emptyName}</div>`}
+                    <dl class="nf-meta">
+                        <div><dt>${msg.project}</dt><dd>${this.project ?? '-'}</dd></div>
+                        <div><dt>${msg.folder}</dt><dd>${this.folder || msg.rootFolder}</dd></div>
+                        <div><dt>${msg.shortName}</dt><dd>${this.shortName || '-'}</dd></div>
+                    </dl>
+                </div>
+
+                <button class="nf-create" ?disabled=${!hasName || this.loading} @click=${this.handleAddFile}>
+                    ${this.loading ? html`<span class="nf-spinner"></span>${msg.loading}` : msg.btnCreate}
+                </button>
+
+                <div class="nf-code">
+                    <div class="nf-code-head">
+                        <span>${msg.preview}</span>
+                        <span class="nf-lang">TypeScript</span>
+                    </div>
                     <plugin-new-file--widget-text-code-100555 language="typescript" text="${this.getTemplate()}"></plugin-new-file--widget-text-code-100555>
-                
-                </div>`
-            }
+                </div>
+            </div>
         `
     }
 

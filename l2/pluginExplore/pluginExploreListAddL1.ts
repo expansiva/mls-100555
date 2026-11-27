@@ -1,7 +1,7 @@
 /// <mls fileReference="_100555_/l2/pluginExplore/pluginExploreListAddL1.ts" enhancement="_102027_/l2/enhancementLit" />
 
 import { html } from 'lit';
-import { customElement, property, query } from 'lit/decorators.js';
+import { customElement, property, query, state } from 'lit/decorators.js';
 import { ServiceBase } from '/_102027_/l2/serviceBase.js';
 import { CollabLitElement } from '/_102029_/l2/collabLitElement.js';
 import { propertyDataSource } from '/_102029_/l2/collabDecorators.js';
@@ -12,24 +12,28 @@ import { getPath } from '/_102027_/l2/utils.js';
 /// **collab_i18n_start**
 const message_pt = {
     labelProject: "Projeto",
-    labelShortName: "Nome",
-    invalidName: "Nome invalido",
-    labelType: "Por favor, selecione um modelo abaixo",
-    btnAdd: "Adicionar",
-    please: "Por facor selecione um projeto primeiro!",
-    msgInitial: "Por favor, selecione um modelo",
-
+    labelShortName: "Nome do arquivo",
+    invalidName: "Nome invalido ou ja existente",
+    btnAdd: "Criar arquivo",
+    please: "Por favor selecione um projeto primeiro!",
+    labelBack: "Voltar",
+    placeholderName: "ex.: pasta/meuArquivo",
+    willCreate: "Será criado",
+    creating: "Criando...",
+    hint: "Arquivo TypeScript em branco no L1. Use / para criar dentro de uma pasta.",
 }
 
 const message_en = {
     labelProject: "Project",
-    labelShortName: "Shortname",
-    invalidName: "Invalid shortName",
-    labelType: "Please select a template below",
-    btnAdd: "Add",
+    labelShortName: "File name",
+    invalidName: "Invalid or existing name",
+    btnAdd: "Create file",
     please: "Please select a project first!",
-    msgInitial: "Please select a template",
-
+    labelBack: "Back",
+    placeholderName: "e.g. folder/myFile",
+    willCreate: "Will be created",
+    creating: "Creating...",
+    hint: "Blank TypeScript file in L1. Use / to create it inside a folder.",
 }
 
 type MessageType = typeof message_en;
@@ -52,6 +56,8 @@ export class ServiceListFilesAdd100555 extends CollabLitElement {
     @property() error: string = '';
     @property() position: string = '';
     @property({ type: Boolean, }) loading: boolean = true;
+    @state() private nameValue: string = '';
+    @state() private creating: boolean = false;
     @propertyDataSource() shortName: string | undefined;
     @query('#iptShortName') inputShortName: HTMLInputElement | undefined;
 
@@ -68,63 +74,80 @@ export class ServiceListFilesAdd100555 extends CollabLitElement {
 
         const lang = this.service?.getMessageKey(messages);
         this.msg = lang ? messages[lang] : message_en;
-        const project = mls.actualProject || 0;
+        const project = mls.actualProject;
 
         return html`
-            ${this.renderHeader()}
-            ${project !== undefined ? this.renderAdd(project)
-                : html`${this.msg.please}`
-            }
+            ${this.renderHeader(project || 0)}
+            ${project ? this.renderAdd(project) : html`<div class="add-empty">${this.msg.please}</div>`}
         `;
     }
 
-    renderHeader() {
-
+    renderHeader(project: number) {
         return html`
-            <div class="headerNav left">
-                <h1>Add</h1>
-                <button class="btn-nav" title="add organism" @click="${() => this.clickCancel()}">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free v6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg>
-                </button>            
+            <div class="add-header">
+                <button class="btn-back" title="${this.msg.labelBack}" @click="${() => this.clickCancel()}">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+                    <span>${this.msg.labelBack}</span>
+                </button>
+                ${project ? html`<span class="project-chip" title="${this.msg.labelProject}">${project}</span>` : ''}
             </div>
         `
     }
 
     renderAdd(project: number) {
+        const name = this.nameValue.trim();
+        const canCreate = !!name && !this.error && !this.creating;
+        const filePath = name ? this.getFileReference(project, name) : '';
 
         return html`
             <div class="section-add">
-                <div class="row-form">
-                    <div>
-                        <label>${this.msg.labelProject}:</label>
-                        <input type="text" disabled value="${project.toString()}"/>
-                    </div>
-                    <div>
-                        <label>${this.msg.labelShortName}:</label>
-                        <input autocomplete="off" value=${this.shortName} type="text" id="iptShortName" @input=${this.handleInputInput}/>
-                        <span>${this.error}</span>
-                    </div>
-                    <div style="display: flex;justify-content: center;align-items: center;padding-top: 19px;">
-                        <button class="btn-save" @click=${this.createFile}>Execute</button>
-                    </div>
+                <div class="field">
+                    <label for="iptShortName">${this.msg.labelShortName}</label>
+                    <input
+                        autocomplete="off"
+                        spellcheck="false"
+                        placeholder="${this.msg.placeholderName}"
+                        class="${this.error ? 'invalid' : ''}"
+                        .value=${this.nameValue}
+                        type="text"
+                        id="iptShortName"
+                        @input=${this.handleInputInput}
+                        @keydown=${(e: KeyboardEvent) => { if (e.key === 'Enter' && canCreate) this.createFile(); }}/>
+                    ${this.error
+                        ? html`<span class="field-error">${this.error}</span>`
+                        : html`<span class="field-hint">${this.msg.hint}</span>`}
                 </div>
-            </div>
 
+                ${filePath && !this.error ? html`
+                    <div class="preview-path">
+                        <span class="preview-label">${this.msg.willCreate}</span>
+                        <code>${filePath}</code>
+                    </div>` : ''}
+
+                <button class="btn-create" ?disabled=${!canCreate} @click=${this.createFile}>
+                    ${this.creating ? html`<span class="spinner"></span>${this.msg.creating}` : this.msg.btnAdd}
+                </button>
+            </div>
         `
     }
 
     private handleInputInput(e: KeyboardEvent) {
         const target = e.target as HTMLInputElement;
         if (!target) return;
+        this.nameValue = target.value;
         const project = mls.actualProject;
-        if (project === undefined) throw new Error('No project selected');
-        const name = this.inputShortName?.value || '';
+        const name = target.value.trim();
         this.error = '';
-        const isValidName = this.getNewNameAndValid(project as number, name);
-        if (!isValidName) {
-            this.error = this.msg.invalidName
-            return;
-        }
+        if (!project || !name) return;
+        if (!this.getNewNameAndValid(project as number, name)) this.error = this.msg.invalidName;
+    }
+
+    /** "_<project>_/l1/<folder>/<shortName>.ts" — mesmo formato dos L1 existentes */
+    private getFileReference(project: number, name: string): string {
+        const split = name.split('/').filter((p) => p);
+        const shortName = split.pop() || '';
+        const folder = split.join('/');
+        return `_${project}_/l1/${folder ? folder + '/' : ''}${shortName}.ts`;
     }
 
     //--------------- IMPLEMENTS----------------
@@ -158,13 +181,14 @@ export class ServiceListFilesAdd100555 extends CollabLitElement {
         try {
 
 
+            if (this.creating) return;
             const project = mls.actualProject;
-            if (project === undefined) throw new Error('No project selected');
-            const name = this.inputShortName?.value || '';
+            if (!project) throw new Error('No project selected');
+            const name = this.nameValue.trim();
             this.error = '';
             const isValidName = this.getNewNameAndValid(project as number, name);
             if (!isValidName) {
-                this.showError(this.msg.invalidName);
+                this.error = this.msg.invalidName;
                 return;
             }
 
@@ -172,19 +196,16 @@ export class ServiceListFilesAdd100555 extends CollabLitElement {
             if (!info) throw new Error('[createFile] Not found path:' + `_${project}_${name}`);
 
             this.showLoad(true);
+            this.creating = true;
 
-            const srcTs = ` /// <mls shortName="${info.shortName}" project="${info.project}" folder="${info.folder}" enhancement="_blank" groupName="${info.folder}" />`;
-
-            const srcDefs = `/// <mls shortName="${info.shortName}" project="${info.project}" folder="${info.folder}" groupName="${info.folder}" enhancement="_blank" />
-
-    // Do not change – automatically generated code.`;
+            const srcTs = `/// <mls fileReference="_${info.project}_/l1/${info.folder ? info.folder + '/' : ''}${info.shortName}.ts" enhancement="_blank"/>\n\nexport {};\n`;
 
             const param: IReqCreateStorFile = {
                 shortName: info.shortName,
                 project: mls.actualProject || 0,
                 folder: info.folder,
                 level: 1,
-                source: srcTs.trim(),
+                source: srcTs,
                 status: 'new',
                 extension:'.ts'
             }
@@ -197,11 +218,13 @@ export class ServiceListFilesAdd100555 extends CollabLitElement {
 
 
             this.showLoad(false);
+            this.creating = false;
 
         } catch (e: any) {
 
             this.showError('[createFile]' + e.message);
             this.showLoad(false);
+            this.creating = false;
         }
 
     }

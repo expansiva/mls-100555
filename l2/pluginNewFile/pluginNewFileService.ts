@@ -12,28 +12,39 @@ import '/_100555_/l2/pluginNewFile/widgetTextCode.js';
 
 /// **collab_i18n_start**
 const message_pt = {
-    title: 'Criar um service',
+    title: "Service",
     description: "Criar um service, que será utilizado no sistema collab.\nUm service no collab.codes, permite a criação de menus após selecionar o level, fica no nav2, com ícones.\nApós criar o arquivo use a inteligência artificial para preparar o service.",
+    header: "Novo service",
+    subtitle: "Service do collab, com menu e ícone no nav2. Depois de criar, use a IA para prepará-lo.",
+    btnCreate: "Criar service",
     project: "Projeto",
     shortName: "Nome",
-    header: "Criar um service",
-    btnCreate: 'Criar arquivo',
-    loading: 'Criando arquivo...',
-    error: 'Nome do arquivo em branco ou invalido',
+    folder: "Pasta",
+    rootFolder: "(raiz)",
+    willCreate: "Será criado",
+    preview: "Prévia do código",
+    loading: "Criando arquivo...",
+    emptyName: "Digite um nome para o arquivo",
+    error: "Nome do arquivo em branco ou invalido",
     errorServiceName: 'Nome do arquivo deve começar com "service"',
 }
 
 const message_en = {
-    title: 'Create a service in Lit',
+    title: "Service",
     description: "Create a service to be used in the Collab system.\nA service in collab.codes allows creating menus after selecting the level, placed in nav2 with icons.\nAfter creating the file, use artificial intelligence to prepare the service.",
+    header: "New service",
+    subtitle: "Collab service, with menu and icon in nav2. After creating it, use AI to prepare it.",
+    btnCreate: "Create service",
     project: "Project",
-    shortName: "ShortName",
-    header: "Create a service in Lit",
-    btnCreate: 'Create file',
-    loading: 'Creating File...',
-    error: 'Blank or invalid file name',
+    shortName: "Name",
+    folder: "Folder",
+    rootFolder: "(root)",
+    willCreate: "Will be created",
+    preview: "Code preview",
+    loading: "Creating file...",
+    emptyName: "Type a name for the file",
+    error: "Blank or invalid file name",
     errorServiceName: 'File name must start with "service"',
-
 }
 
 type MessageType = typeof message_en;
@@ -162,26 +173,49 @@ export class [className] extends ServiceBase {
     }
 
     render() {
-        return html`
-            ${this.loading ?
-                html`<div>${msg.loading}</div>`
-                :
-                html`   
-                <div>
-                    <h2>${msg.header} </h2>
-                    <hr>
-                    <div>
-                        <span> <b>${msg.project}:</b> ${this.project}</span>
-                        <span> <b>${msg.shortName}:</b> ${this.shortName}</span>    
-                    </div>
-                    <div style="margin-top:1rem;">
-                        <button @click=${this.handleAddFile}>${msg.btnCreate}</button>
-                    </div>
+        const hasName = !!(this.shortName && this.project);
+        const folder = this.folder ? `${this.folder}/` : '';
+        const filePath = hasName ? `_${this.project}_/l2/${folder}${this.shortName}.ts` : '';
+        const tagName = hasName ? convertFileNameToTag({ project: this.project as number, shortName: this.shortName as string, folder: this.folder }) : '';
 
+        return html`
+            <div class="nf-card">
+                <div class="nf-head">
+                    <div class="nf-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><path d="M12 3l9 5-9 5-9-5 9-5z"/><path d="M3 13l9 5 9-5"/></svg>
+                    </div>
+                    <div class="nf-head-text">
+                        <h2>${msg.header}</h2>
+                        <p>${msg.subtitle}</p>
+                    </div>
+                </div>
+
+                <div class="nf-summary">
+                    <div class="nf-summary-label">${msg.willCreate}</div>
+                    ${hasName ? html`
+                        <code class="nf-path">${filePath}</code>
+                        ${this.shortName?.startsWith('service') ? '' : html`<div class="nf-warn">${msg.errorServiceName}</div>`}
+                        <code class="nf-tag">&lt;${tagName}&gt;</code>
+                    ` : html`<div class="nf-hint">${msg.emptyName}</div>`}
+                    <dl class="nf-meta">
+                        <div><dt>${msg.project}</dt><dd>${this.project ?? '-'}</dd></div>
+                        <div><dt>${msg.folder}</dt><dd>${this.folder || msg.rootFolder}</dd></div>
+                        <div><dt>${msg.shortName}</dt><dd>${this.shortName || '-'}</dd></div>
+                    </dl>
+                </div>
+
+                <button class="nf-create" ?disabled=${!hasName || this.loading || !this.shortName?.startsWith('service')} @click=${this.handleAddFile}>
+                    ${this.loading ? html`<span class="nf-spinner"></span>${msg.loading}` : msg.btnCreate}
+                </button>
+
+                <div class="nf-code">
+                    <div class="nf-code-head">
+                        <span>${msg.preview}</span>
+                        <span class="nf-lang">TypeScript</span>
+                    </div>
                     <plugin-new-file--widget-text-code-100555 language="typescript" text="${this.getTemplate()}"></plugin-new-file--widget-text-code-100555>
-                
-                </div>`
-            }
+                </div>
+            </div>
         `
     }
 

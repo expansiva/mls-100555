@@ -1,7 +1,7 @@
 /// <mls fileReference="_100555_/l2/pluginExplore/pluginExploreListAddL2.ts" enhancement="_102027_/l2/enhancementLit" />
 
 import { html } from 'lit'; 
-import { customElement, property, query } from 'lit/decorators.js';
+import { customElement, property, query, state } from 'lit/decorators.js';
 import { convertFileNameToTag } from '/_102027_/l2/utils.js';
 import { ServiceBase } from '/_102027_/l2/serviceBase.js';
 import { CollabLitElement } from '/_102029_/l2/collabLitElement.js';
@@ -16,22 +16,28 @@ const message_pt = {
     labelProject: "Projeto",
     labelShortName: "Nome",
     invalidName: "Nome invalido",
-    labelType: "Por favor, selecione um modelo abaixo",
+    labelType: "Modelo",
     btnAdd: "Adicionar",
-    please: "Por facor selecione um projeto primeiro!",
+    please: "Por favor selecione um projeto primeiro!",
     msgInitial: "Por favor, selecione um modelo",
-
+    labelBack: "Voltar",
+    placeholderName: "ex.: pasta/meuArquivo",
+    noTemplates: "Nenhum modelo disponivel",
+    loading: "Carregando modelos...",
 }
 
 const message_en = {
     labelProject: "Project",
-    labelShortName: "Shortname",
-    invalidName: "Invalid shortName",
-    labelType: "Please select a template below",
+    labelShortName: "Name",
+    invalidName: "Invalid name",
+    labelType: "Template",
     btnAdd: "Add",
     please: "Please select a project first!",
     msgInitial: "Please select a template",
-
+    labelBack: "Back",
+    placeholderName: "e.g. folder/myFile",
+    noTemplates: "No templates available",
+    loading: "Loading templates...",
 }
 
 type MessageType = typeof message_en;
@@ -55,6 +61,7 @@ export class ServiceListFilesAdd100555 extends CollabLitElement {
     @property() father?: ServiceBase | undefined;
     @property() plugins: IPlugins[] = [];
     @property({ type: Boolean, }) loading: boolean = true;
+    @state() selectedWidget: string = '';
     @propertyDataSource() shortName: string | undefined;
     @query('#iptShortName') inputShortName: HTMLInputElement | undefined;
 
@@ -100,13 +107,14 @@ export class ServiceListFilesAdd100555 extends CollabLitElement {
     }
 
     renderHeader() {
-
+        const project = mls.actualProject || 0;
         return html`
-            <div class="headerNav left">
-                <h1>Add</h1>
-                <button class="btn-nav" title="add organism" @click="${() => this.clickCancel()}">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free v6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg>
-                </button>            
+            <div class="add-header">
+                <button class="btn-back" title="${this.msg.labelBack}" @click="${() => this.clickCancel()}">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+                    <span>${this.msg.labelBack}</span>
+                </button>
+                <span class="project-chip" title="${this.msg.labelProject}">${project}</span>
             </div>
         `
     }
@@ -115,51 +123,61 @@ export class ServiceListFilesAdd100555 extends CollabLitElement {
 
         return html`
             <div class="section-add">
-                <div class="row-form">
-                    <div>
-                        <label>${this.msg.labelProject}:</label>
-                        <input type="text" disabled value="${project.toString()}"/>
-                    </div>
-                    <div>
-                        <label>${this.msg.labelShortName}:</label>
-                        <input autocomplete="off" value=${this.shortName} type="text" id="iptShortName" @input=${this.handleInputInput}/>
-                        <span>${this.error}</span>
-                    </div>
+                <div class="field">
+                    <label for="iptShortName">${this.msg.labelShortName}</label>
+                    <input
+                        autocomplete="off"
+                        spellcheck="false"
+                        placeholder="${this.msg.placeholderName}"
+                        class="${this.error ? 'invalid' : ''}"
+                        value=${this.shortName || ''}
+                        type="text"
+                        id="iptShortName"
+                        @input=${this.handleInputInput}/>
+                    ${this.error ? html`<span class="field-error">${this.error}</span>` : ''}
                 </div>
-                <hr>
-                <div class="row-form">
-                    <div>
-                        <label>${this.msg.labelType}</label>
-                         ${this.renderTemplates()}
-                    </div>
+                <div class="field">
+                    <label>${this.msg.labelType}</label>
+                    ${this.renderTemplates()}
                 </div>
             </div>
-
         `
     }
 
 
     renderTemplates() {
 
+        if (this.loading) return html`<div class="template-empty">${this.msg.loading}</div>`;
+        if (this.plugins.length === 0) return html`<div class="template-empty">${this.msg.noTemplates}</div>`;
+
         return html`
-            <div class="template-container">
-             ${this.loading
-                ? html`<p>Loading...</p>`
-                :
-                this.plugins.map((template) => {
+            <div class="template-list" role="radiogroup" aria-label="${this.msg.labelType}">
+                ${this.plugins.map((template) => {
+                    const selected = template.widget === this.selectedWidget;
                     return html`
-                        <div  class="template-item" @click=${() => { this.handleClickTemplate(template) }}>
-                            <div class="template-item-content">
-                                <div class="template-item-title">${template.title}</div>
-                                <div class="template-item-body">
-                                    ${template.description.split('\n').map((paragraph) => html`
-                                        <p>${paragraph}</p>
-                                    `)}
-                                </div>
-                                <div class="template-item-tags">
-                                        Tags: ${template.tags.join(', ')}
-                                </div>
+                        <div
+                            class="template-item ${selected ? 'selected' : ''}"
+                            role="radio"
+                            aria-checked="${selected}"
+                            tabindex="0"
+                            @click=${() => this.handleClickTemplate(template)}
+                            @keydown=${(e: KeyboardEvent) => {
+                                if (e.key !== 'Enter' && e.key !== ' ') return;
+                                e.preventDefault();
+                                this.handleClickTemplate(template);
+                            }}>
+                            <div class="template-item-head">
+                                <span class="template-radio"></span>
+                                <span class="template-item-title">${template.title}</span>
                             </div>
+                            ${selected ? html`
+                                <div class="template-item-body">
+                                    ${template.description.split('\n').filter((p) => p.trim()).map((paragraph) => html`<p>${paragraph}</p>`)}
+                                    ${template.tags.length ? html`
+                                        <div class="template-item-tags">
+                                            ${template.tags.map((tag) => html`<span class="tag">${tag}</span>`)}
+                                        </div>` : ''}
+                                </div>` : ''}
                         </div>
                     `
                 })}
@@ -193,6 +211,8 @@ export class ServiceListFilesAdd100555 extends CollabLitElement {
     }
 
     private handleClickTemplate(plugin: IPlugins) {
+        if (this.selectedWidget === plugin.widget) return;
+        this.selectedWidget = plugin.widget;
         const info = getPath(plugin.widget);
         if (!info) throw new Error('[] Not found path:' + plugin.widget);
 

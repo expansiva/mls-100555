@@ -1,7 +1,7 @@
 /// <mls fileReference="_100555_/l2/pluginNewFile/pluginNewFileAgent.ts" enhancement="_102027_/l2/enhancementLit" />
 
 import { html } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { customElement, property, state } from 'lit/decorators.js';
 import { StateLitElement } from '/_102029_/l2/stateLitElement.js';
 import { getMessageKey } from "/_102029_/l2/collabLitElement.js";
 import { propertyDataSource } from '/_102029_/l2/collabDecorators.js';
@@ -11,25 +11,39 @@ import { ServiceBase } from '/_102027_/l2/serviceBase.js';
 import '/_100555_/l2/pluginNewFile/widgetTextCode.js';
 /// **collab_i18n_start**
 const message_pt = {
-  title: "Criar um arquivo do tipo agente.",
-  desc: "Criar um novo arquivo do tipo agente.",
-  project: "Projeto",
-  shortName: "Nome",
-  header: "Arquivo agente",
-  btnCreate: "Criar arquivo",
-  loading: "Criando arquivo...",
-  error: "Nome do arquivo agente em branco ou inválido"
+    title: "Agente",
+    desc: "Criar um novo arquivo do tipo agente.",
+    header: "Novo agente",
+    subtitle: "Arquivo de agente de IA, a partir de um dos modelos abaixo.",
+    template: "Modelo",
+    btnCreate: "Criar agente",
+    project: "Projeto",
+    shortName: "Nome",
+    folder: "Pasta",
+    rootFolder: "(raiz)",
+    willCreate: "Será criado",
+    preview: "Prévia do código",
+    loading: "Criando arquivo...",
+    emptyName: "Digite um nome para o arquivo",
+    error: "Nome do arquivo agente em branco ou inválido",
 }
 
 const message_en = {
-  title: "Create an agent file.",
-  desc: "Create a new agent file.",
-  project: "Project",
-  shortName: "Name",
-  header: "Agent File",
-  btnCreate: "Create file",
-  loading: "Creating file...",
-  error: "Blank or invalid agent file name"
+    title: "Agent",
+    desc: "Create a new agent file.",
+    header: "New agent",
+    subtitle: "AI agent file, based on one of the templates below.",
+    template: "Template",
+    btnCreate: "Create agent",
+    project: "Project",
+    shortName: "Name",
+    folder: "Folder",
+    rootFolder: "(root)",
+    willCreate: "Will be created",
+    preview: "Code preview",
+    loading: "Creating file...",
+    emptyName: "Type a name for the file",
+    error: "Blank or invalid agent file name",
 }
 
 type MessageType = typeof message_en;
@@ -61,6 +75,9 @@ export class PluginNewFileBlank extends StateLitElement {
   @property() position: 'left' | 'right' = 'left';
 
   @property() loading: boolean = false;
+
+
+  @state() private codeTab: number = 0;
 
   @property() templateType: AgentTemplateType = 'agent';
 
@@ -106,35 +123,62 @@ export class PluginNewFileBlank extends StateLitElement {
     }
   }
 
-  render() {
-    return html`
-            ${this.loading ?
-        html`<div>${msg.loading}</div>`
-        :
-        html`   
-                <div>
-                    <h2>${msg.header} </h2>
-                    <hr>
-                    <div>
-                        <span> <b>${msg.project}:</b> ${this.project}</span>
-                        <span> <b>${msg.shortName}:</b> ${this.shortName}</span>    
+    render() {
+        const hasName = !!(this.shortName && this.project);
+        const folder = this.folder ? `${this.folder}/` : '';
+        const filePath = hasName ? `_${this.project}_/l2/${folder}${this.shortName}.ts` : '';
+
+        return html`
+            <div class="nf-card">
+                <div class="nf-head">
+                    <div class="nf-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><path d="M12 3l1.8 4.7 4.7 1.8-4.7 1.8L12 16l-1.8-4.7-4.7-1.8 4.7-1.8z"/><path d="M19 15l.8 2.2 2.2.8-2.2.8L19 21l-.8-2.2-2.2-.8 2.2-.8z"/></svg>
                     </div>
-                    <div style="margin-top:1rem;">
-                        <label>Template:</label>
-                        <select @change=${(e: any) => this.templateType = e.target.value}>
-                            <option value="agent">Agent</option>
-                            <option value="agentParallel">Agent Parallel</option>
-                            <option value="agentWithClarification">Agent With Clarification</option>
-                        </select>
+                    <div class="nf-head-text">
+                        <h2>${msg.header}</h2>
+                        <p>${msg.subtitle}</p>
                     </div>
-                    <div style="margin-top:1rem;">
-                        <button @click=${this.handleAddFile}>${msg.btnCreate}</button>
+                </div>
+
+                <div class="nf-field">
+                    <div class="nf-summary-label">${msg.template}</div>
+                    <div class="nf-options" role="radiogroup">
+                        ${agentTemplateOptions.map((opt) => html`
+                            <button role="radio" aria-checked="${this.templateType === opt.value}" class="${this.templateType === opt.value ? 'active' : ''}" @click=${() => this.templateType = opt.value}>${opt.label}</button>
+                        `)}
                     </div>
-                    <plugin-new-file--widget-text-code-100555 language="typescript" text="${this.getTemplate()}"></plugin-new-file--widget-text-code-100555>
-                </div>`
-      }
+                </div>
+
+                <div class="nf-summary">
+                    <div class="nf-summary-label">${msg.willCreate}</div>
+                    ${hasName ? html`
+                        <code class="nf-path">${filePath}</code>
+                    ` : html`<div class="nf-hint">${msg.emptyName}</div>`}
+                    <dl class="nf-meta">
+                        <div><dt>${msg.project}</dt><dd>${this.project ?? '-'}</dd></div>
+                        <div><dt>${msg.folder}</dt><dd>${this.folder || msg.rootFolder}</dd></div>
+                        <div><dt>${msg.shortName}</dt><dd>${this.shortName || '-'}</dd></div>
+                    </dl>
+                </div>
+
+                <button class="nf-create" ?disabled=${!hasName || this.loading} @click=${this.handleAddFile}>
+                    ${this.loading ? html`<span class="nf-spinner"></span>${msg.loading}` : msg.btnCreate}
+                </button>
+
+                <div class="nf-code">
+                    <div class="nf-code-head">
+                        <span>${msg.preview}</span>
+                        <div class="nf-tabs" role="tablist">
+                            <button role="tab" aria-selected="${this.codeTab === 0}" class="${this.codeTab === 0 ? 'active' : ''}" @click=${() => this.codeTab = 0}>TS</button>
+                            <button role="tab" aria-selected="${this.codeTab === 1}" class="${this.codeTab === 1 ? 'active' : ''}" @click=${() => this.codeTab = 1}>HTML</button>
+                        </div>
+                    </div>
+                    <plugin-new-file--widget-text-code-100555 ?hidden=${this.codeTab !== 0} language="typescript" text="${this.getTemplate()}"></plugin-new-file--widget-text-code-100555>
+                    <plugin-new-file--widget-text-code-100555 ?hidden=${this.codeTab !== 1} language="html" text="${templateHtml}"></plugin-new-file--widget-text-code-100555>
+                </div>
+            </div>
         `
-  }
+    }
 
 }
 
@@ -583,3 +627,9 @@ type AgentTemplateType =
   | 'agentParallel'
   | 'agentWithClarification';
 
+
+const agentTemplateOptions: { value: AgentTemplateType, label: string }[] = [
+  { value: 'agent', label: 'Agent' },
+  { value: 'agentParallel', label: 'Agent Parallel' },
+  { value: 'agentWithClarification', label: 'Agent With Clarification' },
+];
